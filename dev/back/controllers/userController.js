@@ -70,27 +70,54 @@ exports.createUser = async (req, res) => {
     })
 };
 
-exports.updateUser = (req, res) => {
+exports.updateUser = async (req, res) => {
     const { id } = req.params;
     const { name, email, password, role } = req.body;
 
-    if (!name || !email || !password || !role) {
-        return res.status(400).json({ error: 'All fields are required' });
+    try {
+        let updateQuery = 'UPDATE users SET ';
+        const params = [];
+        let updates = [];
+
+        if (name) {
+            updates.push('name = ?');
+            params.push(name);
+        }
+        if (email) {
+            updates.push('email = ?');
+            params.push(email);
+        }
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            updates.push('password = ?');
+            params.push(hashedPassword);
+        }
+        if (role) {
+            updates.push('role = ?');
+            params.push(role);
+        }
+
+        if (updates.length === 0) {
+            return res.status(400).json({ error: 'No fields provided for update' });
+        }
+
+        updateQuery += updates.join(', ') + ' WHERE id = ?';
+        params.push(id);
+
+        db.query(updateQuery, params, (err, results) => {
+            if (err) {
+                console.error('Error updating user:', err);
+                return res.status(500).json({ error: 'Database query failed' });
+            }
+            if (results.affectedRows === 0) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            res.status(200).json({ message: 'User updated successfully' });
+        });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-
-    const updateQuery = 'UPDATE users SET name = ?, email = ?, password = ?, role = ? WHERE id = ?';
-    const params = [name, email, password, role, id];
-
-    db.query(updateQuery, params, (err, results) => {
-        if (err) {
-            console.error('Error updating user:', err);
-            return res.status(500).json({ error: 'Database query failed' });
-        }
-        if (results.affectedRows === 0) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        res.status(200).json({ message: 'User updated successfully' });
-    });
 };
 
 exports.loginUser = (req, res) => {

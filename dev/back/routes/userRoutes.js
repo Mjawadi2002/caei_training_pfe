@@ -3,15 +3,15 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const { authenticateToken, authorizeRoles } = require('../middlewares/middleware');
 
-// Public Route - Login
+
 router.post('/login', userController.loginUser);
 
-// Protected Routes (Only authenticated users)
-router.get('/', authenticateToken, authorizeRoles('admin'), userController.getAllUsers);
+
+router.get('/', authenticateToken, authorizeRoles('admin','agent'), userController.getAllUsers);
 router.get('/:id', authenticateToken, userController.getUserById);
 router.get('/role/:role', authenticateToken, authorizeRoles('admin'), userController.getUsersType);
 router.post('/', authenticateToken, authorizeRoles('admin'), userController.createUser);
 router.delete('/:id', authenticateToken, authorizeRoles('admin'), userController.deleteUser);
-router.put('/:id', authenticateToken, userController.updateUser);
+router.put('/:id', authenticateToken,authorizeRoles('admin'), userController.updateUser);
 
 module.exports = router;
