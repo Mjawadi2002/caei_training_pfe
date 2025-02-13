@@ -1,0 +1,75 @@
+/* Register.css */
+
+/* Overall container for centering */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+  }
+  
+  /* Form container */
+  .register-form-container {
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    backdrop-filter: blur(10px); /* Blurry effect */
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  /* Title styling */
+  .form-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+  }
+  
+  /* Input field styling */
+  .form-group input {
+    border-radius: 5px;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    width: 100%;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .form-group input:focus {
+    border-color: #4CAF50;
+    outline: none;
+  }
+  
+  /* Button styling */
+  .button-group button {
+    width: 100%;
+    padding: 12px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  
+  /* Redirect link text */
+  .redirect-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9rem;
+  }
+  
+  .link-to-login {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .link-to-login:hover {
+    text-decoration: underline;
+  }
+  
