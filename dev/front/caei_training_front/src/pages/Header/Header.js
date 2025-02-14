@@ -1,14 +1,30 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png'; 
 import './Header.css'; 
 
 export default function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token); 
+  }, [location.pathname]); 
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); 
+    setIsAuthenticated(false);
+    navigate("/");
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-transparent">
       <div className="container-fluid">
-      <Link className="nav-link active" to="/"><img src={logo} alt="Platform Logo" className="navbar-logo" /></Link>
+        <Link className="nav-link active" to="/">
+          <img src={logo} alt="Platform Logo" className="navbar-logo" />
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -32,13 +48,17 @@ export default function Header() {
               <Link className="nav-link active" to="/formations">Formations</Link>
             </li>
           </ul>
-          <form className="d-flex" role="search">
-          {location.pathname !== '/login' && (
-            <form className="d-flex" role="search">
-              <button className="btn btn-outline-success" type="submit"><Link className="nav-link active" to="/login">Login</Link></button>
-            </form>
-          )}
-          </form>
+          <div className="d-flex">
+            {isAuthenticated ? (
+              <button className="btn btn-danger" onClick={handleLogout}>
+                Logout
+              </button>
+            ) : location.pathname !== "/login" && ( 
+              <button className="btn btn-outline-success">
+                <Link className="nav-link active" to="/login">Login</Link>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </nav>

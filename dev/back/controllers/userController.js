@@ -150,3 +150,39 @@ exports.loginUser = (req, res) => {
     });
 };
 
+exports.registerUser=async(req,res)=>{
+    const { name, email, password} = req.body; 
+    const client="apprenant"
+    const hashedPassword = await bcrypt.hash(password, 10);
+    db.query('INSERT INTO users (name,email,password,role) VALUES(?,?,?,?)',[name,email,hashedPassword,client],(err,results)=>{
+        if(err){
+            console.error('Error creating user:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        res.status(201).json({ message: 'User created successfully' });
+    })
+}
+
+exports.countAllUsers = async (req, res) => {
+    const sql = 'SELECT COUNT(*) AS userCount FROM users';
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching count of users:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        const count = results[0].userCount;
+        return res.status(200).json({ count });
+    });
+};
+
+exports.countAllClients=async(req,res)=>{
+    const sql='SELECT COUNT(*) AS userCount FROM users where role=?';
+    db.query(sql,['apprenant'],(err,results)=>{
+        if (err) {
+            console.error('Error fetching count of users:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        const count = results[0].userCount;
+        return res.status(200).json({ count });
+    })
+}

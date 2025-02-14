@@ -1,0 +1,8 @@
+.card {
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    backdrop-filter: blur(10px); /* Blurry effect */
+    border-radius: 10px; /* Smooth edges */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    padding: 10px;
+    overflow: hidden; /* Ensures no overflow */
+}

@@ -5,13 +5,14 @@ const { authenticateToken, authorizeRoles } = require('../middlewares/middleware
 
 
 router.post('/login', userController.loginUser);
-
-
-router.get('/', authenticateToken, authorizeRoles('admin','agent'), userController.getAllUsers);
+router.get('/', authenticateToken, authorizeRoles('admin'), userController.getAllUsers);
+router.get('/count', authenticateToken, authorizeRoles('admin'), userController.countAllUsers);
+router.get('/countClients', authenticateToken, authorizeRoles('admin'), userController.countAllClients);
 router.get('/:id', authenticateToken, userController.getUserById);
 router.get('/role/:role', authenticateToken, authorizeRoles('admin'), userController.getUsersType);
 router.post('/', authenticateToken, authorizeRoles('admin'), userController.createUser);
 router.delete('/:id', authenticateToken, authorizeRoles('admin'), userController.deleteUser);
 router.put('/:id', authenticateToken,authorizeRoles('admin'), userController.updateUser);
+router.post('/register', userController.registerUser);
 
 module.exports = router;

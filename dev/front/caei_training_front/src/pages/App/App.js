@@ -8,6 +8,7 @@ import Formations from "../Formations/Formations";
 import Register from "../Register/Register";
 import Home from "../Home/Home";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import User from "../User/User";
 
 function App() {
   return (
@@ -20,13 +21,13 @@ function App() {
         <div className="container-fluid">
           <Header />
           <Routes>
-            {/* Define Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/formations" element={<Formations />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/User" element={<User />} />
           </Routes>
           <Footer />
         </div>

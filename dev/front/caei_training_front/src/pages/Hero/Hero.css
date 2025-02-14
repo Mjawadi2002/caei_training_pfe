@@ -1,0 +1,36 @@
+/* Container styling */
+.container-fluid.section {
+
+    padding: 4rem;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+/* Section logo styling */
+.sectionlogo img {
+    width: 100%;
+    max-width:  auto;
+    height: auto;
+}
+
+/* Description section */
+.section.description {
+    padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Button styling */
+
+.contact-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+    .col.md-4, .col.md-8 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
