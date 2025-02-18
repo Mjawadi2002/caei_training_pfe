@@ -899,7 +899,7 @@
 									"parentStyle": true,
 									"left": 525,
 									"top": 461,
-									"width": 139.32080078125,
+									"width": 139,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyys2MYUv7dE="
@@ -1109,7 +1109,7 @@
 									"parentStyle": true,
 									"left": 743.5,
 									"top": 749,
-									"width": 112.59716796875,
+									"width": 112,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyyt6oIVe8Z4="
@@ -1319,7 +1319,7 @@
 									"parentStyle": true,
 									"left": 1355,
 									"top": 333,
-									"width": 91.10400390625,
+									"width": 90,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyyu/SIWNPDI="
@@ -2684,7 +2684,7 @@
 									"parentStyle": true,
 									"left": 343.5,
 									"top": 197,
-									"width": 113.3017578125,
+									"width": 113,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyy0VUqKxDLs="
@@ -2992,7 +2992,7 @@
 									"parentStyle": true,
 									"left": 610,
 									"top": 205,
-									"width": 125.59716796875,
+									"width": 125,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyy29hbgm5b4="
@@ -3300,7 +3300,7 @@
 									"parentStyle": true,
 									"left": 857.5,
 									"top": 205,
-									"width": 121.9853515625,
+									"width": 121,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyy4s2sJAHj4="
@@ -3608,7 +3608,7 @@
 									"parentStyle": true,
 									"left": 184.5,
 									"top": 285,
-									"width": 116.89453125,
+									"width": 116,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyy7Tmc7+VMo="
@@ -3818,7 +3818,7 @@
 									"parentStyle": true,
 									"left": 258,
 									"top": 349,
-									"width": 124.83544921875,
+									"width": 124,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyy7vEs+q+OI="
@@ -4028,7 +4028,7 @@
 									"parentStyle": true,
 									"left": 404.5,
 									"top": 293,
-									"width": 137.12451171875,
+									"width": 136,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyy8hvdQkzvw="
@@ -4469,9 +4469,9 @@
 									},
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": 160.72998046875,
+									"left": 159.27001953125,
 									"top": 53,
-									"width": 96.0654296875,
+									"width": 96.40185546875,
 									"height": 13,
 									"text": "CAEI TRAINING"
 								},
@@ -4485,7 +4485,7 @@
 									"parentStyle": true,
 									"left": 141,
 									"top": 53,
-									"width": 13.72998046875,
+									"width": 12.27001953125,
 									"height": 13,
 									"text": "uc"
 								}
@@ -4584,7 +4584,7 @@
 									"parentStyle": true,
 									"left": 305,
 									"top": 557,
-									"width": 120.55712890625,
+									"width": 120,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyzNpgyVOd9M="
@@ -4794,7 +4794,7 @@
 									"parentStyle": true,
 									"left": 473,
 									"top": 613,
-									"width": 197.83349609375,
+									"width": 197,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyzRK4yd2wrI="
@@ -5004,7 +5004,7 @@
 									"parentStyle": true,
 									"left": 697.5,
 									"top": 549,
-									"width": 121.9853515625,
+									"width": 121,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyzSMOilVAuQ="
@@ -5699,7 +5699,7 @@
 									"parentStyle": true,
 									"left": 394,
 									"top": 941,
-									"width": 164.08935546875,
+									"width": 164,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyza4lEPcW7A="
@@ -5909,7 +5909,7 @@
 									"parentStyle": true,
 									"left": 228,
 									"top": 877,
-									"width": 211.53173828125,
+									"width": 211,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyzbwg0ZnDvc="
@@ -6119,7 +6119,7 @@
 									"parentStyle": true,
 									"left": 647.5,
 									"top": 893,
-									"width": 111.8544921875,
+									"width": 111,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyzdPY0uoFeA="
@@ -6329,7 +6329,7 @@
 									"parentStyle": true,
 									"left": 862.5,
 									"top": 893,
-									"width": 145.09716796875,
+									"width": 144,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyzd6NU1+LNo="
@@ -7227,7 +7227,7 @@
 									"parentStyle": true,
 									"left": 1150.5,
 									"top": 717,
-									"width": 106.8017578125,
+									"width": 106,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyzpSbXERYQ8="
@@ -7533,7 +7533,7 @@
 									"parentStyle": true,
 									"left": 964.5,
 									"top": 301,
-									"width": 173.9853515625,
+									"width": 173,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyz31zcJUN3Q="
@@ -7836,7 +7836,7 @@
 									"parentStyle": true,
 									"left": 554,
 									"top": 357,
-									"width": 85.8671875,
+									"width": 85,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyz8AdNP2q4Q="
@@ -8046,7 +8046,7 @@
 									"parentStyle": true,
 									"left": 695.5,
 									"top": 357,
-									"width": 112.5908203125,
+									"width": 112,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGUyz8+zeA2o0o="

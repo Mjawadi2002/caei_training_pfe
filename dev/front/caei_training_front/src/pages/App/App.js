@@ -9,6 +9,7 @@ import Register from "../Register/Register";
 import Home from "../Home/Home";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import User from "../User/User";
+import ProtectedRoutes from "../../utils/protectedRoutes";
 
 function App() {
   return (
@@ -27,7 +28,9 @@ function App() {
             <Route path="/formations" element={<Formations />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/User" element={<User />} />
+            <Route element={<ProtectedRoutes />}>
+              <Route path="/user" element={<User />} />
+            </Route>
           </Routes>
           <Footer />
         </div>

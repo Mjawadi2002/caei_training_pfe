@@ -42,10 +42,10 @@ export default function Header() {
               <Link className="nav-link active" to="/about">About Us</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link active" to="/contact">Contact Us</Link>
+              <Link className="nav-link active" to="/formations">Formations</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link active" to="/formations">Formations</Link>
+              <Link className="nav-link active" to="/contact">Contact Us</Link>
             </li>
           </ul>
           <div className="d-flex">

@@ -17,9 +17,8 @@ export default function Register() {
         name,
         email,
         password,
-      });
-      localStorage.setItem("token", res.data.token);  
-      navigate("/user"); 
+      }); 
+      navigate("/login"); 
     } catch (error) {
       console.error("Registration failed:", error.response?.data?.message || error.message);
     }

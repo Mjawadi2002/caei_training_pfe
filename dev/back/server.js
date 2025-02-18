@@ -3,11 +3,11 @@ require('dotenv').config();
 const mysqlPool = require('./config/db');
 const userRouter = require('./routes/userRoutes');  
 const formationRouter = require('./routes/formationRoutes');
+const emailRouter = require('./routes/emailRoutes'); 
 const cors = require('cors');  
 
 const app = express();
 const port = process.env.PORT || 5000;
-
 
 app.use(cors({
     origin: "http://localhost:3000", 
@@ -18,9 +18,11 @@ app.use(cors({
 app.use(express.json());  
 
 
+
+
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/formations', formationRouter);
-
+app.use("/api/v1/email", emailRouter);
 
 mysqlPool.getConnection((err, connection) => {
     if (err) {
