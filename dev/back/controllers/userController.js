@@ -72,8 +72,13 @@ exports.createUser = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
+    console.log("Update request received:", req.body); // Debugging
     const { id } = req.params;
     const { name, email, password, role } = req.body;
+
+    if (!name && !email && !password && !role) {
+        return res.status(400).json({ error: 'No fields provided for update' });
+    }
 
     try {
         let updateQuery = 'UPDATE users SET ';
@@ -98,10 +103,6 @@ exports.updateUser = async (req, res) => {
             params.push(role);
         }
 
-        if (updates.length === 0) {
-            return res.status(400).json({ error: 'No fields provided for update' });
-        }
-
         updateQuery += updates.join(', ') + ' WHERE id = ?';
         params.push(id);
 
@@ -110,16 +111,18 @@ exports.updateUser = async (req, res) => {
                 console.error('Error updating user:', err);
                 return res.status(500).json({ error: 'Database query failed' });
             }
+            console.log('Update Results:', results);
             if (results.affectedRows === 0) {
                 return res.status(404).json({ message: 'User not found' });
             }
             res.status(200).json({ message: 'User updated successfully' });
         });
     } catch (error) {
-        console.error('Error updating user:', error);
+        console.error('Error in updateUser function:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
 
 exports.loginUser = (req, res) => {
     const { email, password } = req.body;
@@ -187,6 +190,30 @@ exports.countAllClients=async(req,res)=>{
             return res.status(500).json({ error: 'Database query failed' });
         }
         const count = results[0].userCount;
+        return res.status(200).json({ count });
+    })
+}
+
+exports.countAllFormateurs=async(req,res)=>{
+    const sql='SELECT COUNT(*) AS userCount FROM users where role=?';
+    db.query(sql,['formateur'],(err,results)=>{
+        if (err) {
+            console.error('Error fetching count of users:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        const count = results[0].userCount;
+        return res.status(200).json({ count });
+    })
+}
+
+exports.countAllFormations=async(req,res)=>{
+    const sql='SELECT COUNT(*) AS formationCount FROM formations';
+    db.query(sql,(err,results)=>{
+        if (err) {
+            console.error('Error fetching count of users:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        const count = results[0].formationCount;
         return res.status(200).json({ count });
     })
 }

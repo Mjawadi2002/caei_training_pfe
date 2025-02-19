@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 export default function Formations() {
   const [formations, setFormations] = useState([]);
 
-  // Fetch formations from the backend when the component mounts
   useEffect(() => {
     fetch('http://localhost:5000/api/v1/formations')
       .then((response) => response.json())
@@ -26,8 +25,15 @@ export default function Formations() {
                     <strong>Price:</strong> ${formation.price}
                   </p>
                   <p className="card-text">
-                    <strong>Session:</strong> {formation.session_deb} - {formation.session_end}
+                    <strong>Session begins:</strong> {formation.session_deb}
                   </p>
+                  <p className="card-text">
+                    <strong>Session ends:</strong> {formation.session_end}
+                  </p>
+                  <div className='d-flex align-items-center'>
+                    <button className='btn btn-success me-2'>Register Now</button>
+
+                  </div>
                 </div>
               </div>
             </div>
