@@ -9,6 +9,10 @@ import Register from "../Register/Register";
 import Home from "../Home/Home";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import User from "../User/User";
+import Error from "../Error/Error";
+import Admin from "../Admin/Admin";
+import Agent from "../Agent/Agent";
+import Formateur from "../Formateur/Formateur";
 import ProtectedRoutes from "../../utils/protectedRoutes";
 
 function App() {
@@ -22,6 +26,7 @@ function App() {
         <div className="container-fluid">
           <Header />
           <Routes>
+            <Route path="*" element={<Error />} />
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
@@ -29,7 +34,10 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route element={<ProtectedRoutes />}>
-              <Route path="/user" element={<User />} />
+                <Route path="/apprenant" element={<User />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/agent" element={<Agent />} />
+                <Route path="/formateur" element={<Formateur />} />
             </Route>
           </Routes>
           <Footer />

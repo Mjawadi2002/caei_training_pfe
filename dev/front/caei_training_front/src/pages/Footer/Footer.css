@@ -1,10 +1,53 @@
-/* Footer.css */
+/* Footer Container */
+.footer-container {
+  color: black; /* Change text color to black */
+  padding-top: 20px;
+  bottom:0;
+}
+
+/* Footer Title */
+.footer-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: black; /* Ensure text is visible */
+}
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.social-link {
+  color: black; /* Change icon color to black */
+  font-size: 1.8rem;
+  transition: color 0.3s ease-in-out;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  color: green; /* Bootstrap primary blue */
+}
+
+/* Contact Information */
+.footer p {
+  margin: 5px 0;
+  font-size: 1rem;
+  color: black; /* Change text color */
+}
+
+.footer p i {
+  margin-right: 8px;
+  color: green; /* Keep icons blue for contrast */
+}
+
+/* Copyright Section */
 .footer {
-    color: white;
-    padding: 20px;
-    text-align: center;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-  }
-  
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+  backdrop-filter: blur(10px);
+  color: black;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}

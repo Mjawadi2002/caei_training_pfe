@@ -16,12 +16,36 @@ export default function Login() {
         email,
         password,
       });
-      localStorage.setItem("token", res.data.token); 
-      navigate("/User"); 
+  
+      const { token, role } = res.data;
+  
+      // Store token and role in local storage
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+  
+      // Redirect based on role
+      switch (role) {
+        case "apprenant":
+          navigate("/apprenant");
+          break;
+        case "admin":
+          navigate("/admin");
+          break;
+        case "agent":
+          navigate("/agent");
+          break;
+        case "formateur":
+          navigate("/formateur");
+          break;
+        default:
+          navigate("/");
+          break;
+      }
     } catch (error) {
       console.error("Login failed:", error.response?.data?.message);
     }
-  }
+  };
+  
 
   return (
     <div className="register-container">

@@ -19,6 +19,7 @@ exports.getUserById = (req, res) => {
             console.error('Error fetching user:', err);
             return res.status(500).json({ error: 'Database query failed' });
         }
+        console.log("Fetched User: ", results); // Add this to log the fetched user
         if (results.length === 0) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -146,7 +147,10 @@ exports.loginUser = (req, res) => {
             { expiresIn: '1h' }
         );
 
-        res.status(200).json({ token });
+        res.status(200).json({ 
+            token,
+            role: user.role 
+        });
     });
 };
 

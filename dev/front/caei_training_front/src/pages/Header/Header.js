@@ -7,15 +7,20 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token); 
-  }, [location.pathname]); 
+    const role = localStorage.getItem("role");
+    setIsAuthenticated(!!token);
+    setUserRole(role);
+  }, [location.pathname]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); 
+    localStorage.removeItem("token");
+    localStorage.removeItem("role"); 
     setIsAuthenticated(false);
+    setUserRole(null);
     navigate("/");
   };
 
@@ -47,6 +52,16 @@ export default function Header() {
             <li className="nav-item">
               <Link className="nav-link active" to="/contact">Contact Us</Link>
             </li>
+            {isAuthenticated && (
+              <li className="nav-item">
+                <Link 
+                  className="nav-link active" 
+                  to={`/${userRole}`} // Dynamically navigate to the role-specific profile page
+                >
+                  Profile
+                </Link>
+              </li>
+            )}
           </ul>
           <div className="d-flex">
             {isAuthenticated ? (

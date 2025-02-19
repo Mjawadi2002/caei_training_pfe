@@ -3,9 +3,10 @@ VALUES ('Agent Name', 'agent@example.com', 'hashed_password', 'agent');
 
 
 
+use caei_training
 Describe users
 
-select * from users where role='agent'
+select * from users where role='formateur'
 
 select * from formations
 

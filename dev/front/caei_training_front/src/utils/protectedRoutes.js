@@ -1,19 +1,40 @@
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, Navigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
 const ProtectedRoutes = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState(null); 
+    const [user, setUser] = useState(null); 
+    const location = useLocation();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        setIsAuthenticated(!!token); 
+        const role = localStorage.getItem("role");
+
+        if (token && role) {
+            setUser({ token, role }); 
+        } else {
+            setUser(false); 
+        }
     }, []);
 
-    if (isAuthenticated === null) {
+    if (user === null) {
         return <div>Loading...</div>; 
     }
 
-    return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+    if (!user) {
+        return <Navigate to="/login" replace />;
+    }
+    const roleRoutes = {
+        admin: "/admin",
+        apprenant: "/apprenant",
+        agent: "/agent",
+        formateur: "/formateur",
+    };
+
+    if (roleRoutes[user.role] !== location.pathname) {
+        return <Navigate to={roleRoutes[user.role]} replace />;
+    }
+
+    return <Outlet />; 
 };
 
 export default ProtectedRoutes;
