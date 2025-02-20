@@ -55,9 +55,52 @@ exports.createFormation = (req, res) => {
 };
 
 
-exports.updateFormation = (req,res)=>{
-    res.json("updating foramtion works!");
-}
+exports.updateFormation = (req, res) => {
+    const { id } = req.params;
+    const { title, description, price, session_deb, session_end, formateur_id } = req.body;
+    
+    const sql = `
+        UPDATE formations 
+        SET title = ?, description = ?, price = ?, session_deb = ?, session_end = ?, formateur_id = ?
+        WHERE id = ?`;
+    
+    db.query(sql, [title, description, price, session_deb, session_end, formateur_id, id], (err, results) => {
+        if (err) {
+            console.error('Error updating formation:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ error: 'Formation not found!' });
+        }
+
+        res.status(200).json({ message: 'Formation updated successfully' });
+    });
+};
+
+exports.updateFormationByName = (req, res) => {
+    const { name } = req.params;
+    const { title, description, price, session_deb, session_end, formateur_id } = req.body;
+    
+    const sql = `
+        UPDATE formations 
+        SET title = ?, description = ?, price = ?, session_deb = ?, session_end = ?, formateur_id = ?
+        WHERE title = ?`;
+    
+    db.query(sql, [title, description, price, session_deb, session_end, formateur_id, name], (err, results) => {
+        if (err) {
+            console.error('Error updating formation by name:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ error: 'Formation not found!' });
+        }
+
+        res.status(200).json({ message: 'Formation updated successfully by name' });
+    });
+};
+
 
 exports.deleteFormation = (req,res)=>{
     const{id}=req.params;

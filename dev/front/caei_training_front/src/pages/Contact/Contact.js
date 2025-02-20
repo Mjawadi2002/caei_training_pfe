@@ -29,7 +29,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="register-container">
+    <div className="register-container fade-in">
       <div className="register-form-container">
         <form className="register-form" onSubmit={handleSubmit}>
           <h2 className="form-title">Contact Us</h2>

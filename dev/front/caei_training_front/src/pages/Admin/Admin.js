@@ -26,7 +26,7 @@ export default function Admin() {
     }, []);
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-5 fade-in">
             <h1 className="display-4 text-dark text-center">Admin Dashboard</h1>
             <div className="row mt-4 py-4">
                 <div className="col-md-4 mb-4">
@@ -34,7 +34,7 @@ export default function Admin() {
                         <div className="card-body text-center">
                             <h2 className="card-title">{countUsers}</h2>
                             <p className="card-text">Clients</p>
-                            <Link to="/manage-clients" className="btn btn-success">
+                            <Link to="/admin/manage-clients" className="btn btn-success">
                                 Manage
                             </Link>
                         </div>
@@ -45,7 +45,7 @@ export default function Admin() {
                         <div className="card-body text-center">
                             <h2 className="card-title">{countFormations}</h2>
                             <p className="card-text">Formations</p>
-                            <Link to="/manage-formations" className="btn btn-success">
+                            <Link to="/admin/manage-formations" className="btn btn-success">
                                 Manage
                             </Link>
                         </div>
@@ -56,7 +56,7 @@ export default function Admin() {
                         <div className="card-body text-center">
                             <h2 className="card-title">{countFormateur}</h2>
                             <p className="card-text">Formateurs</p>
-                            <Link to="/manage-formateurs" className="btn btn-success">
+                            <Link to="/admin/manage-formateurs" className="btn btn-success">
                                 Manage
                             </Link>
                         </div>

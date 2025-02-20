@@ -7,7 +7,7 @@ import slide3 from '../../assets/slide3.jpeg';
 
 export default function About() {
     return (
-        <div className="about-container">
+        <div className="about-container fade-in">
             <div className="about-section">
                 <h1 className="about-title">Our Story !</h1>
                 <div className="about-content">

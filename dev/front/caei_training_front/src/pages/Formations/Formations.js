@@ -11,7 +11,7 @@ export default function Formations() {
   }, []);
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid fade-in">
       <h1 className="text-center">Formations</h1>
       <div className="row">
         {formations.length > 0 ? (
