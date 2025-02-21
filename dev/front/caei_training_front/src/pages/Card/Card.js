@@ -11,7 +11,9 @@ export default function Card({ image, title, text, description }) {
                 <div className="card-body">
                     <h5 className="card-title">{title}</h5>
                     <p className="card-text">{text}</p>
-                    <button className="btn btn-success" onClick={() => setShowModal(true)}>Learn More</button>
+                    <div className="d-flex align-items-center">
+                        <button className="btn btn-success me-2" onClick={() => setShowModal(true)}>Learn More</button>
+                    </div>
                 </div>
             </div>
 

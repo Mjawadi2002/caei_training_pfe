@@ -51,8 +51,6 @@ export default function Footer() {
         <p>© {new Date().getFullYear()} CAEI Training. All rights reserved.</p>
       </footer>
             </div>
-            
-            
             <div className="col-md-3 text-center">
               <h3 className="footer-title">Contact Us</h3>
               <p><i className="bi bi-envelope-fill"></i> contact@caei.com</p>
