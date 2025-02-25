@@ -18,16 +18,18 @@ import ManageFormateurs from "../ManageFormateurs/ManageFormateurs";
 import ManageFormations from "../ManageFormations/ManageFormations";
 import ProtectedRoutes from "../../utils/protectedRoutes";
 import AccessDenied from '../AccessDenied/AccessDenied';
+import ChatAgentClient from "../ChatAgentClient/ChatAgentClient";
 
 function App() {
   return (
-    <Router>
+    <div >
+          <Router>
       <div className="video-container">
         <video autoPlay loop muted playsInline className="background-video">
           <source src={backloop} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-        <div className="container-fluid">
+        <div className="container-fluid" >
           <Header />
           <Routes>
             <Route path="*" element={<Error />} />
@@ -39,9 +41,11 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route element={<ProtectedRoutes allowedRoles={["apprenant"]} />}>
               <Route path="/apprenant" element={<User />} />
+              <Route path="/chatclientagent" element={<ChatAgentClient />}/>
             </Route>
             <Route element={<ProtectedRoutes allowedRoles={["agent"]} />}>
               <Route path="/agent" element={<Agent />} />
+              <Route path="/chatagentclient" element={<ChatAgentClient />}/>
             </Route>
             <Route element={<ProtectedRoutes allowedRoles={["formateur"]} />}>
               <Route path="/formateur" element={<Formateur />} />
@@ -58,6 +62,8 @@ function App() {
         </div>
       </div>
     </Router>
+    </div>
+
   );
 }
 

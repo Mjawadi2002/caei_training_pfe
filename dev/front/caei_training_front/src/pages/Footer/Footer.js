@@ -68,7 +68,7 @@ export default function Footer() {
                 <div className="mb-2">
                   <textarea
                     className="form-control"
-                    rows="2"
+                    rows="3"
                     placeholder="Write your feedback..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}

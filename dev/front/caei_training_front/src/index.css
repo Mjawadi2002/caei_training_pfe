@@ -1,5 +1,6 @@
 /* Global Reset */
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -17,9 +18,8 @@ html, body {
 
 /* Responsive Font Sizing */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-size: 24px; /* Base font size */
+  font-family: 'Caveat', cursive;
+  font-size: 2rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -56,6 +56,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  font-family: 'Caveat', cursive;
 }
 
 /* Responsive Typography */

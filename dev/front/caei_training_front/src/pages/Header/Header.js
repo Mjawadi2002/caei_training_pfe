@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { LogOut } from "lucide-react"; // Import Logout Icon
 import logo from '../../assets/logo.png'; 
 import './Header.css'; 
 
@@ -53,20 +54,34 @@ export default function Header() {
               <Link className="nav-link active" to="/contact">Contact Us</Link>
             </li>
             {isAuthenticated && (
-              <li className="nav-item">
-                <Link 
-                  className="nav-link active" 
-                  to={`/${userRole}`} // Dynamically navigate to the role-specific profile page
-                >
-                  Profile
-                </Link>
-              </li>
-            )}
+  <>
+    <li className="nav-item">
+      <Link 
+        className="nav-link active" 
+        to={`/${userRole}`} 
+      >
+        Profile
+      </Link> 
+    </li>
+    <li className='nav-item'>
+      {localStorage.getItem("role") !== 'agent' && (
+        <Link 
+          className="nav-link active" 
+          to="/chatclientagent"
+        >
+          Contact Agent
+        </Link>
+      )}
+    </li>
+  </>
+)}
+
+
           </ul>
           <div className="d-flex">
             {isAuthenticated ? (
-              <button className="btn btn-danger" onClick={handleLogout}>
-                Logout
+              <button className="btn  d-flex align-items-center" onClick={handleLogout}>
+                <LogOut size={25} className="me-2" /> 
               </button>
             ) : location.pathname !== "/login" && ( 
               <button className="btn btn-outline-success">
