@@ -64,7 +64,7 @@ export default function Header() {
       </Link> 
     </li>
     <li className='nav-item'>
-      {localStorage.getItem("role") !== 'agent' && (
+      {localStorage.getItem("role") == 'apprenant' && (
         <Link 
           className="nav-link active" 
           to="/chatclientagent"

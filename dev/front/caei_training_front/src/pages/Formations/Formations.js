@@ -12,7 +12,6 @@ export default function Formations() {
 
   return (
     <div className="container-fluid fade-in">
-      <h1 className="text-center">Formations</h1>
       <div className="row">
         {formations.length > 0 ? (
           formations.map((formation) => (
@@ -22,7 +21,7 @@ export default function Formations() {
                   <h5 className="card-title">{formation.title}</h5>
                   <p className="card-text">{formation.description}</p>
                   <p className="card-text">
-                    <strong>Price:</strong> ${formation.price}
+                    <strong>Price:</strong>  {formation.price} TND
                   </p>
                   <p className="card-text">
                     <strong>Session begins:</strong> {formation.session_deb}

@@ -1,15 +1,15 @@
 const db=require('../config/db');
 
-exports.getAllFormations = (req,res)=>{
-    const sql=`Select title,description,price,session_deb,session_end from formations;`;
-    db.query(sql,(err,results)=>{
-        if(err){
+exports.getAllFormations = (req, res) => {
+    const sql = `SELECT id, title, description, price, session_deb, session_end, formateur_id FROM formations;`;
+    db.query(sql, (err, results) => {
+        if (err) {
             console.log(err);
             return res.status(500).json({ error: 'Database query failed' });
         }
-        res.status(201).json(results);
-    })
-}
+        res.status(200).json(results);
+    });
+};
 
 exports.getFormationByName = (req, res) => {
     const { name } = req.params;
@@ -119,3 +119,14 @@ exports.deleteFormation = (req,res)=>{
     })
 }
 
+exports.getFormationsOfFormateur =(req,res)=>{
+    const {idformateur}=req.params;
+    const sql='SELECT * from formations where formateur_id=?';
+    db.query(sql,[idformateur],(err,results)=>{
+        if(err){
+            console.error('error fetching formations',err);
+            return res.status(500).json({error:'Database query failed'})
+        }
+        return res.status(200).json(results);
+    })
+}

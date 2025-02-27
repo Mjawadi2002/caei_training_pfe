@@ -217,3 +217,16 @@ exports.countAllFormations=async(req,res)=>{
         return res.status(200).json({ count });
     })
 }
+
+exports.getUserName = (req, res) => {
+    const { name } = req.params;
+    const searchPattern = `%${name}%`; // Allow partial matching
+
+    db.query('SELECT * FROM users WHERE name LIKE ?', [searchPattern], (err, results) => {
+        if (err) {
+            console.error('Error fetching user by name:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        res.status(200).json(results);
+    });
+}

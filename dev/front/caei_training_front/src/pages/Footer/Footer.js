@@ -41,7 +41,7 @@ export default function Footer() {
                   <a href="#" className="social-link"><i className="bi bi-facebook"></i></a>
                 </div>
                 <div className='row'>
-                  <a href="#" className="social-link"><i className="bi bi-instagram"></i></a>
+                  <a href="https://www.instagram.com/mouhanned_jaouedi/?hl=fr" className="social-link"><i className="bi bi-instagram"></i></a>
                 </div>
                 <div className='row'>
                   <a href="#" className="social-link"><i className="bi bi-linkedin"></i></a>
@@ -68,7 +68,7 @@ export default function Footer() {
                 <div className="mb-2">
                   <textarea
                     className="form-control"
-                    rows="3"
+                    rows="2"
                     placeholder="Write your feedback..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
