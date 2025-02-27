@@ -7,6 +7,7 @@ export default function Admin() {
     const [countUsers, setCountUsers] = useState(0);
     const [countFormations, setCountFormations] = useState(0);
     const [countFormateur, setCountFormateur] = useState(0);
+    const [countReclamations,setCountReclamations]=useState(0);
 
     useEffect(() => {
         const fetchCounts = async () => {
@@ -14,9 +15,11 @@ export default function Admin() {
                 const usersResponse = await axios.get('http://localhost:5000/api/v1/users/countClients');
                 const formateursResponse = await axios.get('http://localhost:5000/api/v1/users/countFormateurs');
                 const formationsResponse = await axios.get('http://localhost:5000/api/v1/users/countFormations');
+                const reclamationsResponse=await axios.get('http://localhost:5000/api/v1/email/getCountOfReclamations');
                 setCountUsers(usersResponse.data.count);
                 setCountFormateur(formateursResponse.data.count);
                 setCountFormations(formationsResponse.data.count);
+                setCountReclamations(reclamationsResponse.data.count);
             } catch (error) {
                 console.error("Error fetching counts:", error);
             }
@@ -57,6 +60,28 @@ export default function Admin() {
                             <h2 className="card-title">{countFormateur}</h2>
                             <p className="card-text">Formateurs</p>
                             <Link to="/admin/manage-formateurs" className="btn btn-success">
+                                Manage
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-6 mb-4">
+                    <div className="card dashboard-card">
+                        <div className="card-body text-center">
+                            <h2 className="card-title">{countFormateur}</h2>
+                            <p className="card-text">Enrollments</p>
+                            <Link to="/admin/manage-formateurs" className="btn btn-success">
+                                Manage
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-6 mb-4">
+                    <div className="card dashboard-card">
+                        <div className="card-body text-center">
+                            <h2 className="card-title">{countReclamations}</h2>
+                            <p className="card-text">Réclamations</p>
+                            <Link to="/admin/manage-reclamations" className="btn btn-success">
                                 Manage
                             </Link>
                         </div>

@@ -1,44 +1,44 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "../Register/Register.css";
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: "", subject: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [loading, setLoading] = useState(false);
-  const [responseMessage, setResponseMessage] = useState(null);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setResponseMessage(null);
-
+  
     try {
       const res = await axios.post("http://localhost:5000/api/v1/email/send-email", formData, {
         headers: { "Content-Type": "application/json" },
       });
-      setResponseMessage({ type: "success", text: res.data.message });
-      setFormData({ name: "", subject: "", message: "" });
+  
+      if (res.data.success) {
+        toast.success(res.data.message || "Message sent successfully!");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        toast.error(res.data.message || "Failed to send message.");
+      }
     } catch (error) {
       console.error("Error sending message:", error);
-      setResponseMessage({ type: "error", text: "Failed to send message." });
+      toast.error("Failed to send message.");
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="register-container fade-in">
       <div className="register-form-container">
         <form className="register-form" onSubmit={handleSubmit}>
           <h2 className="form-title">Contact Us</h2>
-
-          {responseMessage && (
-            <div className={`alert ${responseMessage.type === "success" ? "alert-success" : "alert-danger"}`}>
-              {responseMessage.text}
-            </div>
-          )}
 
           <div className="form-group">
             <input
@@ -54,11 +54,11 @@ export default function Contact() {
 
           <div className="form-group">
             <input
-              type="text"
+              type="email"
               className="form-control"
-              name="subject"
-              placeholder="Subject"
-              value={formData.subject}
+              name="email"
+              placeholder="Your Email"
+              value={formData.email}
               onChange={handleChange}
               required
             />
@@ -82,6 +82,8 @@ export default function Contact() {
           </div>
         </form>
       </div>
+
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar closeOnClick />
     </div>
   );
 }
