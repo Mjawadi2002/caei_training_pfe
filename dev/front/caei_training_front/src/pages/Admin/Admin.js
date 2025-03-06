@@ -73,7 +73,7 @@ export default function Admin() {
                         <div className="card-body text-center">
                             <h2 className="card-title">{countEnrollment}</h2>
                             <p className="card-text">Enrollments</p>
-                            <Link to="/admin/manage-formateurs" className="btn btn-success">
+                            <Link to="/admin/manage-enrollment" className="btn btn-success">
                                 Manage
                             </Link>
                         </div>

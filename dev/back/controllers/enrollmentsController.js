@@ -70,7 +70,16 @@ exports.getCountEnrollments = (req, res) => {
 };
 
 exports.getCountEnrollmentsById=(req,res)=>{
-    res.send('counts enrollments by id of apprenant is working !')
+    const {id}=req.params;
+    const query=`Select count(*) as user_enrollment_count from enrollment where apprenant_id=?`
+    db.query(query,[id],(err,results)=>{
+        if(err){
+            console.error(err);
+            return res.status(500).json({error:'DATABASE QUERY FAILED'});
+        }
+        const userEnrollmentCount=results[0].user_enrollment_count;
+        res.status(200).json({user_enrollment_count:userEnrollmentCount});
+    })
 }
 
 exports.registerFormation = (req, res) => {
@@ -122,8 +131,32 @@ exports.deleteEnrollment = (req, res) => {
 };
 
 
-exports.updateEnrollment=(req,res)=>{
-   const {id}=req.params;
-   const query=``;
-   db
+
+exports.updateEnrollment = (req, res) => {
+    const { id } = req.params; 
+    const { studentName, course } = req.body; 
+
+    if (!studentName || !course) {
+        return res.status(400).json({ message: "Student name and course are required." });
+    }
+
+    const query = `
+        UPDATE enrollments 
+        SET student_name = ?, course = ?
+        WHERE enrollment_id = ?
+    `;
+
+
+    db.query(query, [studentName, course, id], (err, result) => {
+        if (err) {
+            console.error("Error updating enrollment:", err);
+            return res.status(500).json({ message: "Failed to update enrollment." });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Enrollment not found." });
+        }
+
+        res.status(200).json({ message: "Enrollment updated successfully." });
+    });
 };

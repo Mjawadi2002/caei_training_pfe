@@ -20,6 +20,7 @@ import ProtectedRoutes from "../../utils/protectedRoutes";
 import AccessDenied from '../AccessDenied/AccessDenied';
 import ChatAgentClient from "../ChatAgentClient/ChatAgentClient";
 import ManageReclamations from "../ManageReclamations/ManageReclamations";
+import ManageEnrollments from "../ManageEnrollments/ManageEnrollments";
 
 function App() {
   return (
@@ -57,6 +58,7 @@ function App() {
               <Route path="/admin/manage-formations" element={<ManageFormations />} />
               <Route path="/admin/manage-formateurs" element={<ManageFormateurs />} />
               <Route path="/admin/manage-reclamations" element ={<ManageReclamations />} />
+              <Route path="/admin/manage-enrollment" element={<ManageEnrollments />} />
             </Route>
             <Route path="/accessdenied" element={<AccessDenied />} />
           </Routes>

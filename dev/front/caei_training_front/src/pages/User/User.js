@@ -45,7 +45,6 @@ export default function User() {
                 console.error("Error fetching user data:", error.response?.data || error.message);
             });
 
-            // Fetch enrolled formations
             axios.get(`http://localhost:5000/api/v1/enrollment/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
@@ -116,7 +115,6 @@ export default function User() {
         })
         .then((response) => {
             console.log("Enrollment deleted:", response.data);
-            // Remove the deleted enrollment from the state
             setEnrolledFormations((prevFormations) => 
                 prevFormations.filter(formation => formation.enrollment_id !== enrollmentId)
             );
