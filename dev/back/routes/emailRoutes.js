@@ -99,11 +99,9 @@ router.post("/respond/:id", async (req, res) => {
 
 router.post("/send-feedback", async (req, res) => {
   const { message } = req.body;
-
   if (!message) {
     return res.status(400).json({ success: false, message: "Message is required." });
   }
-
   const response = await sendFeedback(message);
   res.status(response.success ? 200 : 500).json(response);
 });

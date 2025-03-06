@@ -4,6 +4,7 @@ const mysqlPool = require("./config/db");
 const userRouter = require("./routes/userRoutes");
 const formationRouter = require("./routes/formationRoutes");
 const emailRouter = require("./routes/emailRoutes");
+const enrollmentRouter=require('./routes/enrollmentsRoutes');
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -32,6 +33,7 @@ app.use(express.json());
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/formations", formationRouter);
 app.use("/api/v1/email", emailRouter);
+app.use("/api/v1/enrollment", enrollmentRouter);
 
 
 let activeClients = {};

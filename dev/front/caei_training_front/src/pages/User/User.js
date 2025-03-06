@@ -3,7 +3,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { Spinner, Button, Modal, Form } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./User.css"; // Import your custom CSS for animations
+import "./User.css"; // Import custom CSS for animations
 
 export default function User() {
     const [userId, setUserId] = useState(null);
@@ -13,42 +13,60 @@ export default function User() {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({ name: "", email: "" });
-
-    // Static formations data with descriptions
-    const formations = [
-        { id: 1, name: "Formation 1", description: "This is a detailed description of Formation 1." },
-        { id: 2, name: "Formation 2", description: "This is a detailed description of Formation 2." },
-        { id: 3, name: "Formation 3", description: "This is a detailed description of Formation 3." },
-    ];
+    const [enrolledFormations, setEnrolledFormations] = useState([]);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
 
-        if (token) {
+        if (!token) {
+            console.error("No token found in localStorage.");
+            setLoading(false);
+            return;
+        }
+
+        try {
             const decodedToken = jwtDecode(token);
             const userId = decodedToken.id;
+            setUserId(userId);
+            console.log("Decoded User ID:", userId);
 
-            axios
-                .get(`http://localhost:5000/api/v1/users/${userId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
-                .then((response) => {
-                    if (response.data) {
-                        setUserId(response.data.id);
-                        setUserName(response.data.name);
-                        setUserEmail(response.data.email);
-                        setUserRole(response.data.role);
-                        setFormData({ name: response.data.name, email: response.data.email });
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error fetching user data", error);
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
+            // Fetch user details
+            axios.get(`http://localhost:5000/api/v1/users/${userId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => {
+                console.log("User Data:", response.data);
+                setUserName(response.data.name);
+                setUserEmail(response.data.email);
+                setUserRole(response.data.role);
+                setFormData({ name: response.data.name, email: response.data.email });
+            })
+            .catch((error) => {
+                console.error("Error fetching user data:", error.response?.data || error.message);
+            });
+
+            // Fetch enrolled formations
+            axios.get(`http://localhost:5000/api/v1/enrollment/${userId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => {
+                console.log("Enrolled Formations:", response.data);
+                if (Array.isArray(response.data)) {
+                    setEnrolledFormations(response.data);
+                } else {
+                    console.error("Enrolled formations data is not an array.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching enrolled formations:", error.response?.data || error.message);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+
+        } catch (error) {
+            console.error("Error decoding token:", error);
+            setLoading(false);
         }
     }, []);
 
@@ -63,33 +81,50 @@ export default function User() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const token = localStorage.getItem("token");
-    
+
         if (!userId) {
             console.error("User ID is not available.");
             return;
         }
-    
-        console.log("Updating user:", userId, formData); // Debugging
-    
-        axios
-            .put(`http://localhost:5000/api/v1/users/${userId}`, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            .then((response) => {
-                console.log("User updated successfully:", response.data);
-                setUserName(formData.name);
-                setUserEmail(formData.email);
-            })
-            .catch((error) => {
-                console.error("Error updating user:", error);
-            })
-            .finally(() => {
-                handleClose();
-            });
+
+        axios.put(`http://localhost:5000/api/v1/users/${userId}`, formData, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+            console.log("User updated:", response.data);
+            setUserName(formData.name);
+            setUserEmail(formData.email);
+        })
+        .catch((error) => {
+            console.error("Error updating user:", error.response?.data || error.message);
+        })
+        .finally(() => {
+            handleClose();
+        });
     };
-    
+
+    const handleLeaveFormation = (enrollmentId) => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            console.error("No token found in localStorage.");
+            return;
+        }
+
+        axios.delete(`http://localhost:5000/api/v1/enrollment/${enrollmentId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+            console.log("Enrollment deleted:", response.data);
+            // Remove the deleted enrollment from the state
+            setEnrolledFormations((prevFormations) => 
+                prevFormations.filter(formation => formation.enrollment_id !== enrollmentId)
+            );
+        })
+        .catch((error) => {
+            console.error("Error deleting enrollment:", error.response?.data || error.message);
+        });
+    };
 
     return (
         <div className="container mt-5 fade-in">
@@ -104,7 +139,7 @@ export default function User() {
                             {loading ? (
                                 <div className="mt-4">
                                     <Spinner animation="border" role="status" />
-                                    <span className="ml-2">Loading...</span>
+                                    <span className="mt-2">Loading...</span>
                                 </div>
                             ) : (
                                 <>
@@ -127,17 +162,26 @@ export default function User() {
 
                     <h3 className="display-6 text-center">Enrolled Formations</h3>
                     <div className="row">
-                        {formations.map((formation) => (
-                            <div key={formation.id} className="col-md-4 mb-4">
-                                <div className="card formation-card">
-                                    <div className="card-body text-center">
-                                        <h5 className="card-title">{formation.name}</h5>
-                                        <p className="card-text">{formation.description}</p>
-                                        <Button variant="success">View Details</Button>
+                        {enrolledFormations.length > 0 ? (
+                            enrolledFormations.map((formation, index) => (
+                                <div key={formation.enrollment_id || index} className="col-md-4 mb-4">
+                                    <div className="card formation-card">
+                                        <div className="card-body text-center">
+                                            <h5 className="card-title">{formation.formation_title}</h5>
+                                            <p className="card-text">{formation.formation_description}</p>
+                                            <Button 
+                                                variant="danger" 
+                                                onClick={() => handleLeaveFormation(formation.enrollment_id)}
+                                            >
+                                                Leave Formation
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p className="text-center text-muted">No enrolled formations yet.</p>
+                        )}
                     </div>
                 </div>
             </div>

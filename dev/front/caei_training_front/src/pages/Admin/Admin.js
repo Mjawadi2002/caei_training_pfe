@@ -8,6 +8,7 @@ export default function Admin() {
     const [countFormations, setCountFormations] = useState(0);
     const [countFormateur, setCountFormateur] = useState(0);
     const [countReclamations,setCountReclamations]=useState(0);
+    const [countEnrollment,setCountEnrollment]=useState(0);
 
     useEffect(() => {
         const fetchCounts = async () => {
@@ -16,10 +17,12 @@ export default function Admin() {
                 const formateursResponse = await axios.get('http://localhost:5000/api/v1/users/countFormateurs');
                 const formationsResponse = await axios.get('http://localhost:5000/api/v1/users/countFormations');
                 const reclamationsResponse=await axios.get('http://localhost:5000/api/v1/email/getCountOfReclamations');
+                const enrollmentResponse=await axios.get('http://localhost:5000/api/v1/enrollment/count');
                 setCountUsers(usersResponse.data.count);
                 setCountFormateur(formateursResponse.data.count);
                 setCountFormations(formationsResponse.data.count);
                 setCountReclamations(reclamationsResponse.data.count);
+                setCountEnrollment(enrollmentResponse.data.enrollment_count);
             } catch (error) {
                 console.error("Error fetching counts:", error);
             }
@@ -68,7 +71,7 @@ export default function Admin() {
                 <div className="col-md-6 mb-4">
                     <div className="card dashboard-card">
                         <div className="card-body text-center">
-                            <h2 className="card-title">{countFormateur}</h2>
+                            <h2 className="card-title">{countEnrollment}</h2>
                             <p className="card-text">Enrollments</p>
                             <Link to="/admin/manage-formateurs" className="btn btn-success">
                                 Manage
