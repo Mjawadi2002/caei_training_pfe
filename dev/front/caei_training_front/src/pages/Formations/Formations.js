@@ -18,7 +18,6 @@ export default function Formations() {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      // Redirect to login page if the user is not authenticated
       navigate('/login');
       return;
     }
@@ -61,10 +60,16 @@ export default function Formations() {
                     <strong>Price:</strong> {formation.price} TND
                   </p>
                   <p className="card-text">
-                    <strong>Session begins:</strong> {formation.session_deb}
+                    <strong>Category:</strong> {formation.category}
                   </p>
                   <p className="card-text">
-                    <strong>Session ends:</strong> {formation.session_end}
+                    <strong>Tags:</strong> {formation.tags}
+                  </p>
+                  <p className="card-text">
+                    <strong>Session begins:</strong> {new Date(formation.session_deb).toLocaleDateString()}
+                  </p>
+                  <p className="card-text">
+                    <strong>Session ends:</strong> {new Date(formation.session_end).toLocaleDateString()}
                   </p>
                   <div className="d-flex align-items-center">
                     <button

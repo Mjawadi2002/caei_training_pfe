@@ -1,23 +1,35 @@
 const jwt = require('jsonwebtoken');
 
+// Token authentication middleware
 const authenticateToken = (req, res, next) => {
-    const token = req.header('Authorization');
-    if (!token) return res.status(403).json({ message: 'Access denied' });
+    // Get the token from the Authorization header
+    const token = req.header('Authorization')?.replace('Bearer ', '');
 
-    jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ message: 'Invalid token' });
+    // If no token is provided, return access denied
+    if (!token) {
+        return res.status(403).json({ message: 'Access denied: No token provided' });
+    }
 
+    // Verify the token using the secret
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) {
+            return res.status(403).json({ message: 'Invalid token' });
+        }
+
+        // Attach the user data (from token) to the request object
         req.user = user; 
-        next();
+        next();  // Pass control to the next middleware or route handler
     });
 };
 
+// Role-based authorization middleware
 const authorizeRoles = (...roles) => {
     return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
+        // Check if the user's role is in the list of allowed roles
+        if (!roles.includes(req.user?.role)) {
             return res.status(403).json({ message: 'Access forbidden: Insufficient permissions' });
         }
-        next();
+        next(); // Pass control to the next middleware or route handler
     };
 };
 

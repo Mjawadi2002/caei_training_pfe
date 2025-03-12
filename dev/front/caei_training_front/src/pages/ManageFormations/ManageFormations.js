@@ -16,6 +16,8 @@ export default function ManageFormations() {
     session_deb: "",
     session_end: "",
     formateur_id: "",
+    category: "",
+    tags: "",
   });
 
   const token = localStorage.getItem("token");
@@ -52,7 +54,7 @@ export default function ManageFormations() {
     setFormData(
       formation
         ? { ...formation }
-        : { title: "", description: "", price: "", session_deb: "", session_end: "", formateur_id: "" }
+        : { title: "", description: "", price: "", category: "", tags: "", session_deb: "", session_end: "", formateur_id: "" }
     );
     setShowModal(true);
   };
@@ -60,33 +62,76 @@ export default function ManageFormations() {
   const handleClose = () => {
     setShowModal(false);
     setCurrentFormation(null);
+    setFormData({ title: "", description: "", price: "", category: "", tags: "", session_deb: "", session_end: "", formateur_id: "" });
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const createFormation = async () => {
+    try {
+      // Ensure tags is a string or an array and handle accordingly
+      const formattedData = {
+        title: formData.title,
+        description: formData.description,
+        price: formData.price,
+        session_deb: formData.session_deb,
+        session_end: formData.session_end,
+        formateur_id: formData.formateur_id,
+        category: formData.category.trim(),
+        tags: typeof formData.tags === 'string'
+          ? formData.tags.split(',').map(tag => tag.trim())  // If tags is a string, split by commas and trim
+          : formData.tags ? formData.tags.map(tag => tag.trim()) : [],  // If tags is already an array, trim each element
+      };
+  
+      // Send the data to the API
+      await axios.post("http://localhost:5000/api/v1/formations", formattedData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      fetchFormations(); // Refresh the list
+      handleClose();
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to create formation.");
+    }
+  };
+  
+  
+
+  const updateFormation = async () => {
+    try {
+      const formattedData = {
+        title: formData.title,
+        description: formData.description,
+        price: formData.price,
+        session_deb: formData.session_deb,
+        session_end: formData.session_end,
+        formateur_id: formData.formateur_id,
+        category: formData.category.trim(),
+        tags: formData.tags.split(",").map(tag => tag.trim()), // Ensure the tags are correctly formatted
+      };
+
+      await axios.put(`http://localhost:5000/api/v1/formations/name/${currentFormation.title}`, formattedData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchFormations(); // Refresh the list
+      handleClose();
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to update formation.");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      if (currentFormation) {
-        await axios.put(`http://localhost:5000/api/v1/formations/${currentFormation.id}`, formData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      } else {
-        await axios.post("http://localhost:5000/api/v1/formations", formData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      }
-      fetchFormations();
-      handleClose();
-    } catch (err) {
-      setError(err.response?.data?.error || "Operation failed.");
+    if (currentFormation) {
+      updateFormation();
+    } else {
+      createFormation();
     }
   };
 
   return (
-    <Container className="mt-5">
+    <Container className="mt-4" style={{ maxWidth: "95%" }}>
       <Card className="shadow-lg p-4">
         <h2 className="text-center mb-4">Manage Formations</h2>
         {error && <Alert variant="danger">{error}</Alert>}
@@ -105,6 +150,8 @@ export default function ManageFormations() {
                 <th>Session Start</th>
                 <th>Session End</th>
                 <th>Formateur ID</th>
+                <th>Category</th>
+                <th>Tags</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -115,10 +162,12 @@ export default function ManageFormations() {
                     <td>{formation.id}</td>
                     <td>{formation.title}</td>
                     <td>{formation.description}</td>
-                    <td>{formation.price} USD</td>
+                    <td>{formation.price} TND</td>
                     <td>{new Date(formation.session_deb).toLocaleDateString()}</td>
                     <td>{new Date(formation.session_end).toLocaleDateString()}</td>
                     <td>{formation.formateur_id}</td>
+                    <td>{formation.category}</td>
+                    <td>{formation.tags}</td>
                     <td>
                       <Button variant="warning" size="sm" className="me-2" onClick={() => handleShow(formation)}>
                         <FaEdit />
@@ -131,7 +180,7 @@ export default function ManageFormations() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="8">No formations found.</td>
+                  <td colSpan="10">No formations found.</td>
                 </tr>
               )}
             </tbody>
@@ -159,8 +208,16 @@ export default function ManageFormations() {
               <Form.Control as="textarea" name="description" value={formData.description} onChange={handleChange} required />
             </Form.Group>
             <Form.Group controlId="formFormationPrice">
-              <Form.Label>Price (USD)</Form.Label>
+              <Form.Label>Price (TND)</Form.Label>
               <Form.Control type="number" name="price" value={formData.price} onChange={handleChange} required />
+            </Form.Group>
+            <Form.Group controlId="formFormationCategory">
+              <Form.Label>Category</Form.Label>
+              <Form.Control type="text" name="category" value={formData.category} onChange={handleChange} required />
+            </Form.Group>
+            <Form.Group controlId="formFormationTags">
+              <Form.Label>Tags</Form.Label>
+              <Form.Control type="text" name="tags" value={formData.tags} onChange={handleChange} required />
             </Form.Group>
             <Form.Group controlId="formFormationSessionStart">
               <Form.Label>Session Start</Form.Label>
