@@ -61,8 +61,8 @@ export default function Admin() {
                     <div className="card dashboard-card">
                         <div className="card-body text-center">
                             <h2 className="card-title">{countFormateur}</h2>
-                            <p className="card-text">Formateurs</p>
-                            <Link to="/admin/manage-formateurs" className="btn btn-success">
+                            <p className="card-text">Evaluations</p>
+                            <Link to="/admin/manage-evaluations" className="btn btn-success">
                                 Manage
                             </Link>
                         </div>

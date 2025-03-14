@@ -14,13 +14,13 @@ import Admin from "../Admin/Admin";
 import Agent from "../Agent/Agent";
 import Formateur from "../Formateur/Formateur";
 import ManageClients from "../ManageClients/ManageClients";
-import ManageFormateurs from "../ManageFormateurs/ManageFormateurs";
 import ManageFormations from "../ManageFormations/ManageFormations";
 import ProtectedRoutes from "../../utils/protectedRoutes";
 import AccessDenied from '../AccessDenied/AccessDenied';
 import ChatAgentClient from "../ChatAgentClient/ChatAgentClient";
 import ManageReclamations from "../ManageReclamations/ManageReclamations";
 import ManageEnrollments from "../ManageEnrollments/ManageEnrollments";
+import Evaluations from "../Evaluaions/Evaluations";
 
 function App() {
   return (
@@ -51,12 +51,13 @@ function App() {
             </Route>
             <Route element={<ProtectedRoutes allowedRoles={["formateur"]} />}>
               <Route path="/formateur" element={<Formateur />} />
+              <Route path="/manage-evaluations" element={<Evaluations />} />
             </Route>
             <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/manage-clients" element={<ManageClients />} />
               <Route path="/admin/manage-formations" element={<ManageFormations />} />
-              <Route path="/admin/manage-formateurs" element={<ManageFormateurs />} />
+              <Route path="/admin/manage-evaluations" element={<Evaluations />} />
               <Route path="/admin/manage-reclamations" element ={<ManageReclamations />} />
               <Route path="/admin/manage-enrollment" element={<ManageEnrollments />} />
             </Route>
