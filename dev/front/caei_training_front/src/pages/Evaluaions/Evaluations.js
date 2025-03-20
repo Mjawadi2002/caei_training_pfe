@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { Table, Spinner, Alert, Container, Card, Button, Modal, Form } from "react-bootstrap";
-import { FaStar } from "react-icons/fa"; // For the star icon
+import {
+  Table,
+  Spinner,
+  Alert,
+  Container,
+  Card,
+  Button,
+  Modal,
+  Form,
+} from "react-bootstrap";
+import { FaStar } from "react-icons/fa"; // For star icons
 
 export default function Evaluations() {
   const { state } = useLocation();
@@ -11,9 +20,9 @@ export default function Evaluations() {
   const [evaluations, setEvaluations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false); 
-  const [currentEvalId, setCurrentEvalId] = useState(null); 
-  const [newRating, setNewRating] = useState(1); 
+  const [showModal, setShowModal] = useState(false);
+  const [currentEvalId, setCurrentEvalId] = useState(null);
+  const [newRating, setNewRating] = useState(1);
 
   const token = localStorage.getItem("token");
 
@@ -50,16 +59,16 @@ export default function Evaluations() {
         { rating: newRating },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      fetchEvaluations(); 
-      setShowModal(false); 
+      fetchEvaluations();
+      setShowModal(false);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update rating.");
     }
   };
 
   const openModal = (evalId, currentRating) => {
-    setCurrentEvalId(evalId); 
-    setNewRating(currentRating || 1); 
+    setCurrentEvalId(evalId);
+    setNewRating(currentRating || 1);
     setShowModal(true);
   };
 
@@ -70,7 +79,9 @@ export default function Evaluations() {
   return (
     <Container className="mt-5">
       <Card className="shadow-lg p-4">
-        <h2 className="text-center mb-4">Evaluations for Course {formationName} :</h2>
+        <h2 className="text-center mb-4">
+          Evaluations for Course {formationName} :
+        </h2>
 
         {error && <Alert variant="danger">{error}</Alert>}
 
@@ -86,23 +97,38 @@ export default function Evaluations() {
                 <th>Email</th>
                 <th>Date Enrolled</th>
                 <th>Rating</th>
-                <th>Enrollment ID</th> 
+                <th>Enrollment ID</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {evaluations.map((evalItem, index) => (
+              {evaluations.map((evalItem) => (
                 <tr key={evalItem._id}>
                   <td>{evalItem.name}</td>
                   <td>{evalItem.email}</td>
-                  <td>{new Date(evalItem.date_enrolled).toLocaleDateString()}</td>
-                  <td>{evalItem.rating || "N/A"}</td>
-                  <td>{evalItem.enrollment_id}</td> 
+                  <td>
+                    {new Date(evalItem.date_enrolled).toLocaleDateString()}
+                  </td>
+                  <td>
+                    {evalItem.rating ? (
+                      [...Array(5)].map((_, i) => (
+                        <FaStar
+                          key={i}
+                          color={i < evalItem.rating ? "#ffc107" : "#e4e5e9"}
+                        />
+                      ))
+                    ) : (
+                      "N/A"
+                    )}
+                  </td>
+                  <td>{evalItem.enrollment_id}</td>
                   <td>
                     <Button
                       variant="warning"
                       size="sm"
-                      onClick={() => openModal(evalItem.enrollment_id, evalItem.rating)} 
+                      onClick={() =>
+                        openModal(evalItem.enrollment_id, evalItem.rating)
+                      }
                     >
                       <FaStar />
                     </Button>

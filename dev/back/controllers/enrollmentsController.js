@@ -8,7 +8,8 @@ exports.getAllEnrollments = (req, res) => {
             u.id AS apprenant_id,
             u.name AS apprenant_name, 
             f.title AS formation_title,
-            DATE_FORMAT(e.date_enrolled, '%Y-%m-%d') AS registration_date
+            DATE_FORMAT(e.date_enrolled, '%Y-%m-%d') AS registration_date,
+            e.rating AS enrollment_rating
         FROM enrollments e
         JOIN users u ON e.apprenant_id = u.id
         JOIN formations f ON e.formation_id = f.id
@@ -204,17 +205,15 @@ exports.showEnrollmentByFormationId = (req, res) => {
 
 exports.updateRating = (req, res) => {
     const { rating } = req.body;
-    const { enrollmentId } = req.params;
+    const {id } = req.params;
 
-    // Validate rating
     if (rating === undefined || typeof rating !== 'number' || rating < 0 || rating > 5) {
         return res.status(400).json({ message: "Rating must be a number between 0 and 5." });
     }
 
-    // SQL query to update the rating
     const query = `UPDATE enrollments SET rating = ? WHERE id = ?`;
 
-    db.query(query, [rating, enrollmentId], (err, result) => {
+    db.query(query, [rating, id], (err, result) => {
         if (err) {
             console.error('Error updating rating:', err);
             return res.status(500).json({ error: 'Database query failed.' });
