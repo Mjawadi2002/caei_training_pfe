@@ -183,6 +183,9 @@ exports.countAllUsers = async (req, res) => {
 };
 
 exports.countAllClients=async(req,res)=>{
+
+
+    
     const sql='SELECT COUNT(*) AS userCount FROM users where role=?';
     db.query(sql,['apprenant'],(err,results)=>{
         if (err) {

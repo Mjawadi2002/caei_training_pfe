@@ -51,13 +51,12 @@ function App() {
             </Route>
             <Route element={<ProtectedRoutes allowedRoles={["formateur"]} />}>
               <Route path="/formateur" element={<Formateur />} />
-              <Route path="/manage-evaluations" element={<Evaluations />} />
+              <Route path="/formateur/evaluation" element={<Evaluations />} />
             </Route>
             <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/manage-clients" element={<ManageClients />} />
               <Route path="/admin/manage-formations" element={<ManageFormations />} />
-              <Route path="/admin/manage-evaluations" element={<Evaluations />} />
               <Route path="/admin/manage-reclamations" element ={<ManageReclamations />} />
               <Route path="/admin/manage-enrollment" element={<ManageEnrollments />} />
             </Route>

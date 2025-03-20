@@ -97,7 +97,7 @@ export default function Formateur() {
   return (
     <Container className="mt-5">
       <Card className="shadow-lg p-4">
-        <h2 className="text-center mb-4">My Proposed Formations</h2>
+        <h2 className="text-center mb-4">My Proposed Courses</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         {loading ? (
           <div className="text-center"><Spinner animation="border" /></div>
@@ -131,6 +131,9 @@ export default function Formateur() {
                       <Button variant="danger" size="sm" onClick={() => deleteFormation(formation.id)}>
                         <FaTrash />
                       </Button>
+                      <Link to={`/formateur/evaluation`} state={{ formationId: formation.id ,formationName:formation.title}} className="btn btn-success btn-sm ms-2">
+                        Ratings
+                      </Link>
                     </td>
                   </tr>
                 ))
@@ -172,16 +175,6 @@ export default function Formateur() {
           </Form>
         </Modal.Body>
       </Modal>
-      <div className="d-flex justify-content-center mt-4">
-        <div className="card dashboard-card text-center" style={{ width: "600px" }}>
-          <div className="card-body">
-            <h2 className="card-title">Manage Evaluations</h2>
-            <Link to="/manage-evaluations" className="btn btn-success">
-              Manage
-            </Link>
-          </div>
-        </div>
-      </div>
     </Container>
   );
 }

@@ -84,6 +84,7 @@ exports.getCountEnrollmentsById=(req,res)=>{
 
 exports.registerFormation = (req, res) => {
     const { apprenant_id, formation_id } = req.body;
+    const defaulRating=0;
     
     if (!apprenant_id || !formation_id) {
         return res.status(400).json({ error: 'apprenant_id and formation_id are required' });
@@ -92,11 +93,11 @@ exports.registerFormation = (req, res) => {
     const date_enrolled = new Date(); // Corrected date format
 
     const query = `
-        INSERT INTO enrollments (apprenant_id, formation_id, date_enrolled)
-        VALUES (?, ?, ?)
+        INSERT INTO enrollments (apprenant_id, formation_id, date_enrolled,rating)
+        VALUES (?, ?, ?,?)
     `;
 
-    db.query(query, [apprenant_id, formation_id, date_enrolled], (err, results) => {
+    db.query(query, [apprenant_id, formation_id, date_enrolled,defaulRating], (err, results) => {
         if (err) {
             console.error('Error inserting enrollment:', err);
             return res.status(500).json({ error: 'Database error occurred' });
@@ -160,3 +161,75 @@ exports.updateEnrollment = (req, res) => {
         res.status(200).json({ message: "Enrollment updated successfully." });
     });
 };
+
+
+
+
+exports.showEnrollmentByFormationId = (req, res) => {
+    const { id } = req.params;  
+    const role = 'apprenant';  
+
+    console.log(`Fetching evaluations for formationId: ${id}`);  // Log the formation ID
+
+    const query = `
+        SELECT 
+            enrollments.id AS enrollment_id,  
+            users.id AS user_id,
+            users.name,
+            users.email,
+            enrollments.date_enrolled,
+            enrollments.rating,
+            enrollments.apprenant_id  
+        FROM 
+            enrollments
+        JOIN 
+            users ON enrollments.apprenant_id = users.id
+        WHERE 
+            enrollments.formation_id = ?
+            AND users.role = ?;
+    `;
+
+    db.query(query, [id, role], (err, results) => {
+        if (err) {
+            console.error("Database query error:", err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+
+        console.log('Query Results:', results);  
+        res.status(200).json(results);  // Send results with enrollment_id
+    });
+};
+
+
+
+exports.updateRating = (req, res) => {
+    const { rating } = req.body;
+    const { enrollmentId } = req.params;
+
+    // Validate rating
+    if (rating === undefined || typeof rating !== 'number' || rating < 0 || rating > 5) {
+        return res.status(400).json({ message: "Rating must be a number between 0 and 5." });
+    }
+
+    // SQL query to update the rating
+    const query = `UPDATE enrollments SET rating = ? WHERE id = ?`;
+
+    db.query(query, [rating, enrollmentId], (err, result) => {
+        if (err) {
+            console.error('Error updating rating:', err);
+            return res.status(500).json({ error: 'Database query failed.' });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'No enrollment found with the specified enrollment ID.' });
+        }
+
+        res.status(200).json({ message: 'Rating updated successfully.' });
+    });
+};
+
+
+
+
+
+
