@@ -2,16 +2,20 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react"; 
 import { Link } from 'react-router-dom';
+import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
+import { BiLoaderCircle } from "react-icons/bi"; 
 import './Register.css'; 
 
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const res = await axios.post("http://localhost:5000/api/v1/users/register", {
         name,
@@ -21,6 +25,8 @@ export default function Register() {
       navigate("/login"); 
     } catch (error) {
       console.error("Registration failed:", error.response?.data?.message || error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -30,7 +36,8 @@ export default function Register() {
         <form className="register-form" onSubmit={handleRegister}>
           <h2 className="form-title">Create Account</h2>
 
-          <div className="form-group">
+          <div className="form-group input-group">
+            <span className="input-group-text bg-light"><FaUser size={18} /></span>
             <input 
               type="text" 
               className="form-control" 
@@ -42,7 +49,8 @@ export default function Register() {
             />
           </div>
 
-          <div className="form-group">
+          <div className="form-group input-group">
+            <span className="input-group-text bg-light"><FaEnvelope size={18} /></span>
             <input 
               type="email" 
               className="form-control" 
@@ -54,7 +62,8 @@ export default function Register() {
             />
           </div>
 
-          <div className="form-group">
+          <div className="form-group input-group">
+            <span className="input-group-text bg-light"><FaLock size={18} /></span>
             <input 
               type="password" 
               className="form-control" 
@@ -67,7 +76,9 @@ export default function Register() {
           </div>
 
           <div className="button-group">
-            <button type="submit" className="btn btn-success">Create Account</button> 
+            <button type="submit" className="btn btn-success" disabled={isLoading}>
+              {isLoading ? <BiLoaderCircle className="spinner-border" /> : "Create Account"}
+            </button> 
           </div>
 
           <p className="redirect-link">

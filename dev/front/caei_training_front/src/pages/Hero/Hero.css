@@ -1,36 +1,86 @@
-/* Container styling */
-.container-fluid.section {
-
-    padding: 4rem;
-    border-radius: 12px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+/* General styling for the Hero component */
+.section {
+    padding: 60px 0;
 }
 
-
-/* Section logo styling */
 .sectionlogo img {
-    width: 100%;
-    max-width:  auto;
-    height: auto;
+    max-width: 120px;
+    transition: transform 0.3s ease;
 }
 
-/* Description section */
-.section.description {
+.sectionlogo img:hover {
+    transform: scale(1.1);
+}
+
+.description p {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    font-weight: 300;
+    color: #333;
+}
+
+/* Styling for the Services section */
+h2 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Card styling */
+.card {
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: white;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Image Styling */
+.card img {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Card Body Styling */
+.card-body {
     padding: 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    text-align: center;
 }
 
-/* Button styling */
-
-.contact-btn:hover {
-    background-color: #0056b3;
+/* Card Icon Styling */
+.card .card-icon {
+    margin-bottom: 15px;
 }
 
-/* Media query for responsiveness */
+/* Font Size Adjustments */
+.card-title {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #555;
+    font-weight: 300;
+}
+
+/* Adjustments for large screens */
 @media (max-width: 768px) {
-    .col.md-4, .col.md-8 {
-        flex: 0 0 100%;
-        max-width: 100%;
+    .sectionlogo img {
+        max-width: 100px;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
     }
 }

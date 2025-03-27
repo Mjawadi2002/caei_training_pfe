@@ -1,107 +1,98 @@
-/* Container styling */
+/* General Container Styling */
 .about-container {
     padding: 2rem 0;
     display: flex;
     justify-content: center;
     align-items: center;
     backdrop-filter: blur(5px);
-}
-
-/* Blurry glass effect */
-.about-section {
-    max-width: 1000px;
-    text-align: center;
-    padding: 3rem;
+    background: rgba(255, 255, 255, 0.15);
     border-radius: 16px;
-    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease-in-out;
-    background: rgba(255, 255, 255, 0.15); /* Semi-transparent */
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.about-section:hover {
-    transform: scale(1.02);
-}
-
-/* Title Styling */
-.about-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: black;
-    margin-bottom: 1.5rem;
-    position: relative;
-}
-
-.about-title::after {
-    content: "";
-    width: 80px;
-    height: 4px;
-    background: black;
-    display: block;
-    margin: 10px auto;
-    border-radius: 5px;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 /* Card Styling */
 .about-card {
     display: flex;
     flex-direction: column;
+    align-items: center;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    transition: all 0.3s ease-in-out;
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .about-card:hover {
-    box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.3);
+    transform: translateY(-10px);
+    box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2);
 }
 
-/* Image Styling */
-.about-img {
-    width: 100%;
-    height: auto;
-    border-bottom: 3px solid rgba(255, 255, 255, 0.3);
-}
-
-/* Card Body */
-.about-card-body {
-    padding: 20px;
-}
-
+/* Title Styling */
 .about-card-title {
-    font-size: 1.8rem;
-    color: black;
-    font-weight: bold;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
+/* Text Styling */
 .about-card-text {
     font-size: 1rem;
-    color: black;
-    margin-top: 10px;
+    color: #666;
+    margin-bottom: 1.5rem;
+    text-align: center;
 }
 
-.about-text-muted {
-    font-size: 0.9rem;
-    color: black;
+/* Icon Container Styling */
+.about-icon-container {
+    background-color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    display: inline-block;
+    margin-top: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease-in-out;
+}
+
+.about-icon-container:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Fade-in effect */
+.fade-in {
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .about-section {
-        padding: 2rem;
-    }
-
-    .about-title {
-        font-size: 2rem;
+    .about-container {
+        padding: 1.5rem;
     }
 
     .about-card-title {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
+    }
+
+    .about-card-text {
+        font-size: 0.9rem;
+    }
+
+    .about-icon-container {
+        padding: 12px;
     }
 }

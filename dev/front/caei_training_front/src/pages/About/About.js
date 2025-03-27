@@ -1,47 +1,65 @@
 import '../Hero/Hero.css';
 import './About.css'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import slide1 from '../../assets/slide1.jpeg';
-import slide2 from '../../assets/slide2.jpeg';
-import slide3 from '../../assets/slide3.jpeg';
+
+import { FaUsers, FaLaptopCode, FaTrophy, FaChalkboardTeacher, FaAward } from 'react-icons/fa';
 
 export default function About() {
     return (
         <div className="about-container fade-in">
-            <div className="about-section">
-                <h1 className="about-title">Our Story !</h1>
-                <div className="about-content">
-                    <div id="carouselExampleFade" className="carousel slide carousel-fade" data-bs-ride="carousel">
-                        <div className="carousel-inner">
-                            {/* Slide 1 */}
-                            <div className="carousel-item active">
-                                <img src={slide1} className="d-block w-100" alt="Slide 1" />
-                            </div>
-                            {/* Slide 2 */}
-                            <div className="carousel-item">
-                                <img src={slide2} className="d-block w-100" alt="Slide 2" />
-                            </div>
-                            {/* Slide 3 */}
-                            <div className="carousel-item">
-                                <img src={slide3} className="d-block w-100" alt="Slide 3" />
+            {/* Sections for Mission, Vision, Services, and Achievements */}
+            <div className="container mt-5">
+                <div className="row text-center">
+                    {/* Mission */}
+                    <div className="col-md-3 mb-4">
+                        <div className="card about-card">
+                            <h3 className="about-card-title">Our Mission</h3>
+                            <p className="about-card-text">
+                                We provide high-quality training to bridge knowledge.
+                            </p>
+                            <div className="about-icon-container">
+                                <FaChalkboardTeacher size={50} color="#007bff" />
                             </div>
                         </div>
-                        {/* Controls */}
-                        <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
-                            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span className="visually-hidden">Previous</span>
-                        </button>
-                        <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
-                            <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span className="visually-hidden">Next</span>
-                        </button>
                     </div>
-                    <div className="about-card-body">
-                        <h5 className="about-card-title">CAEI TRAINING</h5>
-                        <p className="about-card-text">
-                            Our journey started with a vision to transform ideas into reality. 
-                            We bring creativity, innovation, and dedication to every project we touch.
-                        </p>
+
+                    {/* Vision */}
+                    <div className="col-md-3 mb-4">
+                        <div className="card about-card">
+                            <h3 className="about-card-title">Our Vision</h3>
+                            <p className="about-card-text">
+                                To become Africa's leading AI and computer engineering training platform.
+                            </p>
+                            <div className="about-icon-container">
+                                <FaAward size={50} color="#28a745" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Services */}
+                    <div className="col-md-3 mb-4">
+                        <div className="card about-card">
+                            <h3 className="about-card-title">Our Services</h3>
+                            <p className="about-card-text">
+                                Offering courses in AI, machine learning, and web development.
+                            </p>
+                            <div className="about-icon-container">
+                                <FaLaptopCode size={50} color="#e74c3c" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Achievements */}
+                    <div className="col-md-3 mb-4">
+                        <div className="card about-card">
+                            <h3 className="about-card-title">Our Achievements</h3>
+                            <p className="about-card-text">
+                                Over 1,000 students trained, now changing the world.
+                            </p>
+                            <div className="about-icon-container">
+                                <FaTrophy size={50} color="#f1c40f" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

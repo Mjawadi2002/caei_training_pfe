@@ -1,14 +1,15 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
-import './Admin.css'; 
 import { useEffect, useState } from "react";
+import { FaUsers, FaChalkboardTeacher, FaRegClipboard, FaEnvelopeOpenText, FaUserPlus } from 'react-icons/fa'; // Import icons
+import './Admin.css'; 
 
 export default function Admin() {
     const [countUsers, setCountUsers] = useState(0);
     const [countFormations, setCountFormations] = useState(0);
     const [countFormateur, setCountFormateur] = useState(0);
-    const [countReclamations,setCountReclamations]=useState(0);
-    const [countEnrollment,setCountEnrollment]=useState(0);
+    const [countReclamations, setCountReclamations] = useState(0);
+    const [countEnrollment, setCountEnrollment] = useState(0);
 
     useEffect(() => {
         const fetchCounts = async () => {
@@ -16,8 +17,8 @@ export default function Admin() {
                 const usersResponse = await axios.get('http://localhost:5000/api/v1/users/countClients');
                 const formateursResponse = await axios.get('http://localhost:5000/api/v1/users/countFormateurs');
                 const formationsResponse = await axios.get('http://localhost:5000/api/v1/users/countFormations');
-                const reclamationsResponse=await axios.get('http://localhost:5000/api/v1/email/getCountOfReclamations');
-                const enrollmentResponse=await axios.get('http://localhost:5000/api/v1/enrollment/count');
+                const reclamationsResponse = await axios.get('http://localhost:5000/api/v1/email/getCountOfReclamations');
+                const enrollmentResponse = await axios.get('http://localhost:5000/api/v1/enrollment/count');
                 setCountUsers(usersResponse.data.count);
                 setCountFormateur(formateursResponse.data.count);
                 setCountFormations(formationsResponse.data.count);
@@ -33,11 +34,12 @@ export default function Admin() {
 
     return (
         <div className="container mt-5 fade-in">
-            <h1 className="display-4 text-dark text-center">Admin Dashboard</h1>
-            <div className="row mt-4 py-4">
+            <div className="row mt-4 ">
+                {/* Client Count Card */}
                 <div className="col-md-6 mb-4">
                     <div className="card dashboard-card">
                         <div className="card-body text-center">
+                            <FaUsers className="card-icon" size={40} />
                             <h2 className="card-title">{countUsers}</h2>
                             <p className="card-text">Clients</p>
                             <Link to="/admin/manage-clients" className="btn btn-success">
@@ -46,9 +48,12 @@ export default function Admin() {
                         </div>
                     </div>
                 </div>
+                
+                {/* Formations Count Card */}
                 <div className="col-md-6 mb-4">
                     <div className="card dashboard-card">
                         <div className="card-body text-center">
+                            <FaChalkboardTeacher className="card-icon" size={40} />
                             <h2 className="card-title">{countFormations}</h2>
                             <p className="card-text">Formations</p>
                             <Link to="/admin/manage-formations" className="btn btn-success">
@@ -57,9 +62,12 @@ export default function Admin() {
                         </div>
                     </div>
                 </div>
+
+                {/* Enrollment Count Card */}
                 <div className="col-md-6 mb-4">
                     <div className="card dashboard-card">
                         <div className="card-body text-center">
+                            <FaUserPlus className="card-icon" size={40} />
                             <h2 className="card-title">{countEnrollment}</h2>
                             <p className="card-text">Enrollments</p>
                             <Link to="/admin/manage-enrollment" className="btn btn-success">
@@ -68,9 +76,12 @@ export default function Admin() {
                         </div>
                     </div>
                 </div>
+
+                {/* Reclamations Count Card */}
                 <div className="col-md-6 mb-4">
                     <div className="card dashboard-card">
                         <div className="card-body text-center">
+                            <FaEnvelopeOpenText className="card-icon" size={40} />
                             <h2 className="card-title">{countReclamations}</h2>
                             <p className="card-text">Réclamations</p>
                             <Link to="/admin/manage-reclamations" className="btn btn-success">
