@@ -1,26 +1,23 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { FaUsers, FaChalkboardTeacher, FaRegClipboard, FaEnvelopeOpenText, FaUserPlus } from 'react-icons/fa'; // Import icons
-import './Admin.css'; 
+import { FaUsers, FaBook, FaTools, FaCalendarCheck } from "react-icons/fa";
+import "./Admin.css";
 
-export default function Admin() {
+export default function AdminPanel() {
     const [countUsers, setCountUsers] = useState(0);
     const [countFormations, setCountFormations] = useState(0);
-    const [countFormateur, setCountFormateur] = useState(0);
     const [countReclamations, setCountReclamations] = useState(0);
     const [countEnrollment, setCountEnrollment] = useState(0);
 
     useEffect(() => {
         const fetchCounts = async () => {
             try {
-                const usersResponse = await axios.get('http://localhost:5000/api/v1/users/countClients');
-                const formateursResponse = await axios.get('http://localhost:5000/api/v1/users/countFormateurs');
-                const formationsResponse = await axios.get('http://localhost:5000/api/v1/users/countFormations');
-                const reclamationsResponse = await axios.get('http://localhost:5000/api/v1/email/getCountOfReclamations');
-                const enrollmentResponse = await axios.get('http://localhost:5000/api/v1/enrollment/count');
+                const usersResponse = await axios.get("http://localhost:5000/api/v1/users/countClients");
+                const formationsResponse = await axios.get("http://localhost:5000/api/v1/users/countFormations");
+                const reclamationsResponse = await axios.get("http://localhost:5000/api/v1/email/getCountOfReclamations");
+                const enrollmentResponse = await axios.get("http://localhost:5000/api/v1/enrollment/count");
                 setCountUsers(usersResponse.data.count);
-                setCountFormateur(formateursResponse.data.count);
                 setCountFormations(formationsResponse.data.count);
                 setCountReclamations(reclamationsResponse.data.count);
                 setCountEnrollment(enrollmentResponse.data.enrollment_count);
@@ -32,64 +29,28 @@ export default function Admin() {
         fetchCounts();
     }, []);
 
+    const sections = [
+        { name: "Clients", icon: <FaUsers className="text-primary" />, route: "/admin/manage-clients", count: countUsers, color: "text-primary" },
+        { name: "Courses", icon: <FaBook className="text-success" />, route: "/admin/manage-formations", count: countFormations, color: "text-success" },
+        { name: "Réclamations", icon: <FaTools className="text-warning" />, route: "/admin/manage-reclamations", count: countReclamations, color: "text-warning" },
+        { name: "Enrollments", icon: <FaCalendarCheck className="text-danger" />, route: "/admin/manage-enrollment", count: countEnrollment, color: "text-danger" },
+    ];
+
     return (
-        <div className="container mt-5 fade-in">
-            <div className="row mt-4 ">
-                {/* Client Count Card */}
-                <div className="col-md-6 mb-4">
-                    <div className="card dashboard-card">
-                        <div className="card-body text-center">
-                            <FaUsers className="card-icon" size={40} />
-                            <h2 className="card-title">{countUsers}</h2>
-                            <p className="card-text">Clients</p>
-                            <Link to="/admin/manage-clients" className="btn btn-success">
-                                Manage
-                            </Link>
+        <div className="container mt-5">
+            <div className="row g-4">
+                {sections.map((section) => (
+                    <div key={section.name} className="col-md-6">
+                        <div className="card shadow-lg border-0 p-3 text-center" role="button">
+                            <div className="card-body">
+                                <div className={`display-4 ${section.color} mb-3`}>{section.icon}</div>
+                                <h2 className="card-title fw-bold">{section.count}</h2>
+                                <p className="card-text">{section.name}</p>
+                                <Link to={section.route} className="btn btn-success">Manage</Link>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                {/* Formations Count Card */}
-                <div className="col-md-6 mb-4">
-                    <div className="card dashboard-card">
-                        <div className="card-body text-center">
-                            <FaChalkboardTeacher className="card-icon" size={40} />
-                            <h2 className="card-title">{countFormations}</h2>
-                            <p className="card-text">Formations</p>
-                            <Link to="/admin/manage-formations" className="btn btn-success">
-                                Manage
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Enrollment Count Card */}
-                <div className="col-md-6 mb-4">
-                    <div className="card dashboard-card">
-                        <div className="card-body text-center">
-                            <FaUserPlus className="card-icon" size={40} />
-                            <h2 className="card-title">{countEnrollment}</h2>
-                            <p className="card-text">Enrollments</p>
-                            <Link to="/admin/manage-enrollment" className="btn btn-success">
-                                Manage
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Reclamations Count Card */}
-                <div className="col-md-6 mb-4">
-                    <div className="card dashboard-card">
-                        <div className="card-body text-center">
-                            <FaEnvelopeOpenText className="card-icon" size={40} />
-                            <h2 className="card-title">{countReclamations}</h2>
-                            <p className="card-text">Réclamations</p>
-                            <Link to="/admin/manage-reclamations" className="btn btn-success">
-                                Manage
-                            </Link>
-                        </div>
-                    </div>
-                </div>
+                ))}
             </div>
         </div>
     );

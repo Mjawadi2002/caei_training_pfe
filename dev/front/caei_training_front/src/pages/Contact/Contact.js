@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { FaUser, FaEnvelope, FaCommentDots, FaPaperPlane } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import "../Register/Register.css";
 
@@ -32,7 +33,6 @@ export default function Contact() {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="register-container fade-in">
@@ -43,7 +43,7 @@ export default function Contact() {
           <div className="form-group">
             <input
               type="text"
-              className="form-control"
+              className="form-control input-icon-user"
               name="name"
               placeholder="Your Name"
               value={formData.name}
@@ -55,7 +55,7 @@ export default function Contact() {
           <div className="form-group">
             <input
               type="email"
-              className="form-control"
+              className="form-control input-icon-email"
               name="email"
               placeholder="Your Email"
               value={formData.email}
@@ -66,7 +66,7 @@ export default function Contact() {
 
           <div className="form-group">
             <textarea
-              className="form-control"
+              className="form-control input-icon-message"
               name="message"
               placeholder="Your Message"
               value={formData.message}
@@ -76,8 +76,8 @@ export default function Contact() {
           </div>
 
           <div className="button-group">
-            <button type="submit" className="btn btn-success" disabled={loading}>
-              {loading ? "Sending..." : "Send"}
+            <button type="submit" className="btn btn-success btn-icon" disabled={loading}>
+              {loading ? "Sending..." : <>Send <FaPaperPlane /></>}
             </button>
           </div>
         </form>
