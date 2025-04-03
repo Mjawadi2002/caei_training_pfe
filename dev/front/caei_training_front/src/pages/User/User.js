@@ -14,6 +14,7 @@ export default function User() {
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({ name: "", email: "" });
     const [enrolledFormations, setEnrolledFormations] = useState([]);
+    const [recommendedCourses, setRecommendedCourses] = useState([]);  // New state for recommended courses
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -34,40 +35,65 @@ export default function User() {
             axios.get(`http://localhost:5000/api/v1/users/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
-            .then((response) => {
-                console.log("User Data:", response.data);
-                setUserName(response.data.name);
-                setUserEmail(response.data.email);
-                setUserRole(response.data.role);
-                setFormData({ name: response.data.name, email: response.data.email });
-            })
-            .catch((error) => {
-                console.error("Error fetching user data:", error.response?.data || error.message);
-            });
+                .then((response) => {
+                    console.log("User Data:", response.data);
+                    setUserName(response.data.name);
+                    setUserEmail(response.data.email);
+                    setUserRole(response.data.role);
+                    setFormData({ name: response.data.name, email: response.data.email });
+                })
+                .catch((error) => {
+                    console.error("Error fetching user data:", error.response?.data || error.message);
+                });
 
+            // Fetch enrolled formations
             axios.get(`http://localhost:5000/api/v1/enrollment/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
-            .then((response) => {
-                console.log("Enrolled Formations:", response.data);
-                if (Array.isArray(response.data)) {
-                    setEnrolledFormations(response.data);
-                } else {
-                    console.error("Enrolled formations data is not an array.");
-                }
+                .then((response) => {
+                    console.log("Enrolled Formations:", response.data);
+                    if (Array.isArray(response.data)) {
+                        setEnrolledFormations(response.data);
+                    } else {
+                        console.error("Enrolled formations data is not an array.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error fetching enrolled formations:", error.response?.data || error.message);
+                });
+
+            // Fetch recommended courses
+            axios.get(`http://localhost:5000/api/v1/enrollment/recommendations/${userId}`, {
+                headers: { Authorization: `Bearer ${token}` },
             })
-            .catch((error) => {
-                console.error("Error fetching enrolled formations:", error.response?.data || error.message);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+                .then((response) => {
+                    console.log("Recommended Courses:", response.data);
+
+                    // Check if recommendedCourses is an array and update state
+                    if (Array.isArray(response.data.recommendedCourses)) {
+                        setRecommendedCourses(response.data.recommendedCourses);
+                    } else {
+                        console.error("Recommended courses data is not an array:", response.data);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error fetching recommended courses:", error.response?.data || error.message);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
 
         } catch (error) {
             console.error("Error decoding token:", error);
             setLoading(false);
         }
-    }, []);
+    }, []); // Initial load of user data
+
+    // This useEffect will trigger a re-render whenever enrolledFormations or recommendedCourses change.
+    useEffect(() => {
+        console.log("Enrolled Formations or Recommended Courses have changed!");
+        // Any logic here can trigger page refreshes or updates based on changes in enrolledFormations or recommendedCourses.
+    }, [enrolledFormations, recommendedCourses]);
 
     const handleShow = () => setShowModal(true);
     const handleClose = () => setShowModal(false);
@@ -89,17 +115,17 @@ export default function User() {
         axios.put(`http://localhost:5000/api/v1/users/${userId}`, formData, {
             headers: { Authorization: `Bearer ${token}` },
         })
-        .then((response) => {
-            console.log("User updated:", response.data);
-            setUserName(formData.name);
-            setUserEmail(formData.email);
-        })
-        .catch((error) => {
-            console.error("Error updating user:", error.response?.data || error.message);
-        })
-        .finally(() => {
-            handleClose();
-        });
+            .then((response) => {
+                console.log("User updated:", response.data);
+                setUserName(formData.name);
+                setUserEmail(formData.email);
+            })
+            .catch((error) => {
+                console.error("Error updating user:", error.response?.data || error.message);
+            })
+            .finally(() => {
+                handleClose();
+            });
     };
 
     const handleLeaveFormation = (enrollmentId) => {
@@ -113,15 +139,48 @@ export default function User() {
         axios.delete(`http://localhost:5000/api/v1/enrollment/${enrollmentId}`, {
             headers: { Authorization: `Bearer ${token}` },
         })
-        .then((response) => {
-            console.log("Enrollment deleted:", response.data);
-            setEnrolledFormations((prevFormations) => 
-                prevFormations.filter(formation => formation.enrollment_id !== enrollmentId)
+            .then((response) => {
+                console.log("Enrollment deleted:", response.data);
+                setEnrolledFormations((prevFormations) =>
+                    prevFormations.filter(formation => formation.enrollment_id !== enrollmentId)
+                );
+            })
+            .catch((error) => {
+                console.error("Error deleting enrollment:", error.response?.data || error.message);
+            });
+    };
+
+    // Handle registration for recommended courses
+    const handleRegisterRecommendedCourse = async (courseId) => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            console.error("No token found in localStorage.");
+            return;
+        }
+
+        try {
+            const decodedToken = jwtDecode(token);
+            const apprenantId = decodedToken.id;
+
+            const response = await axios.post(
+                'http://localhost:5000/api/v1/enrollment/',
+                {
+                    apprenant_id: apprenantId,
+                    formation_id: courseId,
+                },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
             );
-        })
-        .catch((error) => {
-            console.error("Error deleting enrollment:", error.response?.data || error.message);
-        });
+
+            if (response.status === 201) {
+                alert('Registered for the course successfully!');
+            }
+        } catch (error) {
+            console.error('Error registering for the recommended course:', error.response?.data || error.message);
+            alert('Failed to register for the course.');
+        }
     };
 
     return (
@@ -167,8 +226,8 @@ export default function User() {
                                         <div className="card-body text-center">
                                             <h5 className="card-title">{formation.formation_title}</h5>
                                             <p className="card-text">{formation.formation_description}</p>
-                                            <Button 
-                                                variant="danger" 
+                                            <Button
+                                                variant="danger"
                                                 onClick={() => handleLeaveFormation(formation.enrollment_id)}
                                             >
                                                 Leave Formation
@@ -179,6 +238,31 @@ export default function User() {
                             ))
                         ) : (
                             <p className="text-center text-muted">No enrolled formations yet.</p>
+                        )}
+                    </div>
+
+                    {/* Recommended Courses Section */}
+                    <h3 className="display-6 text-center mt-5">Recommended Courses</h3>
+                    <div className="row">
+                        {recommendedCourses.length > 0 ? (
+                            recommendedCourses.map((course, index) => (
+                                <div key={course.id || index} className="col-md-4 mb-4">
+                                    <div className="card formation-card">
+                                        <div className="card-body text-center">
+                                            <h5 className="card-title">{course.title}</h5>
+                                            <p className="card-text">{course.description}</p>
+                                            <Button
+                                                variant="success"
+                                                onClick={() => handleRegisterRecommendedCourse(course.id)}
+                                            >
+                                                Register
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="text-center text-muted">No recommendations available.</p>
                         )}
                     </div>
                 </div>

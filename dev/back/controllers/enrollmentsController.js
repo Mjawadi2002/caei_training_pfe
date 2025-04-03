@@ -228,7 +228,56 @@ exports.updateRating = (req, res) => {
 };
 
 
+exports.getRecommendedCourses = async (req, res) => {
+    try {
+        const userId = req.params.id;
 
+        // Step 1: Get the enrolled courses for the user
+        const enrolledCoursesQuery = `
+            SELECT f.* FROM formations f
+            JOIN enrollments e ON f.id = e.formation_id
+            WHERE e.apprenant_id = ?;
+        `;
+        const [enrolledCourses] = await db.promise().query(enrolledCoursesQuery, [userId]);
 
+        if (enrolledCourses.length === 0) {
+            return res.status(200).json({ message: "No enrolled courses found", recommendedCourses: [] });
+        }
+
+        // Step 2: Extract unique tags from enrolled courses
+        let tagsSet = new Set();
+        enrolledCourses.forEach(course => {
+            if (course.tags && typeof course.tags === "string") {
+                let tagsArray = course.tags.split(",").map(tag => tag.trim()); // Split & trim spaces
+                tagsArray.forEach(tag => tagsSet.add(tag));
+            }
+        });
+
+        // Convert Set to Array
+        const tagsArray = [...tagsSet];
+
+        if (tagsArray.length === 0) {
+            return res.status(200).json({ message: "No relevant tags found", recommendedCourses: [] });
+        }
+
+        // Step 3: Find recommended courses based on extracted tags
+        const placeholders = tagsArray.map(() => "tags LIKE ?").join(" OR ");
+        const values = tagsArray.map(tag => `%${tag}%`);
+
+        const recommendedCoursesQuery = `
+            SELECT * FROM formations
+            WHERE (${placeholders})
+            AND id NOT IN (SELECT formation_id FROM enrollments WHERE apprenant_id = ?);
+        `;
+
+        const [recommendedCourses] = await db.promise().query(recommendedCoursesQuery, [...values, userId]);
+
+        res.status(200).json({ recommendedCourses });
+
+    } catch (error) {
+        console.error("Error fetching recommended courses:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
 
 
