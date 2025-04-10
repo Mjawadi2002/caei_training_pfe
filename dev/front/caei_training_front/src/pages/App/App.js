@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { BsChatDotsFill } from "react-icons/bs";
+
 import backloop from "../../assets/backloop.mp4";
 import Login from '../Login/Login';
 import Footer from '../Footer/Footer';
@@ -21,53 +24,71 @@ import ChatAgentClient from "../ChatAgentClient/ChatAgentClient";
 import ManageReclamations from "../ManageReclamations/ManageReclamations";
 import ManageEnrollments from "../ManageEnrollments/ManageEnrollments";
 import Evaluations from "../Evaluaions/Evaluations";
+import Chatbot from "../ChatBot/Chatbot";
 
 function App() {
-  return (
-    <div >
-          <Router>
-      <div className="video-container">
-        <video autoPlay loop muted playsInline className="background-video">
-          <source src={backloop} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <div className="container-fluid" >
-          <Header />
-          <Routes>
-            <Route path="*" element={<Error />} />
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/formations" element={<Formations />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route element={<ProtectedRoutes allowedRoles={["apprenant"]} />}>
-              <Route path="/apprenant" element={<User />} />
-              <Route path="/chatclientagent" element={<ChatAgentClient />}/>
-            </Route>
-            <Route element={<ProtectedRoutes allowedRoles={["agent"]} />}>
-              <Route path="/agent" element={<Agent />} />
-              <Route path="/chatagentclient" element={<ChatAgentClient />}/>
-            </Route>
-            <Route element={<ProtectedRoutes allowedRoles={["formateur"]} />}>
-              <Route path="/formateur" element={<Formateur />} />
-              <Route path="/formateur/evaluation" element={<Evaluations />} />
-            </Route>
-            <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/admin/manage-clients" element={<ManageClients />} />
-              <Route path="/admin/manage-formations" element={<ManageFormations />} />
-              <Route path="/admin/manage-reclamations" element ={<ManageReclamations />} />
-              <Route path="/admin/manage-enrollment" element={<ManageEnrollments />} />
-            </Route>
-            <Route path="/accessdenied" element={<AccessDenied />} />
-          </Routes>
-          <Footer />
-        </div>
-      </div>
-    </Router>
-    </div>
+  const [isChatOpen, setIsChatOpen] = useState(false); // ✅ Add this line
 
+  return (
+    <div>
+      <Router>
+        <div className="video-container">
+          <video autoPlay loop muted playsInline className="background-video">
+            <source src={backloop} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+
+          <div className="container-fluid">
+            <Header />
+            <Routes>
+              <Route path="*" element={<Error />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/formations" element={<Formations />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route element={<ProtectedRoutes allowedRoles={["apprenant"]} />}>
+                <Route path="/apprenant" element={<User />} />
+                <Route path="/chatclientagent" element={<ChatAgentClient />} />
+              </Route>
+              <Route element={<ProtectedRoutes allowedRoles={["agent"]} />}>
+                <Route path="/agent" element={<Agent />} />
+                <Route path="/chatagentclient" element={<ChatAgentClient />} />
+              </Route>
+              <Route element={<ProtectedRoutes allowedRoles={["formateur"]} />}>
+                <Route path="/formateur" element={<Formateur />} />
+                <Route path="/formateur/evaluation" element={<Evaluations />} />
+              </Route>
+              <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/admin/manage-clients" element={<ManageClients />} />
+                <Route path="/admin/manage-formations" element={<ManageFormations />} />
+                <Route path="/admin/manage-reclamations" element={<ManageReclamations />} />
+                <Route path="/admin/manage-enrollment" element={<ManageEnrollments />} />
+              </Route>
+              <Route path="/accessdenied" element={<AccessDenied />} />
+            </Routes>
+
+            <Footer />
+
+            {/* Floating chat icon */}
+            {!isChatOpen && (
+              <button
+                onClick={() => setIsChatOpen(true)}
+                className="btn btn-success position-fixed bottom-0 end-0 m-4 p-3 rounded-circle shadow"
+                style={{ zIndex: 1049 }}
+              >
+                <BsChatDotsFill size={24} />
+              </button>
+            )}
+
+            {/* Chatbot window */}
+            <Chatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+          </div>
+        </div>
+      </Router>
+    </div>
   );
 }
 

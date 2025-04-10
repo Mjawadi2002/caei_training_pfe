@@ -1,0 +1,30 @@
+***path:
+********
+scraping data->turning it into vectors->use it as our ressources for the chatbot(to get the up to date responses based on our needs)+profitable because its free(no need to buy key api).
+***technologies:
+****************
+langchain,nodejs,react
+***topics u need to understand :
+********************************
+Definition of RAG
+Vector embeddings
+DataStax Vector Database
+OpenAI
+***What is RAG(RETRIEVAL AUGMENTED GENERATION):
+***********************************************
+is when you change the output of a LLM(large language model) by providing the mdel more context alongside a user's input => to generate more precise answers based on the user's needs (in other words extending the power of llm).
+***why use rag:
+**************
+first case senario: if ur llm is cut off date , so u can add new data above the old data of the llm so it can be up to date.
+second case senario: if the data does not even eist in the llm
+***prequeties:
+**************
+nodejs v20
+openAI account
+***Vector Embedings:
+********************
+its a technique to represent information in a format that can be processed by a certain algorithm to have a semantic meaning to the model.
+***steps:
+*********
+create an open ai account
+create a secret key

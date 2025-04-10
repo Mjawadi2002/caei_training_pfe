@@ -5,6 +5,7 @@ const userRouter = require("./routes/userRoutes");
 const formationRouter = require("./routes/formationRoutes");
 const emailRouter = require("./routes/emailRoutes");
 const enrollmentRouter=require('./routes/enrollmentsRoutes');
+const chatbotRouter = require("./routes/chatbotRoutes");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -34,6 +35,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/formations", formationRouter);
 app.use("/api/v1/email", emailRouter);
 app.use("/api/v1/enrollment", enrollmentRouter);
+app.use("/api/v1/chatbot", chatbotRouter);
 
 
 

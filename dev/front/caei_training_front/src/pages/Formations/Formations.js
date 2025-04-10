@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Formations() {
   const [formations, setFormations] = useState([]);
@@ -38,11 +40,17 @@ export default function Formations() {
       );
 
       if (response.status === 201) {
-        alert('Enrollment created successfully!');
+        toast.success('Enrollment created successfully!', {
+          position: 'top-right',
+          autoClose: 3000,
+        });
       }
     } catch (error) {
       console.error('Error registering for formation:', error.response?.data || error.message);
-      alert('Failed to register for the formation.');
+      toast.error('Failed to register for the formation.', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
     }
   };
 
@@ -87,6 +95,7 @@ export default function Formations() {
           <p>No formations available</p>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 }
