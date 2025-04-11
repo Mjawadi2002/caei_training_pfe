@@ -31,6 +31,7 @@ exports.getEnrollmentByUserId = (req, res) => {
     const query = `
         SELECT 
             e.id AS enrollment_id,
+            e.rating AS rating,
             f.title AS formation_title,
             f.description AS formation_description,
             DATE_FORMAT(e.date_enrolled, '%Y-%m-%d') AS registration_date

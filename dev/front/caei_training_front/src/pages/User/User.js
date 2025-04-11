@@ -47,22 +47,35 @@ export default function User() {
                 });
 
             // Fetch enrolled formations
-            axios.get(`http://localhost:5000/api/v1/enrollment/${userId}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            })
-                .then((response) => {
-                    console.log("Enrolled Formations:", response.data);
-                    if (Array.isArray(response.data)) {
-                        setEnrolledFormations(response.data);
-                    } else {
-                        console.error("Enrolled formations data is not an array.");
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error fetching enrolled formations:", error.response?.data || error.message);
-                });
+
 
             // Fetch recommended courses
+
+
+        } catch (error) {
+            console.error("Error decoding token:", error);
+            setLoading(false);
+        }
+    }, []); 
+
+    useEffect(()=>{
+        const token = localStorage.getItem("token");
+
+        axios.get(`http://localhost:5000/api/v1/enrollment/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+            .then((response) => {
+                console.log("Enrolled Formations:", response.data);
+                if (Array.isArray(response.data)) {
+                    setEnrolledFormations(response.data);
+                } else {
+                    console.error("Enrolled formations data is not an array.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching enrolled formations:", error.response?.data || error.message);
+            });
+
             axios.get(`http://localhost:5000/api/v1/enrollment/recommendations/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
@@ -82,18 +95,11 @@ export default function User() {
                 .finally(() => {
                     setLoading(false);
                 });
+    });
 
-        } catch (error) {
-            console.error("Error decoding token:", error);
-            setLoading(false);
-        }
-    }, []); // Initial load of user data
 
-    // This useEffect will trigger a re-render whenever enrolledFormations or recommendedCourses change.
-    useEffect(() => {
-        console.log("Enrolled Formations or Recommended Courses have changed!");
-        // Any logic here can trigger page refreshes or updates based on changes in enrolledFormations or recommendedCourses.
-    }, [enrolledFormations, recommendedCourses]);
+
+
 
     const handleShow = () => setShowModal(true);
     const handleClose = () => setShowModal(false);
@@ -226,6 +232,10 @@ export default function User() {
                                         <div className="card-body text-center">
                                             <h5 className="card-title">{formation.formation_title}</h5>
                                             <p className="card-text">{formation.formation_description}</p>
+                                            <p className="card-text">
+                                                Rating : {formation.rating === 0 ? "Not  assigned" : formation.rating}
+                                            </p>
+
                                             <Button
                                                 variant="danger"
                                                 onClick={() => handleLeaveFormation(formation.enrollment_id)}
