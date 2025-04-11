@@ -10,9 +10,13 @@ class HuggingFaceChatbot {
 
   async chat(messages) {
     try {
-      const prompt = messages
-        .map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`)
-        .join('\n') + `\nAssistant:`;
+      const systemPrompt = `You are a helpful assistant created to answer questions only related to CAEI TRAINING — a platform that provides professional formation and training courses. 
+  If the question is not related to CAEI TRAINING, politely decline to answer and say you're only trained to help with CAEI topics.`;
+  
+      const prompt = 
+        `${systemPrompt}\n\n` +
+        messages.map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`).join('\n') +
+        `\nAssistant:`;
   
       const response = await this.model.invoke(prompt);
   
@@ -28,6 +32,7 @@ class HuggingFaceChatbot {
       };
     }
   }
+  
   
 }
 

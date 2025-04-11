@@ -1,8 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { IoSend } from 'react-icons/io5';
 import { IoMdClose } from 'react-icons/io';
-
 import axios from 'axios';
+
+// Typing dots animation
+const TypingDots = () => (
+  <span className="typing-dots">
+    <span></span>
+    <span></span>
+    <span></span>
+  </span>
+);
 
 const Chatbot = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([
@@ -13,6 +21,7 @@ const Chatbot = ({ isOpen, onClose }) => {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -32,6 +41,10 @@ const Chatbot = ({ isOpen, onClose }) => {
 
     try {
       setIsLoading(true);
+      setIsTyping(true);
+      // Add placeholder "typing..." message
+      setMessages([...newMessages, { role: 'assistant', content: '...' }]);
+
       const response = await axios.post(
         'http://localhost:5000/api/v1/chatbot/chat',
         { messages: newMessages },
@@ -43,11 +56,15 @@ const Chatbot = ({ isOpen, onClose }) => {
 
       if (!response.data?.content) throw new Error('Invalid response format');
 
-      setMessages((prev) => [...prev, userMessage, response.data]);
+      setMessages((prev) => {
+        // Replace last '...' message with actual response
+        const updated = [...prev.slice(0, -1), response.data];
+        return updated;
+      });
     } catch (error) {
       console.error('Chatbot error:', error);
       setMessages((prev) => [
-        ...prev,
+        ...prev.slice(0, -1), // remove the placeholder
         {
           role: 'assistant',
           content: 'Service is currently unavailable. Please try again later.',
@@ -55,6 +72,7 @@ const Chatbot = ({ isOpen, onClose }) => {
       ]);
     } finally {
       setIsLoading(false);
+      setIsTyping(false);
       setInput('');
     }
   };
@@ -62,7 +80,10 @@ const Chatbot = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="position-fixed bottom-0 end-0 m-4 shadow-lg rounded-4 overflow-hidden border border-light bg-white" style={{ width: '380px', height: '500px', zIndex: 1050 }}>
+    <div
+      className="position-fixed bottom-0 end-0 m-4 shadow-lg rounded-4 overflow-hidden border border-light bg-white"
+      style={{ width: '380px', height: '500px', zIndex: 1050 }}
+    >
       {/* Header */}
       <div className="bg-success text-white px-3 py-2 d-flex justify-content-between align-items-center">
         <h6 className="mb-0 fw-bold">AI Assistant</h6>
@@ -74,9 +95,16 @@ const Chatbot = ({ isOpen, onClose }) => {
       {/* Chat messages */}
       <div className="flex-grow-1 p-3 overflow-auto" style={{ height: '380px', backgroundColor: '#f8f9fa' }}>
         {messages.map((msg, index) => (
-          <div key={index} className={`mb-3 d-flex ${msg.role === 'user' ? 'justify-content-end' : 'justify-content-start'}`}>
-            <div className={`px-3 py-2 rounded-pill ${msg.role === 'user' ? 'bg-success text-white' : 'bg-light text-dark'}`}>
-              {msg.content}
+          <div
+            key={index}
+            className={`mb-3 d-flex ${msg.role === 'user' ? 'justify-content-end' : 'justify-content-start'}`}
+          >
+            <div
+              className={`px-3 py-2 rounded-pill ${
+                msg.role === 'user' ? 'bg-success text-white' : 'bg-light text-dark'
+              }`}
+            >
+              {msg.content === '...' && isTyping ? <TypingDots /> : msg.content}
             </div>
           </div>
         ))}
@@ -94,7 +122,11 @@ const Chatbot = ({ isOpen, onClose }) => {
             onChange={(e) => setInput(e.target.value)}
             disabled={isLoading}
           />
-          <button type="submit" className="btn btn-success rounded-end-pill" disabled={isLoading || !input.trim()}>
+          <button
+            type="submit"
+            className="btn btn-success rounded-end-pill"
+            disabled={isLoading || !input.trim()}
+          >
             <IoSend />
           </button>
         </div>
