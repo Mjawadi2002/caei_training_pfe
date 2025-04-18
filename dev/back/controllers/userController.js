@@ -1,6 +1,8 @@
 const db=require('../config/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const path = require('path');
+const fs = require('fs');
 
 exports.getAllUsers = (req, res) => {
     db.query('SELECT * FROM users', (err, results) => {
