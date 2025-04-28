@@ -1,16 +1,38 @@
-INSERT INTO users (name, email, password, role)
-VALUES ('Agent Name', 'agent@example.com', 'hashed_password', 'agent');
-
-
-
 use caei_training
-Describe users
 
-select * from users where role='formateur'
+
+ALTER TABLE enrollments
+ADD COLUMN rating INT DEFAULT NULL;
+
+
+DESCRIBE reclamations
+
+
+DESCRIBE users
+
+
+Describe enrollments
+Describe formations
+
+
+select * from reclamations
+
+
+select * from users
+
+
+
+
+select * from users where role='apprenant'
 
 select * from formations
 
-select * from users where role="apprenant"rolerole
+alter table formations
+add column category varchar(255),
+add column tags TEXT;
+
+
+select * from users where role="agent"
 
 select * from enrollments
 
