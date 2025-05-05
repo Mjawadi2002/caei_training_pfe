@@ -80,6 +80,9 @@ export default function Login() {
             required
           />
         </div>
+        <div className="forgot-password-link mb-3">
+          <Link to="/forgot-password" className="text-decoration-none">Forgot Password?</Link>
+        </div>
         <div className="button-group">
           <button type="submit" className="btn btn-success" disabled={isLoading}>
             {isLoading ? <BiLoaderCircle className="spinner-border" /> : "Login"}

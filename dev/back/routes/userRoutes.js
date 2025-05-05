@@ -21,4 +21,9 @@ router.post('/register', upload.single('profileImage'), userController.registerU
 router.post('/:id/profile-image', authenticateToken, upload.single('profileImage'), userController.uploadProfileImage);
 router.get('/:id/profile-image', authenticateToken, userController.getProfileImage);
 
+// Password reset routes
+router.post('/forgot-password', userController.requestPasswordReset);
+router.post('/reset-password', userController.resetPassword);
+router.post('/verify-reset-code', userController.verifyResetCode);
+
 module.exports = router;

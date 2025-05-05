@@ -3,8 +3,8 @@ import { BsChatDotsFill } from "react-icons/bs";
 
 import backloop from "../../assets/backloop.mp4";
 import Login from '../Login/Login';
-import Footer from '../Footer/Footer';
-import Header from "../Header/Header";
+import Footer from '../../components/Footer/Footer';
+import Header from "../../components/Header/Header";
 import About from "../About/About";
 import Contact from "../Contact/Contact";
 import Formations from "../Formations/Formations";
@@ -25,9 +25,10 @@ import ManageReclamations from "../ManageReclamations/ManageReclamations";
 import ManageEnrollments from "../ManageEnrollments/ManageEnrollments";
 import Evaluations from "../Evaluaions/Evaluations";
 import Chatbot from "../ChatBot/Chatbot";
+import ForgotPassword from "../ForgotPassword/ForgotPassword";
 
 function App() {
-  const [isChatOpen, setIsChatOpen] = useState(false); // ✅ Add this line
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
     <div>
@@ -48,6 +49,7 @@ function App() {
               <Route path="/formations" element={<Formations />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route element={<ProtectedRoutes allowedRoles={["apprenant"]} />}>
                 <Route path="/apprenant" element={<User />} />
                 <Route path="/chatclientagent" element={<ChatAgentClient />} />

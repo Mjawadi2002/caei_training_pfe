@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const fs = require('fs');
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 exports.uploadProfileImage = (req, res) => {
     if (!req.file) {
@@ -402,3 +404,167 @@ exports.getUserName = (req, res) => {
         res.status(200).json(results);
     });
 }
+
+// Generate a random 6-digit code
+const generateResetCode = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
+// Send reset code email
+const sendResetCodeEmail = async (email, resetCode) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            },
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: "Password Reset Code",
+            text: `Your password reset code is: ${resetCode}\nThis code will expire in 10 minutes.`,
+        };
+
+        await transporter.sendMail(mailOptions);
+        return true;
+    } catch (error) {
+        console.error('Error sending reset code email:', error);
+        return false;
+    }
+};
+
+// Request password reset
+exports.requestPasswordReset = async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ error: 'Email is required' });
+    }
+
+    try {
+        // Check if user exists
+        const [user] = await db.promise().query('SELECT id FROM users WHERE email = ?', [email]);
+        
+        if (user.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const userId = user[0].id;
+        const resetCode = generateResetCode();
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
+
+        // Delete any existing reset tokens for this user
+        await db.promise().query('DELETE FROM password_reset_tokens WHERE user_id = ?', [userId]);
+
+        // Insert new reset token
+        await db.promise().query(
+            'INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES (?, ?, ?)',
+            [userId, resetCode, expiresAt]
+        );
+
+        // Send email with reset code
+        const emailSent = await sendResetCodeEmail(email, resetCode);
+        
+        if (!emailSent) {
+            return res.status(500).json({ error: 'Failed to send reset code email' });
+        }
+
+        res.status(200).json({ message: 'Reset code sent to your email' });
+    } catch (error) {
+        console.error('Error in requestPasswordReset:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+// Verify reset code and update password
+exports.resetPassword = async (req, res) => {
+    const { email, code, newPassword } = req.body;
+
+    if (!email || !code || !newPassword) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    try {
+        // Get user and their reset token
+        const [user] = await db.promise().query(
+            'SELECT u.id, prt.token, prt.expires_at FROM users u ' +
+            'JOIN password_reset_tokens prt ON u.id = prt.user_id ' +
+            'WHERE u.email = ? AND prt.token = ?',
+            [email, code]
+        );
+
+        if (user.length === 0) {
+            return res.status(400).json({ error: 'Invalid reset code' });
+        }
+
+        const resetToken = user[0];
+        
+        // Check if token has expired
+        if (new Date() > new Date(resetToken.expires_at)) {
+            return res.status(400).json({ error: 'Reset code has expired' });
+        }
+
+        // Hash new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update password
+        await db.promise().query(
+            'UPDATE users SET password = ? WHERE id = ?',
+            [hashedPassword, resetToken.id]
+        );
+
+        // Delete used reset token
+        await db.promise().query(
+            'DELETE FROM password_reset_tokens WHERE user_id = ?',
+            [resetToken.id]
+        );
+
+        res.status(200).json({ message: 'Password reset successful' });
+    } catch (error) {
+        console.error('Error in resetPassword:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+exports.verifyResetCode = async (req, res) => {
+    const { email, code } = req.body;
+
+    if (!email || !code) {
+        return res.status(400).json({ error: 'Email and code are required' });
+    }
+
+    try {
+        // Get user and their reset token
+        const [user] = await db.promise().query(
+            'SELECT u.id, prt.token, prt.expires_at FROM users u ' +
+            'JOIN password_reset_tokens prt ON u.id = prt.user_id ' +
+            'WHERE u.email = ? AND prt.token = ?',
+            [email, code]
+        );
+
+        if (user.length === 0) {
+            return res.status(400).json({ error: 'Invalid reset code' });
+        }
+
+        const resetToken = user[0];
+        
+        // Check if token has expired
+        if (new Date() > new Date(resetToken.expires_at)) {
+            return res.status(400).json({ error: 'Reset code has expired' });
+        }
+
+        // Code is valid and not expired
+        res.status(200).json({ 
+            message: 'Reset code verified successfully',
+            userId: resetToken.id
+        });
+
+    } catch (error) {
+        console.error('Error in verifyResetCode:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

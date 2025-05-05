@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function Formations() {
   const [formations, setFormations] = useState([]);
+  const [expandedFormation, setExpandedFormation] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,6 +55,10 @@ export default function Formations() {
     }
   };
 
+  const toggleDetails = (formationId) => {
+    setExpandedFormation(expandedFormation === formationId ? null : formationId);
+  };
+
   return (
     <div className="container-fluid fade-in">
       <div className="row">
@@ -64,27 +69,37 @@ export default function Formations() {
                 <div className="card-body">
                   <h5 className="card-title">{formation.title}</h5>
                   <p className="card-text">{formation.description}</p>
-                  <p className="card-text">
-                    <strong>Price:</strong> {formation.price} TND
-                  </p>
-                  <p className="card-text">
-                    <strong>Category:</strong> {formation.category}
-                  </p>
-                  <p className="card-text">
-                    <strong>Tags:</strong> {formation.tags}
-                  </p>
-                  <p className="card-text">
-                    <strong>Session begins:</strong> {new Date(formation.session_deb).toLocaleDateString()}
-                  </p>
-                  <p className="card-text">
-                    <strong>Session ends:</strong> {new Date(formation.session_end).toLocaleDateString()}
-                  </p>
-                  <div className="d-flex align-items-center">
+                  {expandedFormation === formation.id && (
+                    <div className="formation-details">
+                      <p className="card-text">
+                        <strong>Price:</strong> {formation.price} TND
+                      </p>
+                      <p className="card-text">
+                        <strong>Category:</strong> {formation.category}
+                      </p>
+                      <p className="card-text">
+                        <strong>Tags:</strong> {formation.tags}
+                      </p>
+                      <p className="card-text">
+                        <strong>Session begins:</strong> {new Date(formation.session_deb).toLocaleDateString()}
+                      </p>
+                      <p className="card-text">
+                        <strong>Session ends:</strong> {new Date(formation.session_end).toLocaleDateString()}
+                      </p>
+                    </div>
+                  )}
+                  <div className="d-flex align-items-center justify-content-between mt-3">
                     <button
                       className="btn btn-success me-2"
+                      onClick={() => toggleDetails(formation.id)}
+                    >
+                      {expandedFormation === formation.id ? 'Hide Details' : 'Details'}
+                    </button>
+                    <button
+                      className="btn btn-success"
                       onClick={() => handleRegister(formation.id)}
                     >
-                      Register Now
+                      Register
                     </button>
                   </div>
                 </div>
