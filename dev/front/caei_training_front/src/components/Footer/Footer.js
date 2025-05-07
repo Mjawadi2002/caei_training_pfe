@@ -23,7 +23,7 @@ export default function Footer() {
       setMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
-      setResponseMessage({ type: "error", text: "Failed to send message." });
+      setResponseMessage({ type: "error", text: "Failed to send message. Please try again later." });
     } finally {
       setLoading(false);
     }
@@ -32,64 +32,80 @@ export default function Footer() {
   return (
     <>
       {location.pathname === "/" ? 
-        <div className="container-fluid footer-container">
-          <div className="row py-4">
-            <div className="col-md-4 text-center">
+        <footer className="footer-container">
+          <div className="footer-content">
+            <div className="footer-section">
               <h3 className="footer-title">Follow Us</h3>
               <div className="social-icons">
-                <div className='row'>
-                  <a href="#" className="social-link"><i className="bi bi-facebook"></i></a>
-                </div>
-                <div className='row'>
-                  <a href="https://www.instagram.com/mouhanned_jaouedi/?hl=fr" className="social-link"><i className="bi bi-instagram"></i></a>
-                </div>
-                <div className='row'>
-                  <a href="#" className="social-link"><i className="bi bi-linkedin"></i></a>
-                </div>
+                <a href="#" className="social-link" aria-label="Facebook">
+                  <i className="bi bi-facebook"></i>
+                </a>
+                <a href="https://www.instagram.com/mouhanned_jaouedi/?hl=fr" className="social-link" aria-label="Instagram">
+                  <i className="bi bi-instagram"></i>
+                </a>
+                <a href="#" className="social-link" aria-label="LinkedIn">
+                  <i className="bi bi-linkedin"></i>
+                </a>
+                <a href="#" className="social-link" aria-label="Twitter">
+                  <i className="bi bi-twitter-x"></i>
+                </a>
+                <a href="#" className="social-link" aria-label="YouTube">
+                  <i className="bi bi-youtube"></i>
+                </a>
               </div>
-              <footer className="text-center py-3">
-        <p>© {new Date().getFullYear()} CAEI Training. All rights reserved.</p>
-      </footer>
             </div>
-            <div className="col-md-3 text-center">
+
+            <div className="footer-section">
+              <h3 className="footer-title">Quick Links</h3>
+              <ul className="footer-links">
+                <li><a href="/formations">All Courses</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/contact">Need Help</a></li>
+              </ul>
+            </div>
+
+            <div className="footer-section">
               <h3 className="footer-title">Contact Us</h3>
-              <p><i className="bi bi-envelope-fill"></i> contact@caei.com</p>
-              <p><i className="bi bi-telephone-fill"></i> +123 456 789</p>
-              <p><i className="bi bi-geo-alt-fill"></i> 123 Street, City, Country</p>
+              <div className="contact-info">
+                <p><i className="bi bi-envelope-fill"></i> contact@caei.com</p>
+                <p><i className="bi bi-telephone-fill"></i> +123 456 789</p>
+                <p><i className="bi bi-geo-alt-fill"></i> 123 Education Street, Tech City</p>
+                <p><i className="bi bi-clock-fill"></i> Mon-Fri: 9AM-5PM</p>
+              </div>
             </div>
-            <div className="col-md-4 text-center">
-              <h3 className="footer-title">Leave Feedback</h3>
+
+            <div className="footer-section">
+              <h3 className="footer-title">Feedback</h3>
               {responseMessage && (
-                <div className={`alert ${responseMessage.type === "success" ? "alert-success" : "alert-danger"}`}>
+                <div className={`alert-message ${responseMessage.type}`}>
                   {responseMessage.text}
                 </div>
               )}
-              <form onSubmit={handleSubmit}>
-                <div className="mb-2">
-                  <textarea
-                    className="form-control"
-                    rows="2"
-                    placeholder="Write your feedback..."
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    required
-                  ></textarea>
-                </div>
-                <div className='d-flex align-items-center'>
-                  <button className="btn btn-success" type="submit" disabled={loading}>
-                    {loading ? "Sending..." : "Send"}
-                  </button>
-                </div>
+              <form onSubmit={handleSubmit} className="feedback-form">
+                <textarea
+                  className="form-control"
+                  rows="3"
+                  placeholder="Your feedback helps us improve..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  required
+                ></textarea>
+                <button className="btn btn-success" type="submit" disabled={loading}>
+                  {loading ? <><i className="bi bi-arrow-repeat"></i> Sending...</> : <><i className="bi bi-send-fill"></i> Send</>}
+                </button>
               </form>
             </div>
           </div>
-        </div>
-        :  <footer className="text-center py-3">
-        <p>© {new Date().getFullYear()} CAEI Training. All rights reserved.</p>
-      </footer>
+
+          <div className="footer-bottom">
+            <p>© {new Date().getFullYear()} CAEI Training. All rights reserved.</p>
+          </div>
+        </footer>
+        : 
+        <footer className="footer-simple">
+          <p>© {new Date().getFullYear()} CAEI Training. All rights reserved.</p>
+        </footer>
       } 
     </>
   );
 }
-
-/*here i used a ternary operator to render the copyright on any page except the landing page */

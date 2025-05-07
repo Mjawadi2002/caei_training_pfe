@@ -8,6 +8,7 @@
     background: rgba(255, 255, 255, 0.15);
     border-radius: 16px;
     box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
 }
 
 /* Card Styling */
@@ -23,11 +24,17 @@
     padding: 2rem;
     transition: all 0.3s ease-in-out;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    padding: 20px;
 }
 
 .about-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 /* Title Styling */
@@ -38,6 +45,8 @@
     margin-bottom: 1rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+    color: #2c3e50;
+    margin-bottom: 15px;
 }
 
 /* Text Styling */
@@ -46,6 +55,8 @@
     color: #666;
     margin-bottom: 1.5rem;
     text-align: center;
+    line-height: 1.6;
+    margin-bottom: 20px;
 }
 
 /* Icon Container Styling */
@@ -57,6 +68,10 @@
     margin-top: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease-in-out;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 50%;
+    background: rgba(40, 167, 69, 0.1);
 }
 
 .about-icon-container:hover {
@@ -94,5 +109,171 @@
 
     .about-icon-container {
         padding: 12px;
+    }
+}
+
+.about-hero {
+    position: relative;
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+    padding: 100px 0;
+    margin-bottom: 50px;
+}
+
+.about-hero .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.about-logo {
+    transition: transform 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.about-logo:hover {
+    transform: scale(1.05);
+}
+
+.about-story-title {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.about-story-text {
+    color: #666;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.section-title {
+    color: #2c3e50;
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: #28a745;
+}
+
+.feature-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    height: 100%;
+    text-align: center;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    color: #28a745;
+    margin-bottom: 20px;
+}
+
+.feature-card h4 {
+    color: #2c3e50;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.feature-card p {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.cta-section {
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+    padding: 60px 30px;
+    border-radius: 15px;
+    color: white;
+}
+
+.cta-section h3 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.cta-section .lead {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.cta-section .btn-primary {
+    background: white;
+    color: #28a745;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.cta-section .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+}
+
+/* Animation classes */
+.fade-in {
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .about-hero {
+        padding: 60px 0;
+    }
+
+    .about-story-title {
+        font-size: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+
+    .about-card {
+        margin-bottom: 20px;
+    }
+
+    .cta-section {
+        padding: 40px 20px;
+    }
+
+    .cta-section h3 {
+        font-size: 1.6rem;
     }
 }
