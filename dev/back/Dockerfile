@@ -1,20 +1,20 @@
-# Use official Node.js image
-FROM node:22-slim
+# Use Node.js LTS version
+FROM node:18-alpine
 
-# Set working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Copy dependency files
+# Copy package files
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the app files
+# Copy the rest of the application
 COPY . .
 
-# Expose the backend port (adjust if you're using a different one)
-EXPOSE 4000
+# Expose port
+EXPOSE 5000
 
-# Start the app
+# Start the application
 CMD ["npm", "start"]
