@@ -60,7 +60,7 @@ export default function Formations() {
   };
 
   return (
-    <div className="container-fluid fade-in">
+    <div className="container-fluid fade-in py-5">
       <div className="row">
         {formations.length > 0 ? (
           formations.map((formation) => (
@@ -93,7 +93,7 @@ export default function Formations() {
                       className="btn btn-success me-2"
                       onClick={() => toggleDetails(formation.id)}
                     >
-                      {expandedFormation === formation.id ? 'Hide Details' : 'Details'}
+                      {expandedFormation === formation.id ? 'Hide ' : 'Details'}
                     </button>
                     <button
                       className="btn btn-success"

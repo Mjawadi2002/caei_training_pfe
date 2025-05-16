@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { BsChatDotsFill } from "react-icons/bs";
+import { Menu, X } from 'lucide-react';
 
 import backloop from "../../assets/backloop.mp4";
 import Login from '../Login/Login';
 import Footer from '../../components/Footer/Footer';
-import Header from "../../components/Header/Header";
+import Sidebar from "../../components/Sidebar/Sidebar";
 import About from "../About/About";
 import Contact from "../Contact/Contact";
 import Formations from "../Formations/Formations";
@@ -29,6 +30,11 @@ import ForgotPassword from "../ForgotPassword/ForgotPassword";
 
 function App() {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   return (
     <div>
@@ -39,8 +45,28 @@ function App() {
             Your browser does not support the video tag.
           </video>
 
-          <div className="container-fluid">
-            <Header />
+          <button
+            onClick={toggleSidebar}
+            className="sidebar-toggle-btn-outside"
+            style={{
+              position: 'fixed',
+              top: '20px',
+              left: isSidebarOpen ? '270px' : '20px',
+              zIndex: 1050,
+              background: isSidebarOpen ? 'rgba(0, 0, 0, 0.5)' : 'none',
+              border: 'none',
+              borderRadius: '5px',
+              padding: '10px',
+              color: isSidebarOpen ? '#ecf0f1' : '#2c3e50',
+              cursor: 'pointer',
+              transition: 'left 0.3s ease, color 0.3s ease, background 0.3s ease, padding 0.3s ease',
+            }}
+          >
+            {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+
+          <div className={`container-fluid ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+            <Sidebar isSidebarOpen={isSidebarOpen} />
             <Routes>
               <Route path="*" element={<Error />} />
               <Route path="/" element={<Home />} />
@@ -74,7 +100,6 @@ function App() {
 
             <Footer />
 
-            {/* Floating chat icon */}
             {!isChatOpen && (
               <button
                 onClick={() => setIsChatOpen(true)}
@@ -85,7 +110,6 @@ function App() {
               </button>
             )}
 
-            {/* Chatbot window */}
             <Chatbot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
           </div>
         </div>
