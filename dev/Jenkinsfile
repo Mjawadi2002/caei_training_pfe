@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'node18'
+    }
+
     environment {
         DOCKER_COMPOSE = 'docker-compose'
     }
@@ -13,12 +17,6 @@ pipeline {
         }
 
         stage('Build Frontend') {
-            agent {
-                docker {
-                    image 'node:18'
-                    args '-u root:root'
-                }
-            }
             steps {
                 dir('front/caei_training_front') {
                     sh 'npm install'
@@ -28,12 +26,6 @@ pipeline {
         }
 
         stage('Build Backend') {
-            agent {
-                docker {
-                    image 'node:18'
-                    args '-u root:root'
-                }
-            }
             steps {
                 dir('back') {
                     sh 'npm install'
@@ -42,12 +34,6 @@ pipeline {
         }
 
         stage('Test Frontend') {
-            agent {
-                docker {
-                    image 'node:18'
-                    args '-u root:root'
-                }
-            }
             steps {
                 dir('front/caei_training_front') {
                     sh 'npm test'
@@ -56,12 +42,6 @@ pipeline {
         }
 
         stage('Test Backend') {
-            agent {
-                docker {
-                    image 'node:18'
-                    args '-u root:root'
-                }
-            }
             steps {
                 dir('back') {
                     sh 'npm test'
