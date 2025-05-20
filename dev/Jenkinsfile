@@ -1,0 +1,73 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_COMPOSE = 'docker-compose'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                dir('front/caei_training_front') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Build Backend') {
+            steps {
+                dir('back') {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Test Frontend') {
+            steps {
+                dir('front/caei_training_front') {
+                    sh 'npm test'
+                }
+            }
+        }
+
+        stage('Test Backend') {
+            steps {
+                dir('back') {
+                    sh 'npm test'
+                }
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                sh "${DOCKER_COMPOSE} build"
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh "${DOCKER_COMPOSE} down"
+                sh "${DOCKER_COMPOSE} up -d"
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
