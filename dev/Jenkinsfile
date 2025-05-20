@@ -13,6 +13,9 @@ pipeline {
         }
 
         stage('Build Frontend') {
+            tools {
+                nodejs 'YourNodeJSName'
+            }
             steps {
                 dir('front/caei_training_front') {
                     sh 'npm install'
@@ -22,6 +25,9 @@ pipeline {
         }
 
         stage('Build Backend') {
+            tools {
+                nodejs 'YourNodeJSName'
+            }
             steps {
                 dir('back') {
                     sh 'npm install'
