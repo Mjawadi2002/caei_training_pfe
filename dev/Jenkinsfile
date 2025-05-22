@@ -27,7 +27,7 @@ pipeline {
 
         stage('Build Backend') {
             steps {
-                dir('dev/back') {
+                dir('dev/back/') {
                     sh 'npm install'
                 }
             }
@@ -43,7 +43,7 @@ pipeline {
 
         stage('Test Backend') {
             steps {
-                dir('dev/back') {
+                dir('dev/back/') {
                     sh 'npm test'
                 }
             }
