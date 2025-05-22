@@ -7,18 +7,32 @@ pipeline {
 
     environment {
         DOCKER_COMPOSE = 'docker-compose'
+        WORKSPACE_DIR = 'dev'
     }
 
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
+                sh 'pwd'
+                sh 'ls -la'
+            }
+        }
+
+        stage('Verify Workspace') {
+            steps {
+                dir("${WORKSPACE_DIR}") {
+                    sh 'pwd'
+                    sh 'ls -la'
+                }
             }
         }
 
         stage('Build Frontend') {
             steps {
-                dir('dev/front/caei_training_front') {
+                dir("${WORKSPACE_DIR}/front/caei_training_front") {
+                    sh 'pwd'
+                    sh 'ls -la'
                     sh 'npm install'
                     sh 'npm run build'
                 }
@@ -27,7 +41,9 @@ pipeline {
 
         stage('Build Backend') {
             steps {
-                dir('dev/back/') {
+                dir("${WORKSPACE_DIR}/back") {
+                    sh 'pwd'
+                    sh 'ls -la'
                     sh 'npm install'
                 }
             }
@@ -35,7 +51,7 @@ pipeline {
 
         stage('Test Frontend') {
             steps {
-                dir('dev/front/caei_training_front') {
+                dir("${WORKSPACE_DIR}/front/caei_training_front") {
                     sh 'npm test'
                 }
             }
@@ -43,7 +59,7 @@ pipeline {
 
         stage('Test Backend') {
             steps {
-                dir('dev/back/') {
+                dir("${WORKSPACE_DIR}/back") {
                     sh 'npm test'
                 }
             }
