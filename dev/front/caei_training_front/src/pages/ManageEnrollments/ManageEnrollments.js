@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Alert } from "react-bootstrap";
 import axios from "axios";
 import { Table, Button, Container, Row, Col, Card, Spinner, Modal, Form } from "react-bootstrap";
@@ -23,13 +23,7 @@ export default function ManageEnrollments() {
 
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    fetchEnrollments();
-    fetchStudents();
-    fetchCourses();
-  }, [fetchEnrollments, fetchStudents, fetchCourses]);
-
-  const fetchEnrollments = async () => {
+  const fetchEnrollments = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get("http://localhost:5000/api/v1/enrollment", {
@@ -41,9 +35,9 @@ export default function ManageEnrollments() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
-  const fetchStudents = async () => {
+  const fetchStudents = useCallback(async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/v1/users/role/apprenant", {
         headers: { Authorization: `Bearer ${token}` }
@@ -52,9 +46,9 @@ export default function ManageEnrollments() {
     } catch (err) {
       setError(err.response?.data?.message || "Failed to load students.");
     }
-  };
+  }, [token]);
 
-  const fetchCourses = async () => {
+  const fetchCourses = useCallback(async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/v1/formations", {
         headers: { Authorization: `Bearer ${token}` }
@@ -63,7 +57,13 @@ export default function ManageEnrollments() {
     } catch (err) {
       setError(err.response?.data?.message || "Failed to load courses.");
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    fetchEnrollments();
+    fetchStudents();
+    fetchCourses();
+  }, [fetchEnrollments, fetchStudents, fetchCourses]);
 
   const deleteEnrollment = async (id) => {
     if (!window.confirm("Are you sure you want to delete this enrollment?")) return;

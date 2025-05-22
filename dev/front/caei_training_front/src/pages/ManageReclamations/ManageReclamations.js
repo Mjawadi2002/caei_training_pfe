@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Table, Button, Container, Card, Spinner, Alert, Modal, Form } from "react-bootstrap";
 import { FaReply, FaTrash } from "react-icons/fa";
@@ -14,11 +14,7 @@ export default function ManageReclamations() {
 
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    fetchReclamations();
-  }, [fetchReclamations]);
-
-  const fetchReclamations = async () => {
+  const fetchReclamations = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get("http://localhost:5000/api/v1/email/allReclamations", {
@@ -30,7 +26,11 @@ export default function ManageReclamations() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    fetchReclamations();
+  }, [fetchReclamations]);
 
   const deleteReclamation = async (id) => {
     if (!window.confirm("Are you sure you want to delete this réclamation?")) return;
