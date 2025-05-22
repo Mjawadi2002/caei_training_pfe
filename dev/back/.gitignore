@@ -4,7 +4,6 @@ node_modules/
 # Ignore environment variables
 .env
 
-# Ignore package-lock.json and package.json (if you want to exclude them)
+# Ignore package-lock.json (but keep package.json)
 package-lock.json
-package.json
 
