@@ -14,16 +14,28 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
-                sh 'pwd'
-                sh 'ls -la'
+                sh '''
+                    echo "Current directory: $(pwd)"
+                    echo "Listing all files:"
+                    ls -la
+                    echo "Listing dev directory:"
+                    ls -la dev/
+                    echo "Listing dev/back directory:"
+                    ls -la dev/back/
+                '''
             }
         }
 
         stage('Verify Workspace') {
             steps {
                 dir("${WORKSPACE_DIR}") {
-                    sh 'pwd'
-                    sh 'ls -la'
+                    sh '''
+                        echo "Current directory: $(pwd)"
+                        echo "Listing all files:"
+                        ls -la
+                        echo "Checking if package.json exists:"
+                        test -f back/package.json && echo "package.json exists" || echo "package.json not found"
+                    '''
                 }
             }
         }
@@ -31,10 +43,13 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir("${WORKSPACE_DIR}/front/caei_training_front") {
-                    sh 'pwd'
-                    sh 'ls -la'
-                    sh 'npm install'
-                    sh 'npm run build'
+                    sh '''
+                        echo "Current directory: $(pwd)"
+                        echo "Listing all files:"
+                        ls -la
+                        npm install
+                        npm run build
+                    '''
                 }
             }
         }
@@ -42,9 +57,14 @@ pipeline {
         stage('Build Backend') {
             steps {
                 dir("${WORKSPACE_DIR}/back") {
-                    sh 'pwd'
-                    sh 'ls -la'
-                    sh 'npm install'
+                    sh '''
+                        echo "Current directory: $(pwd)"
+                        echo "Listing all files:"
+                        ls -la
+                        echo "Contents of package.json:"
+                        cat package.json
+                        npm install
+                    '''
                 }
             }
         }
