@@ -69,22 +69,24 @@ pipeline {
             }
         }
 
-
-
-
-
         stage('Setup Docker') {
             steps {
                 sh '''
-                    # Check if Docker is installed
-                    if ! command -v docker &> /dev/null; then
-                        echo "Installing Docker..."
-                        curl -fsSL https://get.docker.com -o get-docker.sh
-                        sh get-docker.sh
+                    # Check if we're in WSL
+                    if [ -f /proc/version ] && grep -q Microsoft /proc/version; then
+                        echo "WSL detected. Please ensure Docker Desktop is installed and running."
+                        # Verify Docker is running
+                        if ! docker info > /dev/null 2>&1; then
+                            echo "Docker is not running. Please start Docker Desktop."
+                            exit 1
+                        fi
+                    else
+                        # For non-WSL environments
+                        if ! command -v docker &> /dev/null; then
+                            echo "Docker not found. Please install Docker first."
+                            exit 1
+                        fi
                     fi
-                    
-                    # Add jenkins user to docker group
-                    sudo usermod -aG docker jenkins
                     
                     # Verify Docker installation
                     docker --version
