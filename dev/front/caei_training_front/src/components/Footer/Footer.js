@@ -37,21 +37,21 @@ export default function Footer() {
             <div className="footer-section">
               <h3 className="footer-title">Follow Us</h3>
               <div className="social-icons">
-                <a href="#" className="social-link" aria-label="Facebook">
+                <button className="social-link" aria-label="Facebook" onClick={() => window.open('https://www.facebook.com', '_blank')}>
                   <i className="bi bi-facebook"></i>
-                </a>
-                <a href="https://www.instagram.com/mouhanned_jaouedi/?hl=fr" className="social-link" aria-label="Instagram">
+                </button>
+                <a href="https://www.instagram.com/mouhanned_jaouedi/?hl=fr" className="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
                   <i className="bi bi-instagram"></i>
                 </a>
-                <a href="#" className="social-link" aria-label="LinkedIn">
+                <button className="social-link" aria-label="LinkedIn" onClick={() => window.open('https://www.linkedin.com', '_blank')}>
                   <i className="bi bi-linkedin"></i>
-                </a>
-                <a href="#" className="social-link" aria-label="Twitter">
+                </button>
+                <button className="social-link" aria-label="Twitter" onClick={() => window.open('https://twitter.com', '_blank')}>
                   <i className="bi bi-twitter-x"></i>
-                </a>
-                <a href="#" className="social-link" aria-label="YouTube">
+                </button>
+                <button className="social-link" aria-label="YouTube" onClick={() => window.open('https://www.youtube.com', '_blank')}>
                   <i className="bi bi-youtube"></i>
-                </a>
+                </button>
               </div>
             </div>
 
