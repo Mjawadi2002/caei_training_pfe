@@ -1,0 +1,1619 @@
+\documentclass[a4paper,12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{lipsum}
+\usepackage{fancyhdr}
+\usepackage{tocloft}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{emptypage}
+\usepackage{float}
+\usepackage[table,x11names]{xcolor}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage[table]{xcolor}
+\usepackage{longtable}
+\usepackage[french]{babel} % Assure l'utilisation du français
+\usepackage{booktabs}
+\renewcommand{\chaptername}{Chapitre}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% Réduire l'espacement des listes itemize
+\setlist[itemize]{noitemsep, topsep=0pt}
+
+\renewcommand{\thesection}{\arabic{section}}
+
+% Pas de numérotation des pages avant l'introduction
+\begin{document}
+
+% Page de couverture
+\thispagestyle{empty}
+
+% Section d'en-tête
+\begin{minipage}{0.48\textwidth}
+\begin{flushleft}
+\footnotesize
+République Tunisienne\\
+Ministère de l’Enseignement Supérieur et\\
+de la Recherche Scientifique\\
+Université de Tunis\\
+École Nationale Supérieure d’Ingénieurs de Tunis
+\end{flushleft}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+\begin{flushright}
+\includegraphics[width=3.5cm]{images/logo-ecole-1170x284 (9).png}\\ % Remplacer par votre logo
+\footnotesize
+Code : C3P-ENSIT-04-04\\
+Date de création : 16-06-2012
+\end{flushright}
+\end{minipage}
+
+\vspace{0.6cm} % Espace réduit entre les sections
+
+\begin{center}
+\Huge \textbf{RAPPORT DE PROJET DE FIN D'ÉTUDES}
+\end{center}
+
+\vspace{0.5cm} % Espace ajusté
+
+\begin{center}
+\textbf{Présenté pour l'obtention du}\\
+\textbf{Diplôme National d'Ingénieur en Informatique}\\[0.2cm]
+\textbf{Spécialisation : Génie Logiciel et Systèmes d'Aide à la Décision}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{center}
+\textbf{Par M. \underline{Jawadi Mouhanned}}\\[0.2cm]
+\textbf{Titre du PFE :}\\[0.2cm]
+\fbox{\parbox{0.85\textwidth}{
+\centering
+\textbf{Conception et Développement d'une Application Web Intelligente pour la Plateforme Éducative "Caei Training"}
+}}
+\end{center}
+
+\vspace{0.2cm} % Espace réduit
+
+\begin{center}
+\textbf{Réalisé au sein de :} 
+\par\vspace{0.1cm}
+\includegraphics[width=0.3\textwidth]{images/digital_moov_logo-removebg-preview.png} % Ajuster la largeur si nécessaire
+\end{center}
+
+\vspace{0.2cm}
+
+\begin{center}
+\textbf{Soutenu le 27 juin 2025 devant le jury :}
+\end{center}
+
+\vspace{0.2cm}
+
+\noindent\textbf{Président :} \hspace{0.5cm} M. \dotfill\\[0.2cm]
+\textbf{Rapporteur :} \hspace{0.5cm} M. \dotfill\\[0.2cm]
+\textbf{Encadrant universitaire :} \hspace{0.5cm} M. \dotfill\\[0.2cm]
+\textbf{Encadrant industriel :} \hspace{0.5cm} M. \dotfill
+
+\vfill
+
+\begin{center}
+\textbf{Année universitaire : 2024 - 2025}
+\end{center}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.2cm}
+\small
+\begin{center}
+5, Avenue Taha Hussein – Tunis \hspace{1cm} \url{www.ensit.tn} \hspace{1cm} Tél : (+216) 71 49 82 07 \hspace{1cm} Fax : (+216) 71 391 662
+\end{center}
+
+\newpage
+
+% Remerciements
+\vspace*{-3cm}
+\begin{center}
+    \LARGE \textbf{Remerciements}
+\end{center}
+\vfill
+\newpage
+
+% Liste des acronymes
+\vspace*{-3cm}
+\begin{center}
+    \LARGE \textbf{Liste des Acronymes}
+\end{center}
+\vfill
+\newpage
+
+% Table des matières
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+
+% Liste des figures
+\listoffigures
+\thispagestyle{empty}
+\newpage
+
+% Liste des tableaux
+\listoftables
+\thispagestyle{empty}
+\newpage
+
+% Commencer la numérotation des pages
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\pagestyle{plain}
+
+% Introduction (non numérotée mais dans la table des matières)
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+
+Dans un monde de plus en plus numérique, la demande pour des plateformes de formation innovantes et centrées sur l'apprenant croît rapidement. Le groupe CAEI, un fournisseur de formations reconnu mondialement, a initié le projet CAEI Training avec l'objectif de créer une plateforme web moderne pour révolutionner la gestion des programmes de formation et améliorer l'expérience utilisateur. La plateforme est conçue comme une solution centralisée, multilingue, intégrant des fonctionnalités intelligentes telles qu'un système de recommandation et un support par chatbot en temps réel, en alignement avec la mission de CAEI de fournir des services de formation impactants, conviviaux et évolutifs à l'échelle mondiale.
+
+\par\vspace{0.5cm}
+
+Dans ce contexte, notre projet de fin d'études a débuté en février 2024, avec pour mission de concevoir et développer la plateforme CAEI Training sur une période de sept mois. Le projet a suivi une méthodologie agile, divisée en sprints de développement bien structurés, chacun adressant des jalons fonctionnels et techniques spécifiques.
+
+\par\vspace{0.5cm}
+
+Ce rapport présentera les différentes étapes entreprises pour développer cette application. Il sera structuré comme suit :
+
+\par\vspace{0.5cm}
+
+Le premier chapitre, « Contexte », introduit les fondations du projet, incluant l'entreprise hôte CAEI Group, un aperçu des solutions existantes dans le domaine de la gestion de la formation, et la méthodologie adoptée pour mener à bien le projet.
+
+\par\vspace{0.5cm}
+
+Le deuxième chapitre, « Spécifications et Environnement Technique », explore les aspects techniques du projet, décrivant les exigences fonctionnelles et non fonctionnelles, l'environnement matériel et logiciel, ainsi que les détails de planification tels que le backlog produit et la feuille de route des sprints.
+
+\par\vspace{0.5cm}
+
+Le troisième chapitre, « Sprint 1 – Authentification et Gestion des Utilisateurs », se concentre sur l'implémentation d'une connexion sécurisée, de l'inscription, du contrôle d'accès basé sur les rôles et des fonctionnalités d'administration des utilisateurs, posant les bases pour un accès contrôlé à la plateforme.
+
+\par\vspace{0.5cm}
+
+Le quatrième chapitre, « Sprint 2 – Gestion des Cours et des Inscriptions », couvre les fonctionnalités permettant aux instructeurs de gérer les cours et aux apprenants de parcourir, s'inscrire et suivre leurs formations.
+
+\par\vspace{0.5cm}
+
+Le cinquième chapitre, « Sprint 3 – Tableau de Bord des Agents et Intégration du Chatbot », présente les outils pour les agents de support et intègre un chatbot intelligent pour assister les utilisateurs en temps réel.
+
+\par\vspace{0.5cm}
+
+Le sixième chapitre, « Sprint 4 – Retours et Système de Recommandation », présente les fonctionnalités de retour des utilisateurs et un moteur de recommandation de cours personnalisé basé sur le comportement et les intérêts des utilisateurs.
+
+\par\vspace{0.5cm}
+
+Enfin, la conclusion offre un aperçu des résultats obtenus, des défis surmontés et des perspectives pour les améliorations futures, en mettant l'accent sur la valeur apportée par la plateforme CAEI Training à ses utilisateurs et à l'organisation.
+
+% Chapitre 1
+\chapter{Contexte}
+\section{Introduction}
+
+Dans ce chapitre, nous présenterons l'entreprise hôte, examinerons le processus de planification commerciale du groupe CAEI, identifierons les principaux défis du projet et évaluerons les solutions existantes.
+
+\vspace{0.5cm}
+
+Le chapitre décrit également notre méthodologie Agile et Scrum, présente l'équipe du projet et spécifie le langage de modélisation, posant ainsi les bases du développement du projet.
+
+\section{Présentation de l'Entreprise Hôte}
+
+Cette section est dédiée à la présentation de l'entreprise hôte, en commençant par le groupe Ooredoo ainsi qu'Ooredoo Tunisie, où nous avons réalisé notre projet.
+
+\subsection{Groupe CAEI}
+
+Le Comité Africain pour l'Expertise Internationale (CAEI) est une organisation panafricaine établie dans le but de contribuer au développement du continent africain. Elle opère dans quatre domaines clés et propose une large gamme de services.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/Untitled design (36).png}
+    \caption{Logo du groupe CAEI}
+    \label{fig:caei-logo}
+\end{figure}
+
+\subsection{CAEI Digital MOOV}
+
+CAEI DIGITAL MOOV est une agence de marketing numérique basée en Tunisie depuis 2012 et opérant en France depuis 2022. Elle intervient dans le domaine du support et de l'assistance numériques pour les entreprises. Fondée il y a 10 ans, notre agence a développé une expertise solide et gagné la confiance de clients nationaux et internationaux. Dans un monde en constante évolution, le numérique a joué un rôle important dans nos vies quotidiennes et nos activités professionnelles.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/Untitled design (37).png}
+    \caption{Logo CAEI Digital MOOV}
+    \label{fig:digital-moov}
+\end{figure}
+
+\section{Étude préalable}
+Dans la section suivante, nous fournirons un aperçu complet de la planification commerciale actuelle chez CAEI Digital MOOV. De plus, nous discuterons des défis rencontrés et présenterons notre solution proposée.
+
+\subsection{Planification commerciale CAEI}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\linewidth]{images/organigramme.jpg}
+    \caption{Structure de l'entreprise}
+    \label{fig:enter-label}
+\end{figure}
+\subsection{Problématique}
+
+CAEI Training vise à moderniser son expérience d'apprentissage grâce à une plateforme numérique. Cependant, plusieurs défis clés doivent être relevés :
+
+\begin{itemize}
+    \item Manque de recommandations personnalisées de cours pour les utilisateurs
+    \item Assistance en temps réel limitée pour les apprenants
+    \item Nécessité d'une gestion efficace des formations et des utilisateurs
+    \item Accessibilité multilingue pour un public international
+    \item Garantie de la protection des données et de la sécurité du système
+\end{itemize}
+
+Ce projet cherche à résoudre ces problèmes en intégrant des fonctionnalités intelligentes comme un moteur de recommandation et un chatbot dans une plateforme conviviale.
+
+\subsection{Analyse des solutions existantes}  
+Alors que des plateformes comme Coursera et Udemy dominent l'apprentissage autonome, les outils suivants se spécialisent dans les formations dirigées par des instructeurs et les réservations :  
+
+\begin{table}[H]
+\centering
+\caption{Comparaison des fonctionnalités des plateformes éducatives}
+\label{tab:platforms}
+\resizebox{\textwidth}{!}{ % Ajuste le tableau à la largeur de la page
+\begin{tabular}{|P{3cm}|P{4cm}|P{4cm}|}
+\hline
+\textbf{Plateforme} & \textbf{Fonctionnalités clés} & \textbf{Limitations}  \\
+\hline
+\begin{minipage}{2cm}
+\centering
+\textbf{LearnUpon} \\
+\includegraphics[width=1.5cm]{images/learnupon-logo.png}
+\end{minipage} & 
+\begin{itemize}
+    \item Réservation et inscription aux cours
+    \item Planification des cours dirigés
+    \item Suivi des certifications
+\end{itemize} &
+\begin{itemize}
+    \item Pas d'IA/chatbot
+    \item Support multilingue limité
+\end{itemize} &
+\hline
+\begin{minipage}{2cm}
+\centering
+\textbf{Teachable} \\
+\includegraphics[width=1.5cm]{images/teachable-logo.png}
+\end{minipage} & 
+\begin{itemize}
+    \item Gestion de cohortes en direct
+    \item Intégration des paiements
+    \item Outils d'évaluation de base
+\end{itemize} &
+\begin{itemize}
+    \item Axé sur les créateurs individuels
+    \item Pas de flux institutionnels
+\end{itemize} &
+\hline
+\begin{minipage}{2cm}
+\centering
+\textbf{WizIQ} \\
+\includegraphics[width=1.5cm]{images/wiz.jpg}
+\end{minipage} & 
+\begin{itemize}
+    \item Salles de classe virtuelles
+    \item Suivi de la présence
+    \item Options de marque blanche
+\end{itemize} &
+\begin{itemize}
+    \item Interface utilisateur/UX obsolète
+    \item Pas de moteur de recommandation
+\end{itemize} &
+\hline
+\end{tabular}
+}
+\end{table}
+\vspace{2cm}
+\subsection{Solution}
+\textbf{CAEI Training} est une plateforme numérique innovante conçue pour transformer la gestion de la formation professionnelle grâce à des fonctionnalités intelligentes et une conception centrée sur l'utilisateur. Contrairement aux systèmes d'apprentissage conventionnels, notre solution se spécialise dans les réservations de cours fluides, la collaboration entre instructeurs et étudiants, et les parcours d'apprentissage personnalisés. La plateforme intègre un système de recommandation puissant qui suggère des programmes de formation personnalisés basés sur les profils des utilisateurs et les données historiques, couplé à un chatbot multilingue en temps réel pour un support instantané. Avec des fonctionnalités robustes pour la gestion des inscriptions.
+
+\section{Méthodologie}
+En tant que point fondamental dans le domaine de la gestion de projet, les méthodologies servent de méthode systématique pour guider les équipes vers la réalisation réussie et efficace des projets. Cette section explore les principes fondamentaux des méthodologies agiles, présente Scrum, notre approche choisie pour le développement, et explore ses concepts clés, en terminant par la présentation de l'équipe.
+
+\subsection{Méthodologies agiles}
+La méthodologie Agile met l'accent sur la flexibilité, le travail d'équipe et la satisfaction du client dans son approche incrémentale et itérative du développement logiciel. Les principes fondamentaux de la méthodologie Agile incluent la valorisation des personnes et de leurs relations, un logiciel fonctionnel, la collaboration avec le client et l'adaptabilité au changement. Elle comprend plusieurs concepts et processus (tels que Scrum, Kanban, etc.) qui aident les équipes à produire des logiciels de haute qualité rapidement et efficacement [10].
+
+\subsection{Choix de la méthodologie : Scrum}
+Scrum est un cadre de gestion qui facilite le travail d'équipe et l'atteinte des objectifs. Pour augmenter l'efficacité du projet, certaines réunions, ressources et individus sont nécessaires. Scrum donne aux équipes la capacité de prendre des initiatives, de réfléchir au passé et de s'adapter aux conditions changeantes. Scrum est un outil utilisé par les équipes logicielles pour aborder efficacement, durablement et économiquement des problèmes complexes.
+
+Nous avons choisi Scrum comme méthodologie à adopter. Elle est adaptée à notre projet multifonctionnel. En utilisant les cycles itératifs et les livraisons régulières de Scrum, nous sommes en mesure d'incorporer continuellement les retours des départements financiers et technologiques. Cela nous permet de maintenir la flexibilité et de gérer les complexités de notre processus de planification, en veillant à ce qu'il reste aligné avec les exigences commerciales dynamiques et les considérations financières.
+
+\subsection{Concepts Scrum}
+Les équipes Scrum gèrent les problèmes et supervisent les projets à l'aide d'instruments appelés artefacts Scrum. Les artefacts Scrum fournissent des informations critiques sur la planification et les tâches aux membres de l'équipe et aux parties prenantes. Il existe trois principaux artefacts :
+
+\begin{itemize}
+    \item \textbf{Product Backlog} : Une liste dynamique de fonctionnalités, d'exigences, d'améliorations et de correctifs qui doivent être complétés pour le succès du projet. C'est essentiellement la liste des tâches de l'équipe, constamment revisitée et repriorisée pour s'adapter aux changements du marché.
+    
+    \item \textbf{Sprint Backlog} : La liste des éléments à réaliser par l'équipe de développement dans le cycle de sprint actuel. L'équipe sélectionne les composants du Product Backlog sur lesquels elle travaillera avant chaque sprint. Pendant un sprint, un backlog de sprint est adaptable et peut changer.
+    
+    \item \textbf{Increment} : Une étape vers un objectif ou une vision. C'est le produit final utilisable d'un sprint.
+\end{itemize}
+
+Une équipe Scrum repose sur les trois rôles suivants :
+
+\begin{itemize}
+    \item \textbf{Product Owner} : Priorise les fonctionnalités qui offrent une valeur commerciale maximale, fait le lien entre les besoins des utilisateurs et les efforts de développement, et décide finalement des calendriers de livraison.
+    
+    \item \textbf{Scrum Master} : Agit en tant que mentor et facilitateur, s'assurant que l'équipe suit les directives Scrum et travaille efficacement ensemble. Ils facilitent les progrès continus, éliminent les obstacles et planifient les événements Scrum.
+    
+    \item \textbf{Équipe de développement} : Une équipe multidisciplinaire composée de programmeurs, testeurs, concepteurs et autres experts. Cette équipe auto-organisée assure une livraison réussie et efficace en collaborant pour planifier les sprints, estimer les charges de travail et promouvoir des pratiques de développement durables.
+\end{itemize}
+
+Les projets Scrum se composent de plusieurs sprints, qui sont des cycles itératifs :
+
+\begin{itemize}
+    \item Chaque sprint commence par une réunion de planification où l'équipe détermine les objectifs, attribue les tâches et crée un calendrier pour leur réalisation.
+    
+    \item L'équipe commence ensuite le sprint, qui dure de deux à trois semaines et est dédié au travail de développement.
+    
+    \item Les Scrums quotidiens permettent des mises à jour sur les progrès, l'identification des obstacles et la révision des plans tout en gardant tout le monde sur la bonne voie.
+    
+    \item L'équipe présente son travail et reçoit des commentaires lors d'une revue qui suit le sprint.
+    
+    \item Enfin, l'équipe se réunit pour une rétrospective afin d'évaluer ses résultats, d'identifier les domaines à améliorer et d'affiner sa stratégie pour les sprints à venir.
+\end{itemize}
+
+Grâce à cette méthodologie dynamique, les équipes Scrum peuvent produire de la valeur progressivement et améliorer continuellement leur produit \cite{reference11}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/scrum-framework-example.jpg}
+    \caption{Diagramme du flux de travail Scrum}
+    \label{fig:scrum_workflow}
+\end{figure}
+\vspace{2cm}
+\subsection{Présentation de l'équipe}
+Dérivée des rôles de l'équipe Scrum, le tableau \ref{tab:team_composition} présente la composition de notre équipe.
+
+\begin{table}[h]
+\centering
+\caption{Composition de l'équipe Scrum}
+\label{tab:team_composition}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Rôle} & \textbf{Membre de l'équipe} \\
+\hline
+Propriétaire du produit & Mme Ghofrane \\
+Scrum Master & Mme Ghofrane \\
+Équipe de développement & Jawadi Mouhanned \\
+\hline
+\end{tabular}
+\end{table}
+\section{Modélisation}
+Un ensemble intégré de diagrammes appelé Langage de Modélisation Unifié (UML) est un langage de modélisation standardisé créé pour aider les développeurs de systèmes et de logiciels à définir, visualiser, construire et documenter les artefacts des systèmes logiciels ainsi que la modélisation métier et d'autres systèmes non logiciels. La création de logiciels orientés objets et le processus de développement logiciel reposent fortement sur l'UML. La majorité des notations utilisées pour exprimer la conception d'un projet logiciel sont des représentations graphiques [13].
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\linewidth]{images/uml.png}
+    \caption{Logo UML}
+    \label{fig:enter-label}
+\end{figure}
+
+\section{Conclusion}
+Dans ce chapitre, nous avons présenté l'entreprise hôte CAEI Digital MOOV ainsi que la société mère. Nous avons effectué une étude préalable du projet qui nous a permis d'identifier les principaux défis et lacunes. Ensuite, nous avons examiné et comparé les solutions existantes. Nous avons proposé une solution sur mesure pour répondre à ces défis et présenté notre méthodologie choisie, Scrum, dans le cadre Agile. Nous avons également présenté la composition de l'équipe et le langage de modélisation utilisé dans le projet.
+
+\par\vspace{0.5cm}
+Dans le chapitre suivant, nous étudierons les spécifications des exigences du projet, les détails de l'environnement technique, la définition du backlog produit et la planification des sprints.
+
+\chapter{Spécifications et environnement technique}
+\section{Introduction}
+Ce chapitre se concentre sur l'établissement des bases de notre projet. Nous aborderons les aspects clés tels que la définition des exigences du projet, la mise en place de l'environnement technique avec les bons outils, la création d'un backlog produit des tâches et la planification des objectifs des sprints pour guider notre processus de développement.
+\section{Spécification des exigences}
+Cette section définit les quatre principaux acteurs de notre application, couvre également les exigences fonctionnelles et non fonctionnelles du projet. De plus, elle définit le backlog produit et la planification des sprints.
+\subsection{Acteurs}
+Dans notre application, il y a quatre acteurs principaux : l'administrateur, l'instructeur, l'utilisateur et l'agent. De plus, il y a un acteur secondaire : l'agent chatbot. Chaque acteur a des rôles et des responsabilités distincts qui contribuent à la fonctionnalité et à la gestion du système.
+\subsubsection{Acteurs principaux}
+\begin{itemize}
+    \item \textbf{Administrateur} \\ 
+    Gère l'ensemble de la plateforme, y compris la gestion des utilisateurs (inscription, rôles, mise à jour, suppression), la gestion des cours (création, mise à jour, suppression), la supervision des inscriptions et la résolution des plaintes ou problèmes des utilisateurs.
+    
+    \item \textbf{Instructeur} \\ 
+    Crée et publie des cours, suit les progrès des étudiants, évalue les devoirs et gère les évaluations des étudiants. S'assure que le contenu des cours est à jour et engageant.
+    
+    \item \textbf{Utilisateur (Apprenant)} \\ 
+    S'inscrit aux cours, gère son profil (informations personnelles, préférences), interagit avec les agents de support lorsque l'assistance humaine est requise.
+    
+    \item \textbf{Agent de support} \\ 
+    Gère le système de messagerie pour fournir un support humain direct aux utilisateurs lorsque les problèmes ne peuvent pas être résolus par le chatbot AI. Gère les escalades et assure des réponses rapides.
+\end{itemize}
+
+\subsubsection{Acteurs secondaires}
+\begin{itemize}
+    \item \textbf{Agent Chatbot} \\ 
+    Fournit une assistance automatisée via une IA conversationnelle, y compris la réponse aux FAQ, l'orientation des utilisateurs à travers la navigation sur la plateforme, la résolution des problèmes courants et l'escalade des requêtes complexes vers des agents humains si nécessaire.
+\end{itemize}
+\subsection{Exigences fonctionnelles}
+Les exigences fonctionnelles identifient les actions nécessaires pour que l'utilisateur interagisse avec l'application. Les actions adaptées à chaque acteur sont présentées ci-dessous.
+\subsubsection{Actions de l'administrateur :}
+\begin{itemize}
+    \item Authentification.
+    \item Gestion des utilisateurs.
+    \item Gestion des cours.
+    \item Gestion des inscriptions.
+    \item Gestion des plaintes.
+\end{itemize}
+\subsubsection{Actions de l'instructeur :}
+\begin{itemize}
+    \item Authentification.
+    \item Gestion des cours associés.
+    \item Gestion des étudiants.
+\end{itemize}
+\subsubsection{Actions de l'apprenant :}
+\begin{itemize}
+    \item Authentification.
+    \item Gestion du profil.
+    \item Inscription aux cours.
+    \item Contacter les agents.
+    \item Laisser des retours.
+\end{itemize}
+\subsubsection{Actions de l'agent de support :}
+\begin{itemize}
+    \item Authentification.
+    \item Gestion des conversations.
+\end{itemize}
+\subsubsection{Actions de l'agent chatbot :}
+\begin{itemize}
+    \item Gestion des FAQ.
+\end{itemize}
+Ces actions principales seront détaillées davantage, en développant les histoires d'utilisateurs dans le backlog produit.
+\subsection{Exigences non fonctionnelles}
+En ingénierie logicielle, les exigences non fonctionnelles définissent les attributs de qualité et les capacités opérationnelles d'un système, plutôt que des comportements ou fonctionnalités spécifiques. Ces exigences spécifient comment le système doit fonctionner plutôt que ce qu'il doit faire. Notre application doit satisfaire les exigences non fonctionnelles suivantes :
+
+\subsubsection{Performance}
+\begin{itemize}
+    \item \textbf{Évolutivité} : Le système doit s'adapter à une charge de travail croissante en ajoutant efficacement des ressources pour répondre à une demande accrue des utilisateurs.
+    \item \textbf{Réactivité} : Le système doit répondre aux requêtes des utilisateurs dans des délais acceptables.
+\end{itemize}
+
+\subsubsection{Sécurité}
+\begin{itemize}
+    \item \textbf{Authentification} : Tous les utilisateurs doivent être correctement validés via des mécanismes de connexion sécurisés avant d'accéder au système.
+    \item \textbf{Autorisation} : Le système doit implémenter un contrôle d'accès basé sur les rôles pour appliquer des permissions appropriées pour différents types d'utilisateurs.
+\end{itemize}
+
+\subsubsection{Convivialité}
+\begin{itemize}
+    \item \textbf{Interface intuitive} : L'interface utilisateur doit être explicite avec une navigation claire, des motifs de conception cohérents et un retour immédiat pour les actions des utilisateurs.
+\end{itemize}
+
+\subsubsection{Maintenabilité}
+\begin{itemize}
+    \item \textbf{Architecture du système} : Le logiciel doit être conçu avec des composants modulaires, une documentation claire et une architecture extensible pour faciliter les mises à jour et la maintenance futures.
+    \item \textbf{Débogage} : Le système doit fournir des journaux complets et une gestion des erreurs pour simplifier le dépannage.
+\end{itemize}
+
+\subsection{Diagramme global des cas d'utilisation}
+Un diagramme des cas d'utilisation est un type de diagramme UML qui illustre comment les utilisateurs ou les systèmes externes interagissent avec un système considéré pour atteindre des objectifs spécifiques. Il montre les différentes manières dont les utilisateurs peuvent interagir avec le système, offrant une vue d'ensemble de ses capacités.
+\par\vspace{0.5cm}
+La figure ci-dessous présente le diagramme global des cas d'utilisation de notre application, montrant les interactions entre tous les types d'utilisateurs avec les fonctionnalités du système.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/caei use case global diagram.png}
+    \caption{Diagramme global des cas d'utilisation CAEI}
+    \label{fig:enter-label}
+\end{figure}
+\section{Environnement technique}
+L'objectif de cette section est de présenter les outils matériels et logiciels utilisés pour développer notre plateforme, y compris les machines, les langages de programmation et les technologies.
+\subsection{Environnement matériel}
+Pour soutenir le développement et les tests de notre projet, nous avons utilisé un ordinateur portable avec les spécifications suivantes :
+
+\begin{table}[h]
+\centering
+\caption{Spécifications matérielles}
+\label{tab:hardware}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Composant} & \textbf{Spécification} \\ \hline
+Marque & MSI \\ \hline
+Processeur & 12th Gen Intel(R) Core(TM) i7-12650H 2.30 GHz \\ \hline
+RAM & 16.0 GB \\ \hline
+Système d'exploitation & Windows 10 \\ \hline
+\end{tabular}
+\end{table}
+\subsection{Environnement logiciel}
+Dans cette section, nous explorerons les divers outils, langages de programmation et logiciels utilisés pour réaliser notre projet.
+\subsubsection{Pile choisie}
+La pile choisie (MySQL, Express, React, Node.js) est un framework basé sur JavaScript pour construire des applications web full-stack. Son environnement JavaScript unifié permet un développement efficace d'applications web dynamiques sans changement de contexte entre les langages, ce qui le rend populaire parmi les développeurs.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.1\linewidth]{images/mern-stakc-layers.png}
+    \caption{Couches de l'architecture MERN Stack}
+    \label{fig:mern-layers}
+\end{figure}
+
+Les applications MERN Stack suivent un modèle d'architecture à trois couches basé sur le modèle Model-View-Controller (MVC) :
+
+\begin{itemize}
+    \item \textbf{Couche client (Vue)} \\
+    Construite avec React utilisant HTML, CSS et JavaScript. Cette couche contient toutes les pages web visibles et gère les interactions des utilisateurs avec l'interface de l'application.
+    
+    \item \textbf{Couche application (Contrôleur)} \\
+    Développée avec Express.js sur Node.js, cette couche contient la logique métier. Elle traite les requêtes des clients, gère le flux de données entre les couches et renvoie les réponses appropriées.
+    
+    \item \textbf{Couche base de données (Modèle)} \\
+    Alimentée par MySQL, cette couche gère toutes les opérations de stockage et de récupération des données. Elle maintient l'intégrité des données et assure une gestion appropriée des données pour les fonctionnalités de l'application.
+\end{itemize}
+\par\vspace{0.5cm}
+La figure ci-dessous illustre le modèle MVC de notre plateforme.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/MySQL.png}
+    \caption{Architecture MVC}
+    \label{fig:enter-label}
+\end{figure}
+\begin{itemize}
+    \item MySQL : 
+    \par\vspace{0.5cm}
+    MySQL est un système de gestion de bases de données relationnelles qui stocke les données dans des tableaux structurés utilisant des lignes et des colonnes. Il prend en charge divers moteurs de stockage, assure l'intégrité des données grâce aux relations et aux contraintes, et offre des performances élevées, une évolutivité et une fiabilité pour la gestion des données structurées.
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.3\linewidth]{images/mysql logo.png}
+        \caption{Logo MySQL}
+        \label{fig:enter-label}
+    \end{figure}
+    \vspace{1cm}
+    \item Express : 
+    \par\vspace{0.5cm}
+    ExpressJS est un framework d'application web léger et flexible pour Node.js qui fournit un ensemble puissant de fonctionnalités pour construire des applications web et mobiles. Avec ses nombreuses méthodes utilitaires HTTP et ses intergiciels, il simplifie et accélère la création d'API robustes.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.2\linewidth]{images/express-js-logo-png_seeklogo-339850.png}
+        \caption{Logo Express}
+        \label{fig:enter-label}
+    \end{figure}
+    \item NodeJS :
+    \par\vspace{0.5cm}
+    Node.js est un environnement d'exécution gratuit et open-source conçu spécifiquement pour JavaScript. Multiplateforme, il permet aux développeurs d'utiliser un code JavaScript familier pour construire des serveurs, des applications web, des outils en ligne de commande et des scripts. Conçu pour une programmation asynchrone basée sur les événements, Node.js excelle dans la gestion de multiples connexions simultanées, ce qui le rend idéal pour développer des applications réseau évolutives gérant efficacement de grands volumes de requêtes entrantes.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.2\linewidth]{images/nodejs-1-logo-png-transparent (1).png}
+        \caption{Logo NodeJs}
+        \label{fig:enter-label}
+    \end{figure}
+    \item React :
+    \par\vspace{0.5cm}
+    React est une bibliothèque JavaScript conçue pour simplifier la création d'interfaces utilisateur évolutives et interactives. Développée par Facebook, elle est largement adoptée par les grandes entreprises pour construire des applications web puissantes et efficaces. Son architecture basée sur les composants et son approche déclarative favorisent la réutilisation du code et facilitent la gestion des interfaces utilisateur complexes. React bénéficie également d'une vaste communauté de développeurs qui fournit des outils, une documentation et des ressources étendues pour soutenir l'apprentissage et le développement.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.2\linewidth]{images/React-icon.svg (1).png}
+        \caption{Logo React}
+        \label{fig:enter-label}
+    \end{figure}
+\end{itemize}
+Nous avons choisi cette pile pour ses nombreux avantages :
+\vspace{1cm}
+\begin{itemize}
+    \item \textbf{Applications web de haute qualité} : La combinaison de technologies flexibles et performantes permet un développement rapide d'applications web fiables.
+    \vspace{0.5cm}
+    
+    \item \textbf{Intégration front-end} : Les API REST facilitent l'intégration de nouvelles interfaces et applications front-end de manière transparente.
+    \vspace{0.5cm}
+    
+    \item \textbf{Avantage open-source} : L'ensemble de la pile est open-source, soutenu par une communauté mondiale de développeurs qui améliore l'efficacité tout en évitant le verrouillage par les fournisseurs.
+    \vspace{0.5cm}
+    
+    \item \textbf{Capacités full-stack} : La pile prend en charge le développement front-end et back-end, réduisant les coûts globaux de développement et simplifiant le processus.
+    \vspace{0.5cm}
+    
+    \item \textbf{Forte communauté de support} : Une communauté large et active fournit un support précieux, des outils et des ressources qui accélèrent le développement et le dépannage.
+    \vspace{0.5cm}
+    
+    \item \textbf{Fonctionnalités proches des natives} : Offre une synchronisation fluide des données en ligne/hors ligne et un accès aux fonctionnalités natives des appareils pour une expérience utilisateur améliorée.
+    \vspace{0.5cm}
+    
+    \item \textbf{Interfaces utilisateur personnalisables} : Fournit de nombreuses options pour la personnalisation front-end, permettant la création d'expériences utilisateur hautement personnalisées.
+    \vspace{0.5cm}
+    
+    \item \textbf{Base de code réutilisable} : Encourage la réutilisation du code pour des flux de travail de développement plus rapides et efficaces.
+    \vspace{0.5cm}
+    
+    \item \textbf{Performances optimisées} : Exploite les forces de performance de Node.js pour gérer de grands volumes de trafic et des opérations intensives en données efficacement.
+    \vspace{0.5cm}
+    
+    \item \textbf{Évolutif et prêt pour le cloud} : La gestion des données structurées de MySQL combinée à Node.js et à la compatibilité cloud garantit l'évolutivité et une gestion efficace des données.
+    \vspace{0.5cm}
+\end{itemize}
+\subsubsection{Autres outils}
+\begin{itemize}
+    \item \textbf{Contrôle de version}
+    \begin{itemize}
+     \par\vspace{0.5cm }
+        \item \textbf{Git} : 
+         est un système de contrôle de version distribué gratuit et open-source qui peut être utilisé pour une variété de projets, des petits aux très grands, et est connu pour sa vitesse et son efficacité.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.25\linewidth]{images/git logo.png}
+            \caption{Logo Git}
+            \label{fig:enter-label}
+        \end{figure}
+        \item \textbf{GitHub} : 
+        Une plateforme de service d'hébergement de dépôts Git basée sur le cloud, fournie par l'organisation à but lucratif GitHub. Elle offre une interface facile à utiliser pour tirer parti de Git, qui, lorsqu'il n'est pas utilisé avec GitHub, nécessite généralement un peu plus de savoir-faire technique et l'utilisation de lignes de commande.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.25\linewidth]{images/25231 (3).png}
+            \caption{Logo GitHub}
+            \label{fig:enter-label}
+        \end{figure}
+    \end{itemize}
+    \item \textbf{Modélisation et conception}
+    \begin{itemize}
+    \par\vspace{0.5cm}
+        \item \textbf{StarUML} : 
+        est une plateforme de modélisation logicielle qui prend en charge UML. Elle utilise la notation UML 2.0 et propose onze types de diagrammes différents. Elle est basée sur la version 1.4 d'UML. En promouvant le concept de profil UML, elle soutient activement la méthodologie d'architecture pilotée par les modèles (MDA). StarUML excelle dans son extensibilité et sa capacité à être adapté à l'environnement de l'utilisateur [35]. Elle a été utilisée pour concevoir les diagrammes de cas d'utilisation.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.2\linewidth]{images/Staruml_logo.png}
+            \caption{Logo StarUML}
+            \label{fig:enter-label}
+        \end{figure}
+        \item \textbf{Figma} : 
+        est un outil pour concevoir, prototyper, développer et tester des produits dans un seul espace. De plus, il offre aux concepteurs un espace pour convertir les conceptions en code, appelé Dev Mode, et un tableau blanc en ligne appelé FigJam pour l'alignement des équipes. Il a été utilisé pour le prototypage des interfaces.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.2\linewidth]{images/Figma-logo.svg.png}
+            \caption{Logo Figma}
+            \label{fig:enter-label}
+        \end{figure}
+    \end{itemize}
+    \item \textbf{Test d'API}
+    \begin{itemize}
+    \par\vspace{0.5cm}
+        \item \textbf{Postman} : 
+        est une plateforme puissante pour développer et travailler avec des API. Elle fournit un outil de test complet qui simplifie le processus de création et d'exécution de tests API automatisés.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.25\linewidth]{images/Postman_(software).png}
+            \caption{Logo Postman}
+            \label{fig:enter-label}
+        \end{figure}
+    \end{itemize}
+    \item \textbf{IDE}
+    \begin{itemize}
+        \item \textbf{Visual Studio Code} :
+          est un environnement de développement intégré (IDE) polyvalent et léger disponible sur Windows, macOS et Linux. Il offre une large gamme d'extensions pour divers langages de programmation et environnements d'exécution, tels que C++, C#, Java, Python, PHP, Go et .NET, tout en fournissant un support intégré pour JavaScript, TypeScript et Node.js.
+          \begin{figure}[H]
+              \centering
+              \includegraphics[width=0.2\linewidth]{images/Visual_Studio_Code_1.35_icon.svg.png}
+              \caption{Logo VS Code}
+              \label{fig:enter-label}
+          \end{figure}
+    \end{itemize}
+   
+\end{itemize}
+\section{Diagramme global des classes} 
+Un diagramme global des classes illustre les relations entre les différentes classes ou entités et fournit une vue d'ensemble de la structure d'un projet. Servant de plan, il met en évidence les composants clés, leurs attributs et leurs interactions. Cette représentation de haut niveau aide à comprendre l'architecture et la fonctionnalité du système.
+\par\vspace{0.5cm}
+La figure ci-dessous présente le diagramme global des classes.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/caei class global diagram.png}
+    \caption{Diagramme global des classes CAEI}
+    \label{fig:enter-label}
+\end{figure}
+\par\vspace{0.5cm}
+Nous avons conçu notre diagramme de classes à un stade précoce, avant les sprints, pour offrir une vue claire et détaillée des différentes entités de notre système, y compris leurs rôles, caractéristiques et interconnexions.
+
+\section{Backlog produit}
+
+Le backlog produit est une liste priorisée d'histoires d'utilisateurs qui décrit les exigences fonctionnelles et non fonctionnelles du système. Chaque élément représente une fonctionnalité ou une capacité qui ajoute de la valeur à l'utilisateur final. Le backlog guide le processus de développement, garantissant que les fonctionnalités les plus critiques sont implémentées en premier en fonction de leur complexité et de leur priorité.
+
+\begin{table}[H]
+\caption{Tableau du backlog produit basé sur les responsabilités des acteurs}
+\centering
+\small
+\begin{tabular}{|c|c|p{6.5cm}|c|c|}
+\hline
+\rowcolor[HTML]{2F5597} 
+\textbf{\textcolor{white}{ID de l'histoire}} & \textbf{\textcolor{white}{Acteur}} & \textbf{\textcolor{white}{Histoire d'utilisateur}} & \textbf{\textcolor{white}{Complexité}} & \textbf{\textcolor{white}{Priorité}} \\ \hline
+1 & Administrateur & En tant qu'administrateur, je veux gérer les utilisateurs (inscription, mise à jour, suppression) pour garder la plateforme organisée. & 3 & Élevée \\ \hline
+2 & Administrateur & En tant qu'administrateur, je veux gérer les cours (création, mise à jour, suppression) pour maintenir la qualité des cours. & 4 & Élevée \\ \hline
+3 & Administrateur & En tant qu'administrateur, je veux superviser les inscriptions et résoudre les plaintes des utilisateurs pour assurer un fonctionnement fluide. & 3 & Élevée \\ \hline
+4 & Instructeur & En tant qu'instructeur, je veux créer et publier des cours pour que les apprenants puissent accéder à de nouveaux contenus. & 4 & Élevée \\ \hline
+5 & Instructeur & En tant qu'instructeur, je veux suivre les progrès des étudiants et évaluer leurs devoirs pour guider leur apprentissage. & 3 & Élevée \\ \hline
+6 & Instructeur & En tant qu'instructeur, je veux gérer les évaluations des cours pour améliorer l'engagement du contenu. & 2 & Moyenne \\ \hline
+7 & Utilisateur (Apprenant) & En tant qu'utilisateur, je veux m'inscrire à des cours pour améliorer mes compétences. & 2 & Élevée \\ \hline
+8 & Utilisateur (Apprenant) & En tant qu'utilisateur, je veux mettre à jour mon profil pour personnaliser mon expérience. & 2 & Moyenne \\ \hline
+9 & Utilisateur (Apprenant) & En tant qu'utilisateur, je veux contacter le support en cas de problème. & 2 & Élevée \\ \hline
+10 & Agent de support & En tant qu'agent de support, je veux gérer le système de messagerie pour aider les utilisateurs avec des problèmes non résolus. & 3 & Élevée \\ \hline
+11 & Agent de support & En tant qu'agent de support, je veux escalader les problèmes complexes vers l'équipe appropriée pour une résolution plus rapide. & 2 & Moyenne \\ \hline
+12 & Agent Chatbot & En tant que chatbot, je veux répondre aux FAQ et guider les utilisateurs sur la plateforme pour réduire la charge de travail humaine. & 3 & Élevée \\ \hline
+13 & Agent Chatbot & En tant que chatbot, je veux escalader les problèmes complexes vers les agents de support si nécessaire. & 2 & Élevée \\ \hline
+\end{tabular}
+\end{table}
+\section{Planification des sprints}
+
+La planification des sprints nous permet de diviser le processus de développement en itérations ciblées et gérables. Chaque sprint s'étend sur une durée fixe et cible un ensemble spécifique d'histoires d'utilisateurs sélectionnées dans le backlog produit. Les tâches sont choisies en fonction de la priorité, des dépendances logiques et de la complexité, garantissant un flux de travail fluide et efficace. Voici le plan détaillé des sprints pour ce projet :
+
+\begin{table}[H]
+\caption{Planification des sprints basée sur le backlog produit}
+\centering
+\small
+\begin{tabular}{|c|c|p{6cm}|c|c|}
+\hline
+\rowcolor[HTML]{2F5597} 
+\textbf{\textcolor{white}{Sprint}} & \textbf{\textcolor{white}{Durée}} & \textbf{\textcolor{white}{Tâche}} & \textbf{\textcolor{white}{Complexité}} & \textbf{\textcolor{white}{Priorité}} \\ \hline
+
+1 & 3 semaines & 
+En tant qu'utilisateur, je veux me connecter, réinitialiser mon mot de passe et me déconnecter pour accéder à l'application en toute sécurité. & 4 & Élevée \\ \cline{3-5}
+  &         & En tant qu'administrateur, je veux gérer les utilisateurs (inscription, mise à jour, suppression) pour contrôler l'accès. & 3 & Élevée \\ \hline
+
+2 & 3 semaines & 
+En tant qu'administrateur, je veux créer et publier des cours pour partager du contenu avec les apprenants. & 4 & Élevée \\ \cline{3-5}
+  &         & En tant qu'utilisateur, je veux m'inscrire à des cours et gérer mon profil pour personnaliser mon expérience. & 3 & Élevée \\ \cline{3-5}
+  &         & En tant qu'instructeur, je veux évaluer les apprenants pour suivre leur progression. & 3 & Moyenne \\ \hline
+
+3 & 4 semaines & 
+En tant qu'agent de support, je veux gérer le système de messagerie et escalader les problèmes non résolus. & 3 & Moyenne \\ \cline{3-5}
+  &         & En tant que chatbot, je veux assister les utilisateurs et escalader les requêtes complexes vers un support humain. & 3 & Élevée \\ \hline
+
+4 & 4 semaines & 
+En tant qu'utilisateur, je veux qu'un cours me soit recommandé sur mon profil. & 2 & Moyenne \\ \cline{3-5}
+  &         & En tant qu'utilisateur, je peux envoyer des commentaires ou demander quoi que ce soit au support de la plateforme. & 2 & Moyenne \\ \hline
+
+\end{tabular}
+\label{tab:sprint-tasks}
+\end{table}
+
+\section{Conclusion}
+Le chapitre 2 a fourni un aperçu complet de l'environnement technique et des spécifications du projet. Nous avons commencé par détailler les exigences, y compris les acteurs clés, les besoins fonctionnels et non fonctionnels, et un diagramme global des cas d'utilisation.
+\par\vspace{0.5cm}
+Nous avons ensuite mis en évidence la pile choisie et d'autres technologies essentielles, en décrivant les outils matériels et logiciels nécessaires au développement de la plateforme. Nous avons présenté le backlog produit ainsi que la planification des sprints, garantissant un processus de développement structuré.
+\par\vspace{0.5cm}
+Le chapitre suivant plongera dans le Sprint 1, en se concentrant sur l'authentification et la gestion des utilisateurs.
+
+\chapter{Sprint 1 - Authentification et Gestion des Utilisateurs}
+
+\section{Introduction}
+Le premier sprint se concentre sur l'implémentation d'un système d'authentification sécurisé utilisant des JSON Web Tokens (JWT) et le développement de fonctionnalités complètes de gestion des utilisateurs.
+
+\section{Backlog du sprint}
+Le backlog du sprint pour le Sprint 1 est présenté dans le tableau~\ref{tab:sprint-backlog} :
+
+\small
+\begin{longtable}{|c|c|c|p{4cm}|c|c|}
+\caption{Backlog du Sprint 1} \label{tab:sprint-backlog} 
+\hline
+\rowcolor[HTML]{2F5597} 
+\textbf{\textcolor{white}{ID de la tâche}} & \textbf{\textcolor{white}{Tâche}} & \textbf{\textcolor{white}{ID de l'histoire}} & \textbf{\textcolor{white}{Histoire d'utilisateur}} & \textbf{\textcolor{white}{Complexité (sur 5)}} & \textbf{\textcolor{white}{Priorité}} \\ 
+\hline
+\endfirsthead
+
+\hline
+\rowcolor[HTML]{2F5597} 
+\textbf{\textcolor{white}{ID de la tâche}} & \textbf{\textcolor{white}{Tâche}} & \textbf{\textcolor{white}{ID de l'histoire}} & \textbf{\textcolor{white}{Histoire d'utilisateur}} & \textbf{\textcolor{white}{Complexité (sur 5)}} & \textbf{\textcolor{white}{Priorité}} \\ 
+\hline
+\endhead
+
+\hline
+\endfoot
+
+\hline
+\endlastfoot
+
+\multirow{9}{*}{1} & \multirow{9}{*}{Authentification} & 1.1 & En tant qu'administrateur, je veux me connecter à l'application. & 4 & Élevée \\ \cline{3-6}
+& & 1.2 & En tant qu'administrateur, je veux me déconnecter de mon compte. & 2 & Élevée \\ \cline{3-6}
+& & 1.3 & En tant qu'utilisateur, je veux me connecter à l'application. & 4 & Élevée \\ \cline{3-6}
+& & 1.4 & En tant qu'utilisateur, je veux créer mon propre compte avec mes données personnelles. & 3 & Élevée \\ \cline{3-6}
+& & 1.5 & En tant qu'utilisateur, je veux me déconnecter de mon compte. & 2 & Élevée \\ \cline{3-6}
+& & 1.6 & En tant qu'instructeur, je veux me connecter à mon compte. & 4 & Élevée \\ \cline{3-6}
+& & 1.7 & En tant qu'instructeur, je veux me déconnecter de mon compte. & 2 & Élevée \\ \cline{3-6}
+& & 1.8 & En tant qu'agent, je veux me connecter à mon compte. & 4 & Élevée \\ \cline{3-6}
+& & 1.9 & En tant qu'agent, je veux me déconnecter de mon compte. & 2 & Élevée \\ \hline
+
+\multirow{5}{*}{2} & \multirow{5}{*}{Gestion} & 2.1 & En tant qu'administrateur, je veux créer un compte utilisateur avec un rôle spécifique. & 2 & Élevée \\ \cline{3-6}
+& & 2.2 & En tant qu'administrateur, je veux voir les détails des comptes utilisateurs. & 2 & Élevée \\ \cline{3-6}
+& & 2.3 & En tant qu'administrateur, je veux mettre à jour les comptes utilisateurs. & 2 & Élevée \\ \cline{3-6}
+& & 2.4 & En tant qu'administrateur, je veux supprimer les comptes utilisateurs. & 2 & Élevée \\ \cline{3-6}
+& & 2.5 & En tant qu'administrateur, je veux filtrer les utilisateurs par rôle ou par nom. & 4 & Élevée \\ 
+\end{longtable}
+
+\section{Diagramme des cas d'utilisation du sprint}
+La figure suivante présente le diagramme des cas d'utilisation pour le Sprint 1. Il décrit les interactions entre l'administrateur et l'utilisateur avec le système, en se concentrant sur les fonctionnalités telles que la gestion des comptes utilisateurs et les processus d'authentification.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/sprint 1 use case diagram.png}
+    \caption{Diagramme des cas d'utilisation du Sprint 1}
+    \label{fig:enter-label}
+\end{figure}
+
+\par\vspace{0.5cm}
+\section{Analyse des cas d'utilisation}
+Cette section offre une analyse approfondie des principaux cas d'utilisation du Sprint 1, couvrant leurs descriptions, les acteurs impliqués, les préconditions, les postconditions, le flux principal et les scénarios alternatifs.
+\subsection{Authentification}
+
+Le tableau~\ref{tab:login-usecase} fournit une analyse détaillée du cas d'utilisation pour le processus de connexion. Il décrit comment l'administrateur ou un utilisateur peut se connecter à l'application. Il inclut les préconditions, les postconditions, les scénarios nominaux et alternatifs, et le flux d'exception.
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|l|p{11cm}|}
+\caption{Description textuelle du cas d'utilisation – Connexion}
+\label{tab:login-usecase} \\
+
+\hline
+\rowcolor[HTML]{D9D9D9}
+\textbf{Titre} & Connexion \\ \hline
+\textbf{Acteurs} & Administrateur, Utilisateur (Apprenant, Instructeur, Agent) \\ \hline
+\textbf{Résumé} & Ce cas d'utilisation décrit comment un administrateur ou un utilisateur (apprenant, instructeur ou agent) peut se connecter à l'application. \\ \hline
+\textbf{Préconditions} & 
+\begin{itemize}
+    \item L'acteur a un compte existant et des identifiants valides.
+    \item L'acteur n'est pas encore authentifié.
+\end{itemize}
+\\ \hline
+\textbf{Postconditions} & L'acteur est authentifié et redirigé vers le tableau de bord. \\ \hline
+\textbf{Scénario nominal} &
+\begin{enumerate}
+    \item L'acteur navigue vers la page de connexion.
+    \item Le système affiche la page de connexion avec des champs pour l'email et le mot de passe.
+    \item L'acteur entre son nom d'utilisateur et son mot de passe.
+    \item L'acteur clique sur le bouton de connexion.
+    \item Le système valide les identifiants saisis.
+    \item Le système génère un jeton et le stocke dans le stockage local du navigateur.
+    \item Le système redirige l'utilisateur authentifié vers l'interface du tableau de bord.
+\end{enumerate}
+\\ \hline
+\textbf{Scénario alternatif} &
+L'apprenant crée un compte pour la première fois.
+\\ \hline
+\textbf{Flux d'exception} &
+À la 5e étape du scénario nominal, si les identifiants sont invalides :
+\begin{itemize}
+    \item Le système affiche un message d'erreur informatif à l'acteur.
+    \item L'acteur est invité à réessayer le processus de connexion.
+\end{itemize}
+\\ \hline
+
+\end{longtable}
+
+\subsection{Gestion des utilisateurs}
+Le tableau~\ref{tab:management-use case} fournit une analyse détaillée du cas d'utilisation pour les fonctionnalités de supervision des administrateurs pour la gestion des utilisateurs.
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|l|p{11cm}|}
+\caption{Description textuelle du cas d'utilisation – Gestion des utilisateurs}
+\label{tab:management-use case} \\
+
+\hline
+\rowcolor[HTML]{D9D9D9}
+\textbf{Titre} & Gestion des utilisateurs \\ \hline
+\textbf{Acteurs} & Administrateur \\ \hline
+\textbf{Résumé} & Ce cas d'utilisation décrit comment un administrateur gère les comptes des utilisateurs. \\ \hline
+\textbf{Préconditions} & 
+\begin{itemize}
+    \item L'acteur a un compte existant et des identifiants valides.
+    \item L'acteur n'est pas encore authentifié.
+\end{itemize}
+\\ \hline
+\textbf{Postconditions} & L'acteur est authentifié et redirigé vers le tableau de bord. \\ \hline
+\textbf{Scénario nominal} &
+\begin{enumerate}
+    \item L'acteur navigue vers la page de connexion.
+    \item Le système affiche la page de connexion avec des champs pour l'email et le mot de passe.
+    \item L'acteur entre son nom d'utilisateur et son mot de passe.
+    \item L'acteur clique sur le bouton de connexion.
+    \item Le système valide les identifiants saisis.
+    \item Le système génère un jeton et le stocke dans le stockage local du navigateur.
+    \item Le système redirige l'utilisateur authentifié vers l'interface du tableau de bord.
+    \item L'administrateur peut supprimer un utilisateur.
+    \item L'administrateur peut mettre à jour les données de l'utilisateur.
+    \item L'administrateur peut créer un nouveau compte pour l'utilisateur.
+\end{enumerate}
+\\ \hline
+\textbf{Scénario alternatif} &
+L'administrateur peut filtrer les utilisateurs par nom ou rôle.
+\\ \hline
+\textbf{Flux d'exception} &
+À la 5e étape du scénario nominal, si les identifiants sont invalides :
+\begin{itemize}
+    \item Le système affiche un message d'erreur informatif à l'acteur.
+    \item L'acteur est invité à réessayer le processus de connexion.
+\end{itemize}
+\\ \hline
+
+\end{longtable}
+
+\section{Conception}
+Cette section commence par un diagramme de classes complet, suivi de diagrammes de séquence illustrant les cas d'utilisation clés pour ce sprint. Ces diagrammes servent à clarifier à la fois la conception structurelle et les interactions dynamiques au sein du système, offrant une compréhension claire de l'architecture et du flux opérationnel nécessaires pour implémenter les fonctionnalités principales.
+\subsection{Diagramme de classes}
+Le diagramme de classes pour le Sprint 1 illustre la structure et les relations entre les principales entités impliquées dans la gestion des interactions des utilisateurs, le contrôle des permissions et la gestion des unités dans l'application.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/sprint1 class diagram.png}
+    \caption{Diagramme de classes du Sprint 1}
+    \label{fig:enter-label}
+\end{figure}
+\vspace{3cm}
+\subsection{Authentification}
+Dans cette section, nous présentons et analysons le diagramme de séquence pour le processus d'authentification d'un administrateur accédant au système de gestion des utilisateurs. Le diagramme illustre l'interaction entre les principaux composants du système pendant la procédure de connexion.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/authetication sequence diagram.png}
+    \caption{Diagramme de séquence d'authentification}
+    \label{fig:enter-label}
+\end{figure}
+\subsection{Gestion des utilisateurs}
+Cette section illustre le diagramme de séquence de la gestion des utilisateurs, où tous les composants du système interagissent les uns avec les autres.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/123.drawio.png}
+    \caption{Gestion des utilisateurs}
+    \label{fig:enter-label}
+\end{figure}
+\section{Développement}
+Cette section offre un examen détaillé de la manière dont l'authentification et la gestion des utilisateurs sont implémentées dans l'application.
+
+\subsection{Authentification}
+L'authentification est une partie fondamentale de la sécurité, garantissant que seuls les utilisateurs avec une autorisation appropriée peuvent accéder au système.
+\subsubsection{Connexion}
+L'écran de connexion initial invite l'utilisateur à entrer son adresse e-mail et son mot de passe pour accéder à son compte. La figure~\ref{fig:login-interface} affiche l'interface de connexion.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/login.png}
+    \caption{Interface de connexion}
+    \label{fig:login-interface}
+\end{figure}
+\subsubsection{Mot de passe oublié}
+Les écrans de « Mot de passe oublié » montrent comment les utilisateurs peuvent réinitialiser leur mot de passe par vérification par e-mail. La figure~\ref{fig:forget-password} présente l'interface pour initier le processus de réinitialisation du mot de passe. La figure~\ref{fig:set-code} illustre l'étape où l'utilisateur entre le code de vérification et l'e-mail. Enfin, la figure~\ref{fig:change-pass} montre l'interface où l'utilisateur définit un nouveau mot de passe.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{images/reset password.png}
+    \caption{Interface de vérification par e-mail}
+    \label{fig:forget-password}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{images/enter code.png}
+    \caption{Interface de code de réinitialisation}
+    \label{fig:set-code}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{images/create new pass.png}
+    \caption{Interface de nouveau mot de passe}
+    \label{fig:change-pass}
+\end{figure}
+\subsubsection{Créer un compte}
+Cette sous-section montre comment un utilisateur peut créer un compte en sélectionnant une image de profil et en entrant les informations requises, telles que le nom, l'adresse e-mail et le mot de passe.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/create account.png}
+    \caption{Création de compte}
+    \label{fig:enter-label}
+\end{figure}
+\subsection{Gestion des utilisateurs}
+Le tableau de bord de l'administrateur met en avant de puissantes capacités de gestion des utilisateurs, permettant à l'administrateur de voir tous les utilisateurs (clients, agents et instructeurs), de modifier leurs profils, d'attribuer ou de changer les rôles, d'ajouter de nouveaux utilisateurs ou de les supprimer de la plateforme si nécessaire.
+\par\vspace{0.5cm}
+La figure~\ref{fig:dashboard} présente le tableau de bord de l'administrateur.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{images/Capture d’écran (669).png}
+    \caption{Tableau de bord de l'administrateur}
+    \label{fig:dashboard}
+\end{figure}
+\par\vspace{0.5cm}
+La figure~\ref{fig:clients} montre les données de gestion des clients.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\linewidth]{images/Capture d’écran (670).png}
+    \caption{Interface des données des clients}
+    \label{fig:clients}
+\end{figure}
+\par\vspace{0.5cm}
+La figure~\ref{fig:edit} montre comment modifier les données des utilisateurs.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\linewidth]{images/Capture d’écran (671).png}
+    \caption{Interface de modification des données}
+    \label{fig:edit}
+\end{figure}
+\par\vspace{0.5cm}
+La figure~\ref{fig:add} montre comment ajouter un nouvel utilisateur avec un rôle spécifique.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\linewidth]{images/add new user.png}
+    \caption{Ajout d'un nouvel utilisateur}
+    \label{fig:add}
+\end{figure}
+\subsection{Profil client}
+Cette section met en avant la fonctionnalité de profil utilisateur, qui est divisée en trois domaines clés : les informations personnelles, une liste des cours auxquels le client est inscrit et des recommandations de cours personnalisées générées en fonction de ses inscriptions actuelles.
+\par\vspace{0.5cm}
+La figure~\ref{fig:personal} montre le premier domaine des données personnelles de l'utilisateur.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/user perosnal.png}
+    \caption{Données personnelles de l'utilisateur}
+    \label{fig:personal}
+\end{figure}
+\par\vspace{0.5cm}
+La figure~\ref{fig:courses} montre les domaines des cours inscrits et ceux recommandés.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/enrolled and recommended.png}
+    \caption{Interface des cours inscrits et recommandés}
+    \label{fig:courses}
+\end{figure}
+\section{Conclusion}
+Ce chapitre a couvert le Sprint 1, en se concentrant sur l'authentification et la gestion des utilisateurs, y compris le backlog du sprint, les diagrammes de cas d'utilisation et les fonctionnalités clés. Dans le chapitre suivant, nous aborderons le Sprint 2, présentant les fonctionnalités de base de la gestion des cours.
+
+\chapter{Sprint 2 - Gestion des Cours et des Inscriptions}
+\section{Introduction}
+Le deuxième sprint se concentrera sur l'implémentation des fonctionnalités clés liées aux cours. Cette phase vise à fournir des capacités spécifiques aux rôles qui amélioreront l'expérience utilisateur et rationaliseront la gestion des cours. Plus précisément, les objectifs suivants seront atteints :
+
+\begin{itemize}
+    \item \textbf{Tableau de bord de l'administrateur} : L'administrateur pourra superviser et gérer toutes les données liées aux cours, y compris le suivi des détails des cours, la gestion des inscriptions et la garantie de l'intégrité du système.
+    \item \textbf{Tableau de bord de l'instructeur} : Les instructeurs auront accès à un tableau de bord personnalisé où ils pourront voir et gérer leurs propres cours, suivre les inscriptions des étudiants, mettre à jour le matériel des cours et évaluer les performances globales des cours.
+    \item \textbf{Système d'inscription des utilisateurs} : Les utilisateurs pourront facilement parcourir les cours disponibles et s'inscrire de manière transparente. Le système d'inscription offrira la disponibilité des cours en temps réel et la possibilité de suivre l'état des inscriptions.
+\end{itemize}
+\section{Backlog du sprint}
+Le backlog du sprint pour le Sprint 2 est présenté dans le tableau~\ref{tab:sprint-backlog-2} :
+
+\small
+\begin{longtable}{|c|c|c|p{3cm}|c|c|}
+\caption{Backlog du Sprint 2} \label{tab:sprint-backlog-2} 
+\hline
+\rowcolor[HTML]{2F5597} 
+\textbf{\textcolor{white}{ID de la tâche}} & \textbf{\textcolor{white}{Tâche}} & \textbf{\textcolor{white}{ID de l'histoire}} & \textbf{\textcolor{white}{Histoire d'utilisateur}} & \textbf{\textcolor{white}{Complexité (sur 5)}} & \textbf{\textcolor{white}{Priorité}} \\ 
+\hline
+\endfirsthead
+
+\hline
+\rowcolor[HTML]{2F5597} 
+\textbf{\textcolor{white}{ID de la tâche}} & \textbf{\textcolor{white}{Tâche}} & \textbf{\textcolor{white}{ID de l'histoire}} & \textbf{\textcolor{white}{Histoire d'utilisateur}} & \textbf{\textcolor{white}{Complexité (sur 5)}} & \textbf{\textcolor{white}{Priorité}} \\ 
+\hline
+\endhead
+
+\hline
+\endfoot
+
+\hline
+\endlastfoot
+
+\multirow{6}{*}{1} & \multirow{6}{*}{Gestion des cours} & 2.1 & En tant qu'administrateur, je veux superviser et gérer toutes les données des cours. & 4 & Élevée \\ \cline{3-6}
+& & 2.2 & En tant qu'instructeur, je veux voir et gérer mes propres cours. & 4 & Élevée \\ \cline{3-6}
+& & 2.3 & En tant qu'administrateur, je veux voir la liste de tous les instructeurs et de leurs cours. & 3 & Moyenne \\ \cline{3-6}
+& & 2.4 & En tant qu'instructeur, je veux mettre à jour et modifier le contenu de mes cours. & 3 & Élevée \\ \cline{3-6}
+& & 2.5 & En tant qu'utilisateur, je veux parcourir les cours disponibles et m'y inscrire. & 4 & Élevée \\ \cline{3-6}
+& & 2.6 & En tant qu'utilisateur, je veux suivre l'état de mes inscriptions aux cours. & 3 & Moyenne \\ \hline
+
+\multirow{3}{*}{2} & \multirow{3}{*}{Système d'inscription} & 2.7 & En tant qu'administrateur, je veux suivre les inscriptions des utilisateurs à travers les cours. & 3 & Élevée \\ \cline{3-6}
+& & 2.8 & En tant qu'instructeur, je veux voir une liste des étudiants inscrits à mon cours. & 3 & Moyenne \\ \cline{3-6}
+& & 2.9 & En tant qu'administrateur, je veux gérer les inscriptions des utilisateurs dans des cours spécifiques. & 4 & Élevée \\ \hline
+\end{longtable}
+
+\section{Diagramme des cas d'utilisation du Sprint 2}
+
+Le diagramme des cas d'utilisation pour le Sprint 2 illustre les interactions clés entre les acteurs du système (administrateur, instructeur et utilisateur) avec le système de gestion des cours et des inscriptions. Le diagramme met en évidence trois relations principales :
+
+\subsubsection{Supervision de l'administrateur}
+\begin{itemize}
+    \item Les administrateurs supervisent toutes les données des cours et les affectations des instructeurs.
+    \item Surveillent les inscriptions des utilisateurs à travers tous les cours.
+    \item Gèrent les inscriptions des utilisateurs dans des cours spécifiques si nécessaire.
+    \item Consultent des listes complètes des instructeurs et de leurs cours associés智能AI
+    \item Consultent des listes complètes des instructeurs et de leurs cours associés.
+\end{itemize}
+
+\subsubsection{Gestion des instructeurs}
+\begin{itemize}
+    \item Les instructeurs gèrent le contenu et le matériel de leurs propres паркours.
+    \item Consultent les listes des étudiants inscrits à leurs cours spécifiques.
+    \item Mettent à jour et modifient les informations des cours pour leurs cours assignés.
+\end{itemize}
+
+\subsubsection{Inscription des utilisateurs}
+\begin{itemize}
+    \item Les utilisateurs peuvent parcourir tous les cours disponibles dans le système.
+    \item S'inscrivent aux cours de leur choix.
+    \item Suivent leur état d'inscription personnel à travers les cours.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/sprint 2 use case diagram.png}
+    \caption{Diagramme des cas d'utilisation du Sprint 2}
+    \label{fig:enter-label}
+\end{figure}
+\section{Analyse des cas d'utilisation}
+Cette section offre une analyse approfondie des principaux cas d'utilisation du Sprint 2, couvrant leurs descriptions, les acteurs impliqués, les préconditions, les postconditions, le flux principal et les scénarios alternatifs.
+\subsection{Inscription aux cours}
+Le tableau~\ref{tab:enrollment-usecase} fournit une analyse détaillée du cas d'utilisation pour le processus d'inscription aux cours. Il décrit comment un client (apprenant) peut s'inscrire à un cours sur la plateforme. Il inclut les préconditions, les postconditions, les scénarios nominaux et alternatifs, et le flux d'exception.
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|l|p{11cm}|}
+\caption{Description textuelle du cas d'utilisation – Inscription aux cours}
+\label{tab:enrollment-usecase} \\
+
+\hline
+\rowcolor[HTML]{D9D9D9}
+\textbf{Titre} & Inscription aux cours \\ \hline
+\textbf{Acteurs} & Client (Apprenant) \\ \hline
+\textbf{Résumé} & Ce cas d'utilisation décrit comment un client (apprenant) peut s'inscrire à un cours sur la plateforme. \\ \hline
+\textbf{Préconditions} & 
+\begin{itemize}
+    \item Le client a un compte et est connecté.
+    \item Le client a accès à la plateforme et peut parcourir les cours disponibles.
+\end{itemize}
+\\ \hline
+\textbf{Postconditions} & Le client est inscrit avec succès au cours sélectionné et peut y accéder depuis son profil. \\ \hline
+\textbf{Scénario nominal} &
+\begin{enumerate}
+    \item Le client navigue vers la liste des cours disponibles.
+    \item Le système affiche le catalogue des cours avec les détails pertinents.
+    \item Le client sélectionne un cours d'intérêt.
+    \item Le système vérifie si le client est authentifié.
+    \item Si authentifié, le client clique sur le bouton « S'inscrire ».
+    \item Le système enregistre l'inscription et met à jour le profil du client.
+    \item Le client peut accéder au contenu du cours depuis son tableau de bord ou son profil.
+\end{enumerate}
+\\ \hline
+\textbf{Scénario alternatif} &
+Le client n'est pas connecté lorsqu'il tente de s'inscrire :
+\begin{itemize}
+    \item Le système redirige le client vers la page de connexion/inscription.
+    \item Le client se connecte ou crée un nouveau compte.
+    \item Une fois authentifié avec succès, le client est redirigé vers la page du cours sélectionné pour procéder à l'inscription.
+\end{itemize}
+\\ \hline
+\textbf{Flux d'exception} &
+Si une étape échoue (par exemple, erreur réseau ou cours indisponible) :
+\begin{itemize}
+    \item Le système affiche un message d'erreur approprié.
+    \item Le client est conseillé de réessayer ou de sélectionner un autre cours.
+\end{itemize}
+\\ \hline
+
+\end{longtable}
+\subsection{Gestion des cours et des inscriptions}
+Le tableau~\ref{tab:course-enrollment-management} fournit une analyse détaillée du cas d'utilisation pour la gestion des cours et des inscriptions. Il décrit comment l'administrateur peut gérer les cours et surveiller les inscriptions sur la plateforme. Il inclut les préconditions, les postconditions, les scénarios nominaux et alternatifs, et les flux d'exception.
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|l|p{11cm}|}
+\caption{Description textuelle du cas d'utilisation – Gestion des cours et des inscriptions}
+\label{tab:course-enrollment-management} \\
+
+\hline
+\rowcolor[HTML]{D9D9D9}
+\textbf{Titre} & Gestion des cours et des inscriptions \\ \hline
+\textbf{Acteurs} & Administrateur \\ \hline
+\textbf{Résumé} & Ce cas d'utilisation décrit comment l'administrateur peut gérer les cours (ajouter, mettre à jour, supprimer, assigner des instructeurs) et voir les inscriptions des apprenants pour chaque cours. \\ \hline
+\textbf{Préconditions} & 
+\begin{itemize}
+    \item L'administrateur est connecté à la plateforme.
+    \item L'administrateur a accès au tableau de bord de gestion des cours et des inscriptions.
+\end{itemize}
+\\ \hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item Les cours sont créés, mis à jour ou supprimés selon les besoins.
+    \item Les cours sont correctement assignés aux instructeurs.
+    \item L'administrateur peut voir la liste des étudiants inscrits pour chaque cours.
+\end{itemize}
+\\ \hline
+\textbf{Scénario nominal} &
+\begin{enumerate}
+    \item L'administrateur navigue vers le tableau de bord de l'administrateur.
+    \item Le système affiche une liste de tous les cours avec leurs détails (titre, description, dates, ID de l'instructeur).
+    \item L'administrateur choisit d'ajouter un nouveau cours.
+    \item Le système affiche un formulaire de création de cours.
+    \item L'administrateur remplit les détails du cours et sélectionne un instructeur par ID.
+    \item Le système enregistre le nouveau cours et le lie à l'instructeur.
+    \item L'administrateur peut modifier les détails des cours existants ou supprimer un cours.
+    \item L'administrateur accède à la section des inscriptions.
+    \item Le système affiche une liste des apprenants inscrits pour chaque cours.
+\end{enumerate}
+\\ \hline
+\textbf{Scénario alternatif} &
+L'administrateur modifie un cours au lieu
+d'en créer un nouveau :
+\begin{itemize}
+\item L'administrateur sélectionne un cours existant dans la liste.
+\item Le système affiche un formulaire prérempli avec les détails du cours.
+\item L'administrateur modifie les champs nécessaires (par exemple, le titre, la description ou l'instructeur).
+\item Le système enregistre les modifications et met à jour la base de données.
+\end{itemize}
+\ \hline
+\textbf{Flux d'exception} &
+Si une étape échoue (par exemple, erreur de validation des données ou problème de connexion à la base de données) :
+\begin{itemize}
+\item Le système affiche un message d'erreur spécifique.
+\item L'administrateur est invité à corriger les entrées ou à réessayer.
+\end{itemize}
+\ \hline
+
+\end{longtable}
+
+\section{Conception}
+Cette section commence par un diagramme de classes complet, suivi de diagrammes de séquence illustrant les cas d'utilisation clés pour ce sprint. Ces diagrammes servent à clarifier à la fois la conception structurelle et les interactions dynamiques au sein du système, offrant une compréhension claire de l'architecture et du flux opérationnel nécessaires pour implémenter les fonctionnalités principales.
+\par\vspace{2cm}
+\subsection{Diagramme de classes}
+Le diagramme de classes pour le Sprint 2 illustre la structure et les relations entre les principales entités impliquées dans la gestion des interactions des utilisateurs, le contrôle des permissions et la gestion des unités au sein de l'application.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/sprint 2 use case diagram.png}
+    \caption{Diagramme de classes du Sprint 2}
+    \label{fig:enter-label}
+\end{figure}
+\par\vspace{7cm}
+\subsection{Inscription aux cours}
+Dans cette section, nous présentons et analysons le diagramme de séquence pour le processus d'inscription aux cours d'un apprenant.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/caei.drawio.png}
+    \caption{Diagramme de séquence de l'inscription aux cours}
+    \label{fig:enter-label}
+\end{figure}
+\subsection{Gestion des cours et des inscriptions}
+Dans cette section, nous présentons et analysons le diagramme de séquence pour le processus de gestion des cours et des inscriptions par l'administrateur.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/managecourse.drawio.png}
+    \caption{Diagramme de séquence de la gestion des cours et des inscriptions}
+    \label{fig:enter-label}
+\end{figure}
+\subsection{Gestion des apprenants}
+Dans cette section, nous présentons et analysons le diagramme de séquence pour la gestion des apprenants et comment l'instructeur peut évaluer les apprenants au cours de ce processus.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\linewidth]{images/learnermanege.drawio.png}
+    \caption{Diagramme de séquence de la gestion des apprenants}
+    \label{fig:enter-label}
+\end{figure}
+\section{Développement}
+Cette section offre un examen détaillé de la manière dont la gestion des cours et les processus d'inscription sont implémentés dans l'application.
+\subsection{Inscription aux cours}
+L'inscription aux cours est une partie fondamentale de notre plateforme, où le client peut parcourir les cours disponibles et s'inscrire à tout cours de son choix. Une fois inscrit, le profil est mis à jour et les cours inscrits deviennent visibles dans la section « Cours » du profil.
+\subsubsection{Cours disponibles}
+La figure~\ref{fig:available} montre la page avec les cours disponibles.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/courses pages.png}
+    \caption{Cours disponibles}
+    \label{fig:available}
+\end{figure}
+\subsubsection{Détails du cours}
+La figure~\ref{fig:detail} montre les détails du cours sélectionné.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/course detail.png}
+    \caption{Détails du cours}
+    \label{fig:detail}
+\end{figure}
+\subsubsection{Section des cours inscrits}
+La figure~\ref{fig:enrolled} illustre l'interface où l'apprenant peut voir tous les cours auxquels il est inscrit, offrant un accès facile au contenu des cours et au suivi de la progression.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/enrolled course section in profile.png}
+    \caption{Section des cours inscrits}
+    \label{fig:enrolled}
+\end{figure}
+\subsection{Gestion des cours et des inscriptions}
+La gestion des cours et des inscriptions est essentielle pour maintenir une plateforme d'apprentissage organisée et efficace. Elle permet aux administrateurs de contrôler la disponibilité des cours et de surveiller la participation des apprenants, garantissant une expérience éducative fluide et personnalisée.
+\subsubsection{Gestion des cours}
+La figure~\ref{fig:course_manage} illustre l'interface où l'administrateur peut gérer tous les cours, y compris la création de nouveaux cours, leur attribution aux instructeurs, la modification des détails des cours ou la suppression des cours existants.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/formation manage page.png}
+    \caption{Interface de gestion des cours}
+    \label{fig:course_manage}
+\end{figure}
+\subsubsection{Ajouter un nouveau cours}
+La figure~\ref{fig:add_course} illustre l'interface où l'administrateur peut ajouter un nouveau cours et l'associer à un certain instructeur en fonction de son identifiant.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/add new course.png}
+    \caption{Interface d'ajout d'un nouveau cours}
+    \label{fig:add_course}
+\end{figure}
+\subsubsection{Gestion des inscriptions}
+La figure~\ref{fig:enroll_manage} illustre l'interface où l'administrateur peut gérer toutes les inscriptions.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/enrollment manage.png}
+    \caption{Interface de gestion des inscriptions}
+    \label{fig:enroll_manage}
+\end{figure}
+\subsection{Gestion des apprenants}
+La gestion des apprenants permet aux instructeurs de superviser efficacement leurs cours assignés et de suivre la progression des étudiants. Elle fournit des outils pour voir les apprenants inscrits et attribuer des notes ou des commentaires, améliorant le soutien personnalisé et le suivi académique.
+\subsubsection{Cours proposés}
+La figure~\ref{fig:proposed_courses} illustre l'interface où l'instructeur peut gérer tous ses cours proposés.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/proposed courses.png}
+    \caption{Interface des cours proposés}
+    \label{fig:proposed_courses}
+\end{figure}
+\subsubsection{Interface d'évaluation}
+La figure~\ref{fig:evaluation} illustre l'interface où l'instructeur peut gérer tous ses étudiants et leur attribuer des notes.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/evaluation .png}
+    \caption{Interface d'évaluation}
+    \label{fig:evaluation}
+\end{figure}
+\section{Conclusion}
+Ce chapitre a couvert le Sprint 2, en se concentrant sur la gestion des cours et des inscriptions, y compris le backlog du sprint, les diagrammes de cas d'utilisation et les fonctionnalités clés. Dans le chapitre suivant, nous aborderons le Sprint 3, présentant les fonctionnalités de base des différents types d'agents de support sur notre plateforme.
+\chapter{Sprint 3 - Tableau de Bord des Agents et Intégration du Chatbot}
+\section{Introduction}
+Le troisième sprint se concentrera sur le développement et l'intégration de fonctionnalités de communication intelligente et en temps réel qui améliorent le support et l'engagement des utilisateurs. Cette phase vise à implémenter des outils pour les agents humains et les assistants virtuels alimentés par l'IA. Plus précisément, les objectifs suivants seront atteints :
+
+\begin{itemize}
+    \item \textbf{Système de messagerie en temps réel :} En exploitant Socket.IO, un système de messagerie en temps réel sera implémenté pour faciliter une communication fluide entre les utilisateurs et les agents. Ce système garantira une communication bidirectionnelle à faible latence, permettant des interactions dynamiques et des temps de réponse améliorés.
+    
+    \item \textbf{Intégration de l'agent chatbot :} Un assistant virtuel alimenté par des modèles de langage avancés (LLMs) sera intégré à la plateforme pour gérer les questions courantes des utilisateurs, fournir des recommandations de cours et aider à la navigation. Le chatbot servira de première ligne de support, escaladant les problèmes complexes vers les agents humains si nécessaire.
+\end{itemize}
+\section{Backlog du sprint}
+Le backlog du sprint pour le Sprint 3 est présenté dans le tableau~\ref{tab:sprint-backlog-3} :
+
+\small
+\begin{longtable}{|c|p{2.5cm}|c|p{6.5cm}|c|c|}
+\caption{Backlog du Sprint 3} \label{tab:sprint-backlog-3} \\
+\hline
+\rowcolor[HTML]{2F5597}
+\textbf{\textcolor{white}{ID de la tâche}} & \textbf{\textcolor{white}{Tâche}} & \textbf{\textcolor{white}{ID de l'histoire}} & \textbf{\textcolor{white}{Histoire d'utilisateur}} & \textbf{\textcolor{white}{Complexité (sur 5)}} & \textbf{\textcolor{white}{Priorité}} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor[HTML]{2F5597}
+\textbf{\textcolor{white}{ID de la tâche}} & \textbf{\textcolor{white}{Tâche}} & \textbf{\textcolor{white}{ID de l'histoire}} & \textbf{\textcolor{white}{Histoire d'utilisateur}} & \textbf{\textcolor{white}{Complexité (sur 5)}} & \textbf{\textcolor{white}{Priorité}} \\
+\hline
+\endhead
+
+\hline
+\endfoot
+
+\hline
+\endlastfoot
+
+\multirow{2}{*}{1} & \multirow{2}{=}{Tableau de bord des agents} 
+& 3.1 & En tant qu'agent, je veux accéder à un tableau de bord pour gérer et répondre aux messages des utilisateurs en temps réel. & 4 & Élevée \\
+\cline{3-6}
+& & 3.2 & En tant qu'agent, je veux voir l'historique des conversations et le contexte de l'utilisateur pour fournir un meilleur support. & 3 & Moyenne \\
+\hline
+
+\multirow{3}{*}{2} & \multirow{3}{=}{Système de messagerie en temps réel} 
+& 3.3 & En tant qu'utilisateur, je veux contacter un agent humain via un système de messagerie en temps réel. & 4 & Élevée \\
+\cline{3-6}
+& & 3.4 & En tant qu'agent, je veux recevoir et répondre aux messages des utilisateurs instantanément en utilisant Socket.IO. & 4 & Élevée \\
+\cline{3-6}
+& & 3.5 & En tant qu'utilisateur, je veux recevoir des réponses rapides des agents via une interface de chat fluide. & 3 & Élevée \\
+\hline
+
+\multirow{2}{*}{3} & \multirow{2}{=}{Intégration de l'agent chatbot} 
+& 3.6 & En tant que tout utilisateur, je veux interagir avec un chatbot pour obtenir des réponses aux questions courantes. & 4 & Élevée \\
+\cline{3-6}
+& & 3.7 & En tant qu'utilisateur, je veux que le chatbot escalade ma requête vers un agent humain si nécessaire. & 5 & Élevée \\
+\hline
+\end{longtable}
+\section{Diagramme des cas d'utilisation du Sprint 3}
+
+Le diagramme des cas d'utilisation pour le Sprint 3 se concentre sur l'amélioration des fonctionnalités de communication et de support sur la plateforme. Il introduit de nouveaux acteurs du système (agent et chatbot) et définit les interactions qui tournent autour de la messagerie en temps réel, de l'escalade du support et des tableaux de bord des agents. Le diagramme met en évidence trois domaines principaux :
+
+\subsubsection{Interaction des agents}
+\begin{itemize}
+    \item Les agents accèdent à un tableau de bord dédié pour gérer les demandes de support.
+    \item Visualisent les conversations en cours et le contexte des utilisateurs pour une communication efficace.
+    \item Reçoivent et répondent aux messages en temps réel envoyés par les utilisateurs.
+\end{itemize}
+
+\subsubsection{Support et messagerie des utilisateurs}
+\begin{itemize}
+    \item Les utilisateurs initient des conversations avec un chatbot ou un agent humain.
+    \item Utilisent une interface de chat en temps réel pour un support rapide et interactif.
+    \item Escaladent automatiquement les requêtes non résolues du chatbot vers un agent.
+    \item Reçoivent des réponses instantanées et maintiennent un historique de conversation cohérent.
+\end{itemize}
+
+\subsubsection{Intégration du chatbot}
+\begin{itemize}
+    \item Le chatbot fournit des réponses automatiques aux questions courantes des utilisateurs.
+    \item Reconnaît quand une demande d'utilisateur nécessite une intervention humaine.
+    \item Transfère les conversations à un agent disponible en fonction du contexte.
+    \item Reste actif pour répondre aux FAQ après l'interaction avec un agent.
+\end{itemize}
+\section{Analyse des cas d'utilisation}
+Cette section propose une analyse approfondie des principaux cas d'utilisation du Sprint 3, couvrant leurs descriptions, les acteurs impliqués, les préconditions, les postconditions, le flux principal et les scénarios alternatifs.
+\subsection{Messagerie de support utilisateur}
+Le tableau~\ref{tab:messagerie-usecase} fournit une analyse détaillée du cas d'utilisation pour le processus de messagerie. Il décrit comment un client (apprenant) peut communiquer avec un agent (agent humain) en utilisant un système de messagerie en temps réel. Il inclut les préconditions, les postconditions, les scénarios nominaux et alternatifs, et le flux d'exception.
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|l|p{11cm}|}
+\caption{Description textuelle du cas d'utilisation – Messagerie de support utilisateur}
+\label{tab:messagerie-usecase} \\
+
+\hline
+\rowcolor[HTML]{D9D9D9}
+\textbf{Titre} & Messagerie de support utilisateur \\ \hline
+\textbf{Acteurs} & Utilisateur (Apprenant), Agent (Support humain) \\ \hline
+\textbf{Résumé} & Ce cas d'utilisation décrit comment un utilisateur peut initier une session de messagerie en temps réel avec un agent en entrant un pseudonyme et un identifiant de salle. Les données sont affichées instantanément à l'agent, et les deux parties peuvent commencer à communiquer dans une salle de discussion partagée. \\ \hline
+\textbf{Préconditions} & 
+\begin{itemize}
+    \item L'utilisateur est connecté à la plateforme.
+    \item L'interface de messagerie est accessible.
+    \item Un agent est disponible pour le support en temps réel.
+\end{itemize}
+\\ \hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item Un canal de communication en temps réel est établi entre l'utilisateur et l'agent.
+    \item Les messages sont échangés instantanément dans la salle.
+    \item L'historique de la conversation est éventuellement stocké pour consultation.
+\end{itemize}
+\\ \hline
+\textbf{Scénario nominal} &
+\begin{enumerate}
+    \item L'utilisateur accède à l'interface de chat de support.
+    \item L'utilisateur entre un pseudonyme et un identifiant de salle.
+    \item Le système crée ou rejoint la salle spécifiée.
+    \item Le tableau de bord de l'agent affiche l'entrée du nouvel utilisateur (pseudonyme et identifiant de salle).
+    \item L'agent rejoint la même salle.
+    \item Une session de messagerie en temps réel commence entre l'utilisateur et l'agent.
+    \item Les deux participants peuvent envoyer et recevoir des messages instantanément.
+\end{enumerate}
+\\ \hline
+\textbf{Scénario alternatif} &
+L'utilisateur entre un identifiant de salle existant où un agent est déjà présent :
+\begin{itemize}
+    \item L'utilisateur est ajouté à la salle de conversation existante.
+    \item L'agent reçoit une notification de l'arrivée du nouvel utilisateur.
+\end{itemize}
+\\ \hline
+\textbf{Flux d'exception} &
+Si le pseudonyme ou l'identifiant de salle est manquant ou invalide :
+\begin{itemize}
+    \item Le système invite l'utilisateur à remplir les deux champs avant de continuer.
+\end{itemize}
+
+Si aucun agent n'est actuellement disponible :
+\begin{itemize}
+    \item L'utilisateur est informé d'attendre ou de réessayer plus tard.
+    \item En option, un chatbot peut répondre aux requêtes initiales jusqu'à ce qu'un agent soit disponible.
+\end{itemize}
+\\ \hline
+
+\end{longtable}
+\subsection{Agent chatbot}
+Le tableau~\ref{tab:chatbot} fournit une analyse détaillée du cas d'utilisation pour la fonctionnalité de chatbot où tout type d'utilisateur peut communiquer avec cet agent. Il inclut les préconditions, les postconditions, les scénarios nominaux et alternatifs, et le flux d'exception.
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{|l|p{11cm}|}
+\caption{Description textuelle du cas d'utilisation – Agent chatbot}
+\label{tab:chatbot} \\
+
+\hline
+\rowcolor[HTML]{D9D9D9}
+\textbf{Titre} & Agent chatbot \\ \hline
+\textbf{Acteurs} & Tout utilisateur (Apprenant, Instructeur, Administrateur) \\ \hline
+\textbf{Résumé} & Ce cas d'utilisation décrit comment tout type d'utilisateur peut interagir avec l'agent chatbot pour recevoir des réponses automatisées liées au domaine de la plateforme. Si un utilisateur pose une question en dehors du cadre du chatbot, celui-ci refuse poliment et informe l'utilisateur qu'il ne peut répondre qu'aux questions liées à la plateforme. \\ \hline
+\textbf{Préconditions} & 
+\begin{itemize}
+    \item L'utilisateur est connecté à la plateforme.
+    \item L'interface du chatbot est accessible sur la plateforme.
+\end{itemize}
+\\ \hline
+\textbf{Postconditions} & 
+\begin{itemize}
+    \item L'utilisateur reçoit des réponses automatisées aux questions valides liées à la plateforme.
+    \item Pour les questions non liées, l'utilisateur est informé des limitations du chatbot.
+\end{itemize}
+\\ \hline
+\textbf{Scénario nominal} &
+\begin{enumerate}
+    \item L'utilisateur ouvre l'interface du chatbot depuis la plateforme.
+    \item L'utilisateur entre une question (par exemple, « Comment m'inscrire à un cours ? »).
+    \item Le chatbot traite la question.
+    \item Le chatbot renvoie une réponse pertinente et utile basée sur la base de connaissances de la plateforme.
+    \item L'utilisateur poursuit la conversation avec des requêtes supplémentaires liées.
+\end{enumerate}
+\\ \hline
+\textbf{Scénario alternatif} &
+L'utilisateur pose une question en dehors du domaine de la plateforme (par exemple, « Quel temps fait-il aujourd'hui ? ») :
+\begin{itemize}
+    \item Le chatbot reconnaît que la question n'est pas liée à la plateforme.
+    \item Le chatbot répond : « Je suis désolé, je suis programmé pour aider uniquement avec des sujets liés à notre plateforme. »
+\end{itemize}
+\\ \hline
+\textbf{Flux d'exception} &
+Si le chatbot ne comprend pas l'entrée :
+\begin{itemize}
+    \item Il répond avec un message par défaut : « Je n'ai pas bien compris. Pourriez-vous reformuler votre question ? »
+\end{itemize}
+
+Si le chatbot rencontre un problème technique :
+\begin{itemize}
+    \item Le système affiche un message d'erreur : « Le chatbot est actuellement indisponible. Veuillez réessayer plus tard. »
+\end{itemize}
+\\ \hline
+\end{longtable}
+\section{Conception}
+Cette section commence par un diagramme de classes complet, suivi de diagrammes de séquence illustrant les cas d'utilisation clés pour ce sprint. Ces diagrammes servent à clarifier à la fois la conception structurelle et les interactions dynamiques au sein du système, offrant une compréhension claire de l'architecture et du flux opérationnel nécessaires pour implémenter les fonctionnalités principales.
+\subsection{Diagramme de classes}
+Le diagramme de classes pour le Sprint 3 illustre la structure et les relations entre les principales entités impliquées dans la gestion des interactions des utilisateurs, le contrôle des permissions et la gestion des unités au sein de l'application.
+\subsection{Messagerie de support utilisateur}
+Dans cette section, nous présentons et analysons le diagramme de séquence pour la messagerie de support utilisateur.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/caei_sprint_3_sequence_diagrams.drawio.png}
+    \caption{Diagramme de séquence de la communication entre apprenant et agent}
+    \label{fig:enter-label}
+\end{figure}
+\subsection{Chatbot}
+Dans cette section, nous présentons et analysons le diagramme de séquence de la fonctionnalité du chatbot.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/chatbot.drawio.png}
+    \caption{Diagramme de séquence du chatbot}
+    \label{fig:enter-label}
+\end{figure}
+\section{Développement}
+Cette section fournit une analyse détaillée de la manière dont les différents types d'agents, qu'il s'agisse d'agents de support humains ou d'agents chatbot, interagissent avec les utilisateurs.
+\subsection{Agent de support humain}
+Les agents de support humains jouent un rôle crucial dans la fourniture d'une assistance personnalisée et empathique aux utilisateurs, en particulier dans des situations complexes ou sensibles où les systèmes automatisés peuvent être insuffisants. Leur capacité à comprendre le contexte, les émotions et à fournir des solutions adaptées améliore considérablement l'expérience utilisateur globale et la confiance dans la plateforme.
+\subsubsection{Contacter un agent}
+La figure~\ref{fig:contact_agent} montre la page pour contacter un agent de support, où les utilisateurs peuvent entrer leur pseudonyme préféré et l'identifiant de salle souhaité.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{images/contact_agent.png}
+    \caption{Interface pour contacter un agent}
+    \label{fig:contact_agent}
+\end{figure}
+\subsubsection{Tableau de bord de l'agent}
+La figure~\ref{fig:entering_data} montre le tableau de bord de l'agent pendant que l'apprenant entre encore son pseudonyme et l'identifiant de salle.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/entering data.png}
+    \caption{Premiers pas de la communication entre l'agent et l'apprenant}
+    \label{fig:entering_data}
+\end{figure}
+\subsubsection{Agent rejoignant la salle}
+La figure~\ref{fig:entering_agent} montre comment l'agent peut rejoindre une salle en fonction du pseudonyme de l'apprenant et de l'identifiant.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/agent will enter.png}
+    \caption{Interface de l'agent rejoignant la salle}
+    \label{fig:entering_agent}
+\end{figure}
+\subsubsection{Conversation entre l'agent et l'apprenant}
+La figure~\ref{fig:communication} montre la conversation entre l'agent de support humain et l'apprenant.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/real time communication.png}
+    \caption{Interface de conversation}
+    \label{fig:communication}
+\end{figure}
+\subsection{Chatbot}
+
+Pour améliorer l'interaction avec les utilisateurs et fournir une assistance automatisée, un chatbot a été intégré à la plateforme en utilisant une implémentation personnalisée basée sur des modèles de langage avancés (LLMs). Ce chatbot a été construit avec LangChain et exploite l'API Together pour accéder à un LLM open-source (Mistral 7B). Le chatbot est affiné pour répondre exclusivement aux questions liées à la plateforme CAEI, telles que les formations disponibles, le contenu des cours, les horaires, les prix et l'inscription.
+
+Pour garantir que les réponses sont précises et alignées sur les données en temps réel de la plateforme, le chatbot interroge dynamiquement la table \texttt{formations} de la base de données. Cette intégration permet au chatbot de référencer les détails réels des cours lors de la formulation des réponses. Si un utilisateur soumet une requête non liée au domaine de la plateforme, le chatbot est programmé pour rediriger poliment la conversation en indiquant qu'il ne traite que des demandes spécifiques à CAEI. Ce modèle d'interaction ciblé fournit aux utilisateurs des réponses fiables et pertinentes tout en maintenant l'intégrité du cadre de la plateforme.
+\par\vspace{4cm}
+La figure~\ref{fig:chat_bot} montre comment le chatbot apparaît lorsque vous cliquez sur l'icône ci-dessous.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/chat_bot.png}
+    \caption{Interface du chatbot}
+    \label{fig:chat_bot}
+\end{figure}
+La figure~\ref{fig:chat_bot_answering} montre comment le chatbot répond à vos questions.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/answering.png}
+    \caption{Interface de réponse du chatbot}
+    \label{fig:chat_bot_answering}
+\end{figure}
+\section{Conclusion}
+Ce chapitre a présenté le Sprint 3, qui s'est concentré sur l'implémentation des fonctionnalités de support de base de la plateforme. Il a inclus l'intégration de deux types d'agents : l'agent de support humain et le chatbot alimenté par l'IA. Nous avons détaillé l'architecture, les cas d'utilisation et les modèles d'interaction qui permettent aux utilisateurs de communiquer efficacement avec les deux types d'agents. Le chatbot a été intégré en utilisant des modèles de langage avancés (LLMs) via LangChain et l'API Together, avec un réglage fin et un accès à la base de données pour garantir des réponses précises et spécifiques au domaine.
+
+Dans le chapitre suivant, nous explorerons le Sprint 4, qui introduit un système de recommandation adapté aux préférences et à l'historique des cours des utilisateurs. De plus, des mécanismes de retour seront implémentés pour améliorer l'engagement des utilisateurs et la qualité globale des offres de la plateforme.
+
+\end{document}

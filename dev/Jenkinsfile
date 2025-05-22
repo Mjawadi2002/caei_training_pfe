@@ -18,7 +18,7 @@ pipeline {
 
         stage('Build Frontend') {
             steps {
-                dir('front/caei_training_front') {
+                dir('dev/front/caei_training_front') {
                     sh 'npm install'
                     sh 'npm run build'
                 }
@@ -27,7 +27,7 @@ pipeline {
 
         stage('Build Backend') {
             steps {
-                dir('back') {
+                dir('dev/back') {
                     sh 'npm install'
                 }
             }
