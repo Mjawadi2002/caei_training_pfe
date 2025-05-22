@@ -72,27 +72,56 @@ pipeline {
         stage('Setup Docker') {
             steps {
                 sh '''
-                    # Check if we're in WSL
-                    if [ -f /proc/version ] && grep -q Microsoft /proc/version; then
-                        echo "WSL detected. Please ensure Docker Desktop is installed and running."
-                        # Verify Docker is running
-                        if ! docker info > /dev/null 2>&1; then
-                            echo "Docker is not running. Please start Docker Desktop."
-                            exit 1
-                        fi
+                    echo "Checking system information..."
+                    echo "OS: $(uname -a)"
+                    echo "Current user: $(whoami)"
+                    echo "Current directory: $(pwd)"
+                    
+                    echo "Checking Docker installation..."
+                    if command -v docker &> /dev/null; then
+                        echo "Docker is installed at: $(which docker)"
+                        docker --version
                     else
-                        # For non-WSL environments
-                        if ! command -v docker &> /dev/null; then
-                            echo "Docker not found. Please install Docker first."
-                            exit 1
-                        fi
+                        echo "Docker command not found in PATH"
+                        echo "Checking common Docker installation locations..."
+                        ls -l /usr/bin/docker 2>/dev/null || echo "Docker not found in /usr/bin"
+                        ls -l /usr/local/bin/docker 2>/dev/null || echo "Docker not found in /usr/local/bin"
                     fi
                     
-                    # Verify Docker installation
-                    docker --version
+                    echo "Checking Docker service status..."
+                    if systemctl is-active --quiet docker 2>/dev/null; then
+                        echo "Docker service is running"
+                    else
+                        echo "Docker service is not running"
+                    fi
                     
-                    # Verify Docker Compose
-                    docker compose version
+                    echo "Checking Docker socket..."
+                    if [ -S /var/run/docker.sock ]; then
+                        echo "Docker socket exists"
+                        ls -l /var/run/docker.sock
+                    else
+                        echo "Docker socket not found"
+                    fi
+                    
+                    echo "Checking Docker Compose..."
+                    if command -v docker-compose &> /dev/null; then
+                        echo "Docker Compose is installed at: $(which docker-compose)"
+                        docker-compose --version
+                    elif docker compose version &> /dev/null; then
+                        echo "Docker Compose plugin is available"
+                        docker compose version
+                    else
+                        echo "Docker Compose not found"
+                    fi
+                    
+                    # Try to run a simple Docker command
+                    echo "Testing Docker functionality..."
+                    if docker info &> /dev/null; then
+                        echo "Docker is working properly"
+                    else
+                        echo "Docker is not working properly"
+                        echo "Error: $(docker info 2>&1)"
+                    fi
                 '''
             }
         }
@@ -100,7 +129,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 sh '''
-                    # Use docker compose command
+                    echo "Attempting to build Docker images..."
                     docker compose build
                 '''
             }
@@ -109,6 +138,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
+                    echo "Attempting to deploy..."
                     docker compose down
                     docker compose up -d
                 '''
