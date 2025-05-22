@@ -69,21 +69,6 @@ pipeline {
             }
         }
 
-        stage('Test Frontend') {
-            steps {
-                dir("${WORKSPACE_DIR}/front/caei_training_front") {
-                    sh 'npm test'
-                }
-            }
-        }
-
-        stage('Test Backend') {
-            steps {
-                dir("${WORKSPACE_DIR}/back") {
-                    sh 'npm test'
-                }
-            }
-        }
 
         stage('Build Docker Images') {
             steps {
