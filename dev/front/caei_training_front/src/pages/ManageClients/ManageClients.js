@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Table, Button, Container, Row, Col, Card, Spinner, Alert, Modal, Form } from "react-bootstrap";
 import { FaUserEdit, FaTrash, FaUserPlus } from "react-icons/fa";
@@ -15,11 +15,7 @@ export default function ManageClients() {
 
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    fetchClients();
-  }, [selectedRole, searchName, fetchClients]);
-
-  const fetchClients = async () => {
+  const fetchClients = useCallback(async () => {
     setLoading(true);
     try {
       let url = "http://localhost:5000/api/v1/users";
@@ -42,7 +38,11 @@ export default function ManageClients() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedRole, searchName, token]);
+
+  useEffect(() => {
+    fetchClients();
+  }, [fetchClients]);
 
   const deleteClient = async (id) => {
     if (!window.confirm("Are you sure you want to delete this client?")) return;

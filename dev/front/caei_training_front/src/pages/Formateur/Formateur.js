@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Table, Spinner, Alert, Container, Card, Button, Modal, Form } from "react-bootstrap";
 import { jwtDecode } from "jwt-decode";
@@ -25,16 +25,7 @@ export default function Formateur() {
     }
   }
 
-  useEffect(() => {
-    if (id) {
-      fetchFormations();
-    } else {
-      setError("Invalid or missing token.");
-      setLoading(false);
-    }
-  }, [id, fetchFormations]);
-
-  const fetchFormations = async () => {
+  const fetchFormations = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get(`http://localhost:5000/api/v1/formations/formateur/${id}`, {
@@ -46,7 +37,16 @@ export default function Formateur() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, token]);
+
+  useEffect(() => {
+    if (id) {
+      fetchFormations();
+    } else {
+      setError("Invalid or missing token.");
+      setLoading(false);
+    }
+  }, [id, fetchFormations]);
 
   const deleteFormation = async (formationId) => {
     if (!window.confirm("Are you sure you want to delete this formation?")) return;

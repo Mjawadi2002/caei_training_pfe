@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import {
@@ -26,16 +26,7 @@ export default function Evaluations() {
 
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    if (formationId) {
-      fetchEvaluations();
-    } else {
-      setError("Formation ID is missing.");
-      setLoading(false);
-    }
-  }, [formationId, fetchEvaluations]);
-
-  const fetchEvaluations = async () => {
+  const fetchEvaluations = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -50,7 +41,16 @@ export default function Evaluations() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [formationId, token]);
+
+  useEffect(() => {
+    if (formationId) {
+      fetchEvaluations();
+    } else {
+      setError("Formation ID is missing.");
+      setLoading(false);
+    }
+  }, [formationId, fetchEvaluations]);
 
   const handleUpdateRating = async () => {
     try {
