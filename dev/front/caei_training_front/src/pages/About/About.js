@@ -2,7 +2,7 @@ import '../Hero/Hero.css';
 import './About.css'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from '../../assets/logo.png';
-import { FaUsers, FaLaptopCode, FaTrophy, FaChalkboardTeacher, FaAward, FaGraduationCap, FaBook, FaGlobe } from 'react-icons/fa';
+import { FaUsers, FaTrophy, FaChalkboardTeacher, FaAward, FaGraduationCap, FaBook, FaGlobe } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 export default function About() {

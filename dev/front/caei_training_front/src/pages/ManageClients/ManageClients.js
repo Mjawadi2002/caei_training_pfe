@@ -17,7 +17,7 @@ export default function ManageClients() {
 
   useEffect(() => {
     fetchClients();
-  }, [selectedRole, searchName]);
+  }, [selectedRole, searchName, fetchClients]);
 
   const fetchClients = async () => {
     setLoading(true);

@@ -33,7 +33,7 @@ export default function Evaluations() {
       setError("Formation ID is missing.");
       setLoading(false);
     }
-  }, [formationId]);
+  }, [formationId, fetchEvaluations]);
 
   const fetchEvaluations = async () => {
     setLoading(true);

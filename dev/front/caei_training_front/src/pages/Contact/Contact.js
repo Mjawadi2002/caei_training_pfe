@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { FaUser, FaEnvelope, FaCommentDots, FaPaperPlane } from "react-icons/fa";
+import { FaPaperPlane } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 import "../Register/Register.css";
 

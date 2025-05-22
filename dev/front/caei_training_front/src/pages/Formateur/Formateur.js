@@ -32,7 +32,7 @@ export default function Formateur() {
       setError("Invalid or missing token.");
       setLoading(false);
     }
-  }, [id]);
+  }, [id, fetchFormations]);
 
   const fetchFormations = async () => {
     setLoading(true);

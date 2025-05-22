@@ -16,7 +16,7 @@ export default function ManageReclamations() {
 
   useEffect(() => {
     fetchReclamations();
-  }, []);
+  }, [fetchReclamations]);
 
   const fetchReclamations = async () => {
     setLoading(true);

@@ -27,7 +27,7 @@ export default function ManageEnrollments() {
     fetchEnrollments();
     fetchStudents();
     fetchCourses();
-  }, []);
+  }, [fetchEnrollments, fetchStudents, fetchCourses]);
 
   const fetchEnrollments = async () => {
     setLoading(true);

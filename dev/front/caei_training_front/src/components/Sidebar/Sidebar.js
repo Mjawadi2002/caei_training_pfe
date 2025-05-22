@@ -60,7 +60,7 @@ function Sidebar({ isSidebarOpen }) {
                 </Link>
               </li>
               <li className='sidebar-nav-item'>
-                {localStorage.getItem("role") == 'apprenant' && (
+                {localStorage.getItem("role") === 'apprenant' && (
                   <Link
                     className="sidebar-nav-link"
                     to="/chatclientagent"
