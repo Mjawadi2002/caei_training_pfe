@@ -11,6 +11,21 @@ pipeline {
     }
 
     stages {
+        stage('Setup Docker Compose') {
+            steps {
+                sh '''
+                    echo "Installing docker-compose..."
+                    curl -L "https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                    chmod +x /usr/local/bin/docker-compose
+                    ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+                    
+                    echo "Verifying installations..."
+                    docker --version
+                    docker-compose --version
+                '''
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
