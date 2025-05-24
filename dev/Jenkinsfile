@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        DOCKER_COMPOSE = 'docker compose'
+        DOCKER_COMPOSE = 'docker-compose'
         WORKSPACE_DIR = 'dev'
     }
 
@@ -74,7 +74,7 @@ pipeline {
                 sh '''
                     echo "Verifying Docker installation..."
                     docker --version
-                    docker compose version
+                    docker-compose --version
                     
                     echo "Building Docker images..."
                     cd ${WORKSPACE_DIR}
