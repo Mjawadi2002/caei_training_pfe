@@ -8,6 +8,7 @@ pipeline {
     environment {
         DOCKER_COMPOSE = 'docker-compose'
         WORKSPACE_DIR = 'dev'
+        DOCKER_COMPOSE_PATH = '/var/jenkins_home/docker-compose'
     }
 
     stages {
@@ -15,13 +16,12 @@ pipeline {
             steps {
                 sh '''
                     echo "Installing docker-compose..."
-                    sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-                    sudo chmod +x /usr/local/bin/docker-compose
-                    sudo ln -sf /usr/local/bin/docker-compose /usr/bin/docker-compose
+                    curl -L "https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-$(uname -s)-$(uname -m)" -o ${DOCKER_COMPOSE_PATH}
+                    chmod +x ${DOCKER_COMPOSE_PATH}
                     
                     echo "Verifying installations..."
                     docker --version
-                    docker-compose --version
+                    ${DOCKER_COMPOSE_PATH} --version
                 '''
             }
         }
@@ -89,11 +89,11 @@ pipeline {
                 sh '''
                     echo "Verifying Docker installation..."
                     docker --version
-                    docker-compose --version
+                    ${DOCKER_COMPOSE_PATH} --version
                     
                     echo "Building Docker images..."
                     cd ${WORKSPACE_DIR}
-                    ${DOCKER_COMPOSE} build --no-cache
+                    ${DOCKER_COMPOSE_PATH} build --no-cache
                     
                     echo "Listing built images..."
                     docker images
@@ -106,10 +106,10 @@ pipeline {
                 sh '''
                     echo "Stopping existing containers..."
                     cd ${WORKSPACE_DIR}
-                    ${DOCKER_COMPOSE} down
+                    ${DOCKER_COMPOSE_PATH} down
                     
                     echo "Starting containers..."
-                    ${DOCKER_COMPOSE} up -d
+                    ${DOCKER_COMPOSE_PATH} up -d
                     
                     echo "Checking container status..."
                     docker ps
