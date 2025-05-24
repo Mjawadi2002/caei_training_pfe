@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'docker:dind'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
 
     tools {
         nodejs 'node24'
@@ -74,21 +69,19 @@ pipeline {
             }
         }
 
-        stage('Verify Docker') {
+        stage('Build Docker Images') {
             steps {
                 sh '''
                     echo "Verifying Docker installation..."
                     docker --version
-                    docker info
-                '''
-            }
-        }
-
-        stage('Build Docker Images') {
-            steps {
-                sh '''
-                    echo "Attempting to build Docker images..."
-                    docker compose build
+                    docker compose version
+                    
+                    echo "Building Docker images..."
+                    cd ${WORKSPACE_DIR}
+                    ${DOCKER_COMPOSE} build --no-cache
+                    
+                    echo "Listing built images..."
+                    docker images
                 '''
             }
         }
@@ -96,9 +89,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    echo "Attempting to deploy..."
-                    docker compose down
-                    docker compose up -d
+                    echo "Stopping existing containers..."
+                    cd ${WORKSPACE_DIR}
+                    ${DOCKER_COMPOSE} down
+                    
+                    echo "Starting containers..."
+                    ${DOCKER_COMPOSE} up -d
+                    
+                    echo "Checking container status..."
+                    docker ps
                 '''
             }
         }
