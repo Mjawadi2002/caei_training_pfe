@@ -59,27 +59,17 @@ pipeline {
             }
         }
 
-        stage('Deploy to GitHub') {
+        stage('Deploy') {
             steps {
-                script {
-                    sh '''
-                        git config user.email "mouhanned.j18@gmail.com"
-                        git config user.name "Mouhanned Jawadi"
-
-                        git add .
-
-                        CHANGES=$(git status --porcelain)
-
-                        if [ -n "$CHANGES" ]; then
-                            git commit -m "Jenkins: Build artifacts updated [ci skip]"
-                            git push origin HEAD:$(git rev-parse --abbrev-ref HEAD)
-                        else
-                            echo "No changes to commit"
-                        fi
-                    '''
-                }
+                sh '''
+                    echo "-----------------------------------------"
+                    echo "✅ Deployment stage executed successfully!"
+                    echo "This is where deployment would happen."
+                    echo "-----------------------------------------"
+                '''
             }
         }
+
     }
 
     post {
