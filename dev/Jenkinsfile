@@ -2,41 +2,21 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'node24'
+        nodejs 'nodejs20' 
     }
 
     environment {
-        DOCKER_COMPOSE = 'docker-compose'
         WORKSPACE_DIR = 'dev'
-        DOCKER_COMPOSE_PATH = '/var/jenkins_home/docker-compose'
     }
 
     stages {
-        stage('Setup Docker Compose') {
-            steps {
-                sh '''
-                    echo "Installing docker-compose..."
-                    curl -L "https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-$(uname -s)-$(uname -m)" -o ${DOCKER_COMPOSE_PATH}
-                    chmod +x ${DOCKER_COMPOSE_PATH}
-                    
-                    echo "Verifying installations..."
-                    docker --version
-                    ${DOCKER_COMPOSE_PATH} --version
-                '''
-            }
-        }
-
         stage('Checkout') {
             steps {
                 checkout scm
                 sh '''
-                    echo "Current directory: $(pwd)"
-                    echo "Listing all files:"
+                    echo "Checked out code:"
                     ls -la
-                    echo "Listing dev directory:"
-                    ls -la dev/
-                    echo "Listing dev/back directory:"
-                    ls -la dev/back/
+                    ls -la ${WORKSPACE_DIR}
                 '''
             }
         }
@@ -45,11 +25,11 @@ pipeline {
             steps {
                 dir("${WORKSPACE_DIR}") {
                     sh '''
-                        echo "Current directory: $(pwd)"
-                        echo "Listing all files:"
+                        echo "Verifying workspace structure..."
+                        echo "Listing files:"
                         ls -la
-                        echo "Checking if package.json exists:"
-                        test -f back/package.json && echo "package.json exists" || echo "package.json not found"
+                        test -f front/caei_training_front/package.json && echo "Frontend package.json found" || echo "Frontend package.json missing"
+                        test -f back/package.json && echo "Backend package.json found" || echo "Backend package.json missing"
                     '''
                 }
             }
@@ -59,9 +39,7 @@ pipeline {
             steps {
                 dir("${WORKSPACE_DIR}/front/caei_training_front") {
                     sh '''
-                        echo "Current directory: $(pwd)"
-                        echo "Listing all files:"
-                        ls -la
+                        echo "Building frontend..."
                         npm install
                         npm run build
                     '''
@@ -73,47 +51,33 @@ pipeline {
             steps {
                 dir("${WORKSPACE_DIR}/back") {
                     sh '''
-                        echo "Current directory: $(pwd)"
-                        echo "Listing all files:"
-                        ls -la
-                        echo "Contents of package.json:"
-                        cat package.json
+                        echo "Building backend..."
                         npm install
+                        npm run build || echo "No build script for backend, skipping"
                     '''
                 }
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Deploy to GitHub') {
             steps {
-                sh '''
-                    echo "Verifying Docker installation..."
-                    docker --version
-                    ${DOCKER_COMPOSE_PATH} --version
-                    
-                    echo "Building Docker images..."
-                    cd ${WORKSPACE_DIR}
-                    ${DOCKER_COMPOSE_PATH} build --no-cache
-                    
-                    echo "Listing built images..."
-                    docker images
-                '''
-            }
-        }
+                script {
+                    sh '''
+                        git config user.email "jenkins@example.com"
+                        git config user.name "Jenkins CI"
 
-        stage('Deploy') {
-            steps {
-                sh '''
-                    echo "Stopping existing containers..."
-                    cd ${WORKSPACE_DIR}
-                    ${DOCKER_COMPOSE_PATH} down
-                    
-                    echo "Starting containers..."
-                    ${DOCKER_COMPOSE_PATH} up -d
-                    
-                    echo "Checking container status..."
-                    docker ps
-                '''
+                        git add .
+
+                        CHANGES=$(git status --porcelain)
+
+                        if [ -n "$CHANGES" ]; then
+                            git commit -m "Jenkins: Build artifacts updated [ci skip]"
+                            git push origin HEAD:$(git rev-parse --abbrev-ref HEAD)
+                        else
+                            echo "No changes to commit"
+                        fi
+                    '''
+                }
             }
         }
     }
