@@ -45,7 +45,7 @@ class FreeChatbot {
   async chat(messages) {
     const systemPrompt = {
       role: "system",
-      content: `You are a CAEI TRAINING assistant with access to current course data. Follow these rules:
+      content: `You are a CAEI TRAINING assistant with access to current course data.,don't answer questions about other topics, Follow these rules:
       
 1. ONLY answer questions about:
    - Available formations (courses)

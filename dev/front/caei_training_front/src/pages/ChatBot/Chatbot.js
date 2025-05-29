@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { IoSend } from 'react-icons/io5';
 import { IoMdClose } from 'react-icons/io';
+import { FaQuestionCircle } from 'react-icons/fa';
 import axios from 'axios';
+import './Chatbot.css';
 
 // Typing dots animation
 const TypingDots = () => (
@@ -11,6 +13,25 @@ const TypingDots = () => (
     <span></span>
   </span>
 );
+
+const FAQ_QUESTIONS = [
+  {
+    question: "What is CAEI Training?",
+    answer: "CAEI Training is a professional training platform that offers various courses and certifications to help individuals enhance their skills and advance their careers."
+  },
+  {
+    question: "What courses are available?",
+    answer: "We offer a wide range of courses including professional certifications, technical training, and specialized programs. You can view all available courses in our Formations section."
+  },
+  {
+    question: "How can I enroll in a course?",
+    answer: "To enroll in a course, you need to create an account, browse our available courses, and click on the 'Enroll' button for your chosen course."
+  },
+  {
+    question: "What is your purpose?",
+    answer: "Our purpose is to provide high-quality education and training to help individuals achieve their professional goals and advance their careers through accessible and comprehensive learning programs."
+  }
+];
 
 const Chatbot = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([
@@ -22,6 +43,7 @@ const Chatbot = ({ isOpen, onClose }) => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [showFAQ, setShowFAQ] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -31,6 +53,14 @@ const Chatbot = ({ isOpen, onClose }) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const handleFAQClick = (question, answer) => {
+    setMessages(prev => [...prev, 
+      { role: 'user', content: question },
+      { role: 'assistant', content: answer }
+    ]);
+    setShowFAQ(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,7 +72,6 @@ const Chatbot = ({ isOpen, onClose }) => {
     try {
       setIsLoading(true);
       setIsTyping(true);
-      // Add placeholder "typing..." message
       setMessages([...newMessages, { role: 'assistant', content: '...' }]);
 
       const response = await axios.post(
@@ -57,14 +86,13 @@ const Chatbot = ({ isOpen, onClose }) => {
       if (!response.data?.content) throw new Error('Invalid response format');
 
       setMessages((prev) => {
-        // Replace last '...' message with actual response
         const updated = [...prev.slice(0, -1), response.data];
         return updated;
       });
     } catch (error) {
       console.error('Chatbot error:', error);
       setMessages((prev) => [
-        ...prev.slice(0, -1), // remove the placeholder
+        ...prev.slice(0, -1),
         {
           role: 'assistant',
           content: 'Service is currently unavailable. Please try again later.',
@@ -80,30 +108,50 @@ const Chatbot = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div
-      className="position-fixed bottom-0 end-0 m-4 shadow-lg rounded-4 overflow-hidden border border-light bg-white"
-      style={{ width: '380px', height: '500px', zIndex: 1050 }}
-    >
+    <div className="chatbot-container">
       {/* Header */}
-      <div className="bg-success text-white px-3 py-2 d-flex justify-content-between align-items-center">
+      <div className="chatbot-header">
         <h6 className="mb-0 fw-bold">AI Assistant</h6>
-        <button className="btn btn-sm text-white" onClick={onClose}>
-          <IoMdClose size={20} />
-        </button>
+        <div className="header-buttons">
+          <button 
+            className="btn btn-sm text-white faq-button" 
+            onClick={() => setShowFAQ(!showFAQ)}
+            title="FAQ"
+          >
+            <FaQuestionCircle size={20} />
+          </button>
+          <button className="btn btn-sm text-white" onClick={onClose}>
+            <IoMdClose size={20} />
+          </button>
+        </div>
       </div>
 
+      {/* FAQ Panel */}
+      {showFAQ && (
+        <div className="faq-panel">
+          <h6 className="faq-title">Frequently Asked Questions</h6>
+          <div className="faq-list">
+            {FAQ_QUESTIONS.map((faq, index) => (
+              <button
+                key={index}
+                className="faq-item"
+                onClick={() => handleFAQClick(faq.question, faq.answer)}
+              >
+                {faq.question}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Chat messages */}
-      <div className="flex-grow-1 p-3 overflow-auto" style={{ height: '380px', backgroundColor: '#f8f9fa' }}>
+      <div className="chat-messages">
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`mb-3 d-flex ${msg.role === 'user' ? 'justify-content-end' : 'justify-content-start'}`}
+            className={`message-wrapper ${msg.role === 'user' ? 'user' : 'assistant'}`}
           >
-            <div
-              className={`px-3 py-2 rounded-pill ${
-                msg.role === 'user' ? 'bg-success text-white' : 'bg-light text-dark'
-              }`}
-            >
+            <div className={`message ${msg.role === 'user' ? 'user-message' : 'assistant-message'}`}>
               {msg.content === '...' && isTyping ? <TypingDots /> : msg.content}
             </div>
           </div>
@@ -112,11 +160,11 @@ const Chatbot = ({ isOpen, onClose }) => {
       </div>
 
       {/* Input form */}
-      <form onSubmit={handleSubmit} className="border-top px-3 py-2 bg-white">
+      <form onSubmit={handleSubmit} className="chat-input-form">
         <div className="input-group">
           <input
             type="text"
-            className="form-control rounded-start-pill border-success"
+            className="form-control chat-input"
             placeholder="Type your message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -124,7 +172,7 @@ const Chatbot = ({ isOpen, onClose }) => {
           />
           <button
             type="submit"
-            className="btn btn-success rounded-end-pill"
+            className="btn btn-success send-button"
             disabled={isLoading || !input.trim()}
           >
             <IoSend />
