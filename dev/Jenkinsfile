@@ -62,26 +62,22 @@ pipeline {
         stage('Run Applications') {
             steps {
                 parallel {
-                    stage('Start Frontend') {
-                        steps {
-                            dir("${WORKSPACE_DIR}/front/caei_training_front") {
-                                sh '''
-                                    echo "Starting frontend application..."
-                                    npm start &
-                                    sleep 10  # Give frontend time to start
-                                '''
-                            }
+                    'Start Frontend': {
+                        dir("${WORKSPACE_DIR}/front/caei_training_front") {
+                            sh '''
+                                echo "Starting frontend application..."
+                                npm start &
+                                sleep 10  # Give frontend time to start
+                            '''
                         }
-                    }
-                    stage('Start Backend') {
-                        steps {
-                            dir("${WORKSPACE_DIR}/back") {
-                                sh '''
-                                    echo "Starting backend application..."
-                                    npm start &
-                                    sleep 10  # Give backend time to start
-                                '''
-                            }
+                    },
+                    'Start Backend': {
+                        dir("${WORKSPACE_DIR}/back") {
+                            sh '''
+                                echo "Starting backend application..."
+                                npm start &
+                                sleep 10  # Give backend time to start
+                            '''
                         }
                     }
                 }
