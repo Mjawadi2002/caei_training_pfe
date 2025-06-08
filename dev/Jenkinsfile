@@ -68,6 +68,8 @@ pipeline {
                                 echo "Starting frontend application..."
                                 npm start &
                                 sleep 10  # Give frontend time to start
+                                echo "Frontend should be running on http://localhost:3000"
+                                curl -I http://localhost:3000 || echo "Frontend not responding yet"
                             '''
                         }
                     }
@@ -79,6 +81,8 @@ pipeline {
                                 echo "Starting backend application..."
                                 npm start &
                                 sleep 10  # Give backend time to start
+                                echo "Backend should be running on http://localhost:5000"
+                                curl -I http://localhost:5000 || echo "Backend not responding yet"
                             '''
                         }
                     }
@@ -86,23 +90,24 @@ pipeline {
             }
         }
 
-
         stage('Deploy') {
             steps {
                 sh '''
                     echo "-----------------------------------------"
-                    echo "✅ Deployment stage executed successfully!"
-                    echo "This is where deployment would happen."
+                    echo "✅ Applications are running!"
+                    echo "Frontend: http://localhost:3000"
+                    echo "Backend: http://localhost:5000"
                     echo "-----------------------------------------"
+                    echo "Press Ctrl+C to stop the pipeline and applications"
+                    sleep 300  # Keep running for 5 minutes
                 '''
             }
         }
-
     }
 
     post {
         always {
-            cleanWs()
+            echo 'Pipeline completed!'
         }
         success {
             echo 'Pipeline completed successfully!'
