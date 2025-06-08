@@ -62,7 +62,7 @@ pipeline {
         stage('Run Applications') {
             steps {
                 parallel {
-                    'Start Frontend': {
+                    frontend: {
                         dir("${WORKSPACE_DIR}/front/caei_training_front") {
                             sh '''
                                 echo "Starting frontend application..."
@@ -71,7 +71,7 @@ pipeline {
                             '''
                         }
                     },
-                    'Start Backend': {
+                    backend: {
                         dir("${WORKSPACE_DIR}/back") {
                             sh '''
                                 echo "Starting backend application..."
