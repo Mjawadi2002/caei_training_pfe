@@ -60,9 +60,9 @@ pipeline {
         }
 
         stage('Run Applications') {
-            steps {
-                parallel {
-                    frontend: {
+            parallel {
+                stage('Frontend') {
+                    steps {
                         dir("${WORKSPACE_DIR}/front/caei_training_front") {
                             sh '''
                                 echo "Starting frontend application..."
@@ -70,8 +70,10 @@ pipeline {
                                 sleep 10  # Give frontend time to start
                             '''
                         }
-                    },
-                    backend: {
+                    }
+                }
+                stage('Backend') {
+                    steps {
                         dir("${WORKSPACE_DIR}/back") {
                             sh '''
                                 echo "Starting backend application..."
@@ -83,6 +85,7 @@ pipeline {
                 }
             }
         }
+
 
         stage('Deploy') {
             steps {
