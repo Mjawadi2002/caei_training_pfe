@@ -99,7 +99,7 @@ pipeline {
                     echo "Backend: http://localhost:5000"
                     echo "-----------------------------------------"
                     echo "Press Ctrl+C to stop the pipeline and applications"
-                    sleep 300  # Keep running for 5 minutes
+                    sleep 120  # Keep running for 5 minutes
                 '''
             }
         }
