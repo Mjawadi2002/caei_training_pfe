@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Table, Button, Container, Card, Spinner, Alert, Modal, Form } from "react-bootstrap";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function ManageFormations() {
   const [formations, setFormations] = useState([]);
@@ -18,7 +20,10 @@ export default function ManageFormations() {
     formateur_id: "",
     category: "",
     tags: "",
+    image_path: "/uploads/formations/default-formation.png"
   });
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const token = localStorage.getItem("token");
 
@@ -44,81 +49,77 @@ export default function ManageFormations() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFormations((prev) => prev.filter((formation) => formation.id !== id));
+      toast.success('Formation deleted successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } catch (err) {
       setError(err.response?.data?.error || "Failed to delete formation.");
+      toast.error(err.response?.data?.error || "Failed to delete formation.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
   };
 
   const handleShow = (formation = null) => {
     setCurrentFormation(formation);
     setFormData(
       formation
-        ? { ...formation }
-        : { title: "", description: "", price: "", category: "", tags: "", session_deb: "", session_end: "", formateur_id: "" }
+        ? {
+            ...formation,
+            session_deb: formatDate(formation.session_deb),
+            session_end: formatDate(formation.session_end)
+          }
+        : {
+            title: "",
+            description: "",
+            price: "",
+            category: "",
+            tags: "",
+            session_deb: "",
+            session_end: "",
+            formateur_id: "",
+            image_path: "/uploads/formations/default-formation.png"
+          }
     );
+    setSelectedFile(null);
+    setImagePreview(formation ? `http://localhost:5000${formation.image_path}` : null);
     setShowModal(true);
   };
 
   const handleClose = () => {
     setShowModal(false);
     setCurrentFormation(null);
-    setFormData({ title: "", description: "", price: "", category: "", tags: "", session_deb: "", session_end: "", formateur_id: "" });
+    setFormData({ title: "", description: "", price: "", category: "", tags: "", session_deb: "", session_end: "", formateur_id: "", image_path: "/uploads/formations/default-formation.png" });
+    setSelectedFile(null);
+    setImagePreview(null);
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-  const createFormation = async () => {
-    try {
-      // Ensure tags is a string or an array and handle accordingly
-      const formattedData = {
-        title: formData.title,
-        description: formData.description,
-        price: formData.price,
-        session_deb: formData.session_deb,
-        session_end: formData.session_end,
-        formateur_id: formData.formateur_id,
-        category: formData.category.trim(),
-        tags: typeof formData.tags === 'string'
-          ? formData.tags.split(',').map(tag => tag.trim())  // If tags is a string, split by commas and trim
-          : formData.tags ? formData.tags.map(tag => tag.trim()) : [],  // If tags is already an array, trim each element
-      };
-  
-      // Send the data to the API
-      await axios.post("http://localhost:5000/api/v1/formations", formattedData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-  
-      fetchFormations(); // Refresh the list
-      handleClose();
-    } catch (err) {
-      setError(err.response?.data?.error || "Failed to create formation.");
-    }
-  };
-  
-  
-
-  const updateFormation = async () => {
-    try {
-      const formattedData = {
-        title: formData.title,
-        description: formData.description,
-        price: formData.price,
-        session_deb: formData.session_deb,
-        session_end: formData.session_end,
-        formateur_id: formData.formateur_id,
-        category: formData.category.trim(),
-        tags: formData.tags.split(",").map(tag => tag.trim()), // Ensure the tags are correctly formatted
-      };
-
-      await axios.put(`http://localhost:5000/api/v1/formations/name/${currentFormation.title}`, formattedData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      fetchFormations(); // Refresh the list
-      handleClose();
-    } catch (err) {
-      setError(err.response?.data?.error || "Failed to update formation.");
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -130,8 +131,112 @@ export default function ManageFormations() {
     }
   };
 
+  const createFormation = async () => {
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append('title', formData.title);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('price', formData.price);
+      formDataToSend.append('session_deb', formData.session_deb);
+      formDataToSend.append('session_end', formData.session_end);
+      formDataToSend.append('formateur_id', formData.formateur_id);
+      formDataToSend.append('category', formData.category.trim());
+      formDataToSend.append('tags', typeof formData.tags === 'string' 
+        ? formData.tags.split(',').map(tag => tag.trim())
+        : formData.tags ? formData.tags.map(tag => tag.trim()) : []);
+      
+      if (selectedFile) {
+        formDataToSend.append('formationImage', selectedFile);
+      }
+
+      const response = await axios.post("http://localhost:5000/api/v1/formations", formDataToSend, {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        },
+      });
+
+      if (response.data.image_path) {
+        setFormData(prev => ({ ...prev, image_path: response.data.image_path }));
+      }
+
+      fetchFormations();
+      handleClose();
+      toast.success('Formation created successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to create formation.");
+      toast.error(err.response?.data?.error || "Failed to create formation.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  };
+
+  const updateFormation = async () => {
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append('title', formData.title);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('price', formData.price);
+      formDataToSend.append('session_deb', formData.session_deb);
+      formDataToSend.append('session_end', formData.session_end);
+      formDataToSend.append('formateur_id', formData.formateur_id);
+      formDataToSend.append('category', formData.category.trim());
+      formDataToSend.append('tags', formData.tags.split(",").map(tag => tag.trim()));
+      formDataToSend.append('image_path', formData.image_path);
+      
+      if (selectedFile) {
+        formDataToSend.append('formationImage', selectedFile);
+      }
+
+      const response = await axios.put(`http://localhost:5000/api/v1/formations/name/${currentFormation.title}`, formDataToSend, {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        },
+      });
+
+      if (response.data.image_path) {
+        setFormData(prev => ({ ...prev, image_path: response.data.image_path }));
+      }
+      
+      fetchFormations();
+      handleClose();
+      toast.success('Formation updated successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to update formation.");
+      toast.error(err.response?.data?.error || "Failed to update formation.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  };
+
   return (
     <Container className="mt-4" style={{ maxWidth: "95%" }}>
+      <ToastContainer />
       <Card className="shadow-lg p-4">
         <h2 className="text-center mb-4">Manage Formations</h2>
         {error && <Alert variant="danger">{error}</Alert>}
@@ -143,6 +248,7 @@ export default function ManageFormations() {
           <Table striped bordered hover responsive className="text-center">
             <thead className="bg-dark text-white">
               <tr>
+                <th>Image</th>
                 <th>ID</th>
                 <th>Title</th>
                 <th>Description</th>
@@ -159,6 +265,13 @@ export default function ManageFormations() {
               {formations.length > 0 ? (
                 formations.map((formation) => (
                   <tr key={formation.id}>
+                    <td>
+                      <img 
+                        src={`http://localhost:5000${formation.image_path}`} 
+                        alt={formation.title}
+                        style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                      />
+                    </td>
                     <td>{formation.id}</td>
                     <td>{formation.title}</td>
                     <td>{formation.description}</td>
@@ -180,7 +293,7 @@ export default function ManageFormations() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="10">No formations found.</td>
+                  <td colSpan="11">No formations found.</td>
                 </tr>
               )}
             </tbody>
@@ -193,12 +306,30 @@ export default function ManageFormations() {
         </div>
       </Card>
 
-      <Modal show={showModal} onHide={handleClose}>
+      <Modal show={showModal} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
           <Modal.Title>{currentFormation ? "Edit Formation" : "Add New Formation"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>Formation Image</Form.Label>
+              <Form.Control
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+              {(imagePreview || formData.image_path) && (
+                <div className="mt-2">
+                  <img
+                    src={imagePreview || `http://localhost:5000${formData.image_path}`}
+                    alt="Preview"
+                    style={{ maxWidth: '200px', maxHeight: '200px' }}
+                    className="img-thumbnail"
+                  />
+                </div>
+              )}
+            </Form.Group>
             <Form.Group controlId="formFormationTitle">
               <Form.Label>Title</Form.Label>
               <Form.Control type="text" name="title" value={formData.title} onChange={handleChange} required />
@@ -221,11 +352,23 @@ export default function ManageFormations() {
             </Form.Group>
             <Form.Group controlId="formFormationSessionStart">
               <Form.Label>Session Start</Form.Label>
-              <Form.Control type="date" name="session_deb" value={formData.session_deb} onChange={handleChange} required />
+              <Form.Control
+                type="date"
+                name="session_deb"
+                value={formData.session_deb}
+                onChange={handleChange}
+                required
+              />
             </Form.Group>
             <Form.Group controlId="formFormationSessionEnd">
               <Form.Label>Session End</Form.Label>
-              <Form.Control type="date" name="session_end" value={formData.session_end} onChange={handleChange} required />
+              <Form.Control
+                type="date"
+                name="session_end"
+                value={formData.session_end}
+                onChange={handleChange}
+                required
+              />
             </Form.Group>
             <Form.Group controlId="formFormationFormateurId">
               <Form.Label>Formateur ID</Form.Label>

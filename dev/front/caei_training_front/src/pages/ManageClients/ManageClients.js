@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Table, Button, Container, Row, Col, Card, Spinner, Alert, Modal, Form } from "react-bootstrap";
 import { FaUserEdit, FaTrash, FaUserPlus } from "react-icons/fa";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function ManageClients() {
   const [clients, setClients] = useState([]);
@@ -51,8 +53,24 @@ export default function ManageClients() {
         headers: { Authorization: `Bearer ${token}` }
       });
       setClients((prev) => prev.filter((client) => client.id !== id));
+      toast.success('Client deleted successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } catch (err) {
       setError(err.response?.data?.message || "Failed to delete client.");
+      toast.error(err.response?.data?.message || "Failed to delete client.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -86,20 +104,45 @@ export default function ManageClients() {
         await axios.put(`http://localhost:5000/api/v1/users/${currentClient.id}`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
+        toast.success('Client updated successfully!', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       } else {
         await axios.post("http://localhost:5000/api/v1/users", formData, {
           headers: { Authorization: `Bearer ${token}` }
+        });
+        toast.success('Client created successfully!', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
       }
       fetchClients();
       handleClose();
     } catch (err) {
       setError(err.response?.data?.message || "Operation failed.");
+      toast.error(err.response?.data?.message || "Operation failed.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
   return (
     <Container className="mt-5">
+      <ToastContainer />
       <Card className="shadow-lg p-4">
         <h2 className="text-center mb-4">Manage Clients</h2>
         {error && <Alert variant="danger">{error}</Alert>}

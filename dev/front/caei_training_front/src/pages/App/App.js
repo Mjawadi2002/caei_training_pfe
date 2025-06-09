@@ -27,6 +27,7 @@ import ManageEnrollments from "../ManageEnrollments/ManageEnrollments";
 import Evaluations from "../Evaluaions/Evaluations";
 import Chatbot from "../ChatBot/Chatbot";
 import ForgotPassword from "../ForgotPassword/ForgotPassword";
+import AdminStatistics from "../Admin/AdminStatistics";
 
 function App() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -94,6 +95,7 @@ function App() {
                 <Route path="/admin/manage-formations" element={<ManageFormations />} />
                 <Route path="/admin/manage-reclamations" element={<ManageReclamations />} />
                 <Route path="/admin/manage-enrollment" element={<ManageEnrollments />} />
+                <Route path="/admin/statistics" element={<AdminStatistics />} />
               </Route>
               <Route path="/accessdenied" element={<AccessDenied />} />
             </Routes>

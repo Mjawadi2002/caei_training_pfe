@@ -1,14 +1,16 @@
 const db = require('../config/db');
+const fs = require('fs');
+const path = require('path');
 
 exports.getAllFormations = (req, res) => {
-    const sql = `SELECT id, title, description, price, session_deb, session_end, formateur_id, category, tags FROM formations;`;
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error('Database error:', err);
-            return res.status(500).json({ error: 'Database query failed' });
-        }
-        res.status(200).json(results);
-    });
+  const sql = "SELECT * FROM formations";
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching formations:', err);
+      return res.status(500).json({ error: 'Database query failed' });
+    }
+    res.json(results);
+  });
 };
 
 exports.getFormationByName = (req, res) => {
@@ -30,101 +32,171 @@ exports.getFormationByName = (req, res) => {
 };
 
 exports.createFormation = (req, res) => {
-    const { title, description, price, session_deb, session_end, formateur_id, category, tags } = req.body;
+  const { title, description, price, session_deb, session_end, formateur_id, category, tags } = req.body;
+  
+  // Handle image upload
+  let image_path = '/uploads/formations/default-formation.png';
+  if (req.file) {
+    image_path = `/uploads/formations/${req.file.filename}`;
+  }
 
-    // Ensure tags is an array, and convert it to a comma-separated string
-    const tagsString = Array.isArray(tags) ? tags.join(',') : tags || ''; 
+  // Format dates to YYYY-MM-DD
+  const formattedSessionDeb = new Date(session_deb).toISOString().split('T')[0];
+  const formattedSessionEnd = new Date(session_end).toISOString().split('T')[0];
 
-    const sql = `
-        INSERT INTO formations (title, description, price, session_deb, session_end, formateur_id, category, tags)
-        SELECT ?, ?, ?, ?, ?, ?, ?, ?
-        WHERE EXISTS (
-            SELECT 1 FROM users WHERE id = ? AND role = 'formateur'
-        )
-    `;
+  // Ensure tags is an array, and convert it to a comma-separated string
+  const tagsString = Array.isArray(tags) ? tags.join(',') : tags || '';
 
-    db.query(sql, [title, description, price, session_deb, session_end, formateur_id, category, tagsString, formateur_id], (err, results) => {
-        if (err) {
-            console.error('Error creating formation:', err);
-            return res.status(500).json({ error: 'Database query failed' });
-        }
+  const sql = `
+      INSERT INTO formations (title, description, price, session_deb, session_end, formateur_id, category, tags, image_path)
+      SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?
+      WHERE EXISTS (
+          SELECT 1 FROM users WHERE id = ? AND role = 'formateur'
+      )
+  `;
 
-        if (results.affectedRows === 0) {
-            return res.status(400).json({ error: 'Invalid formateur_id: User is not a formateur!' });
-        }
+  db.query(sql, [title, description, price, formattedSessionDeb, formattedSessionEnd, formateur_id, category, tagsString, image_path, formateur_id], (err, results) => {
+    if (err) {
+      console.error('Error creating formation:', err);
+      return res.status(500).json({ error: 'Database query failed' });
+    }
 
-        res.status(201).json({ message: 'Formation created successfully' });
+    if (results.affectedRows === 0) {
+      return res.status(400).json({ error: 'Invalid formateur_id: User is not a formateur!' });
+    }
+
+    res.status(201).json({ 
+      message: 'Formation created successfully',
+      image_path: image_path
     });
+  });
 };
 
-
-
-
 exports.updateFormation = (req, res) => {
-    const { id } = req.params;
-    const { title, description, price, session_deb, session_end, formateur_id } = req.body;
-    
-    const sql = `
-        UPDATE formations 
-        SET title = ?, description = ?, price = ?, session_deb = ?, session_end = ?, formateur_id = ?
-        WHERE id = ?`;
+  const { id } = req.params;
+  const { title, description, price, session_deb, session_end, formateur_id } = req.body;
+  
+  // Handle image upload
+  let image_path = req.body.image_path;
+  if (req.file) {
+    // Delete old image if it exists and is not the default
+    if (image_path && image_path !== '/uploads/formations/default-formation.png') {
+      const oldImagePath = path.join(__dirname, '..', image_path);
+      if (fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath);
+      }
+    }
+    image_path = `/uploads/formations/${req.file.filename}`;
+  }
 
-    db.query(sql, [title, description, price, session_deb, session_end, formateur_id, id], (err, results) => {
-        if (err) {
-            console.error('Error updating formation:', err);
-            return res.status(500).json({ error: 'Database query failed' });
-        }
+  // Format dates to YYYY-MM-DD
+  const formattedSessionDeb = new Date(session_deb).toISOString().split('T')[0];
+  const formattedSessionEnd = new Date(session_end).toISOString().split('T')[0];
 
-        if (results.affectedRows === 0) {
-            return res.status(404).json({ error: 'Formation not found!' });
-        }
+  const sql = `
+      UPDATE formations 
+      SET title = ?, description = ?, price = ?, session_deb = ?, session_end = ?, formateur_id = ?, image_path = ?
+      WHERE id = ?`;
 
-        res.status(200).json({ message: 'Formation updated successfully' });
+  db.query(sql, [title, description, price, formattedSessionDeb, formattedSessionEnd, formateur_id, image_path, id], (err, results) => {
+    if (err) {
+      console.error('Error updating formation:', err);
+      return res.status(500).json({ error: 'Database query failed' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'Formation not found!' });
+    }
+
+    res.status(200).json({ 
+      message: 'Formation updated successfully',
+      image_path: image_path
     });
+  });
 };
 
 exports.updateFormationByName = (req, res) => {
-    const { name } = req.params;
-    const { title, description, price, session_deb, session_end, formateur_id, category, tags } = req.body;
+  const { name } = req.params;
+  const { title, description, price, session_deb, session_end, formateur_id, category, tags } = req.body;
+  
+  // Handle image upload
+  let image_path = req.body.image_path;
+  if (req.file) {
+    // Delete old image if it exists and is not the default
+    if (image_path && image_path !== '/uploads/formations/default-formation.png') {
+      const oldImagePath = path.join(__dirname, '..', image_path);
+      if (fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath);
+      }
+    }
+    image_path = `/uploads/formations/${req.file.filename}`;
+  }
 
-    // Ensure tags is an array and convert it to a comma-separated string
-    const tagsString = Array.isArray(tags) ? tags.join(',') : tags || ''; 
+  // Format dates to YYYY-MM-DD
+  const formattedSessionDeb = new Date(session_deb).toISOString().split('T')[0];
+  const formattedSessionEnd = new Date(session_end).toISOString().split('T')[0];
 
-    const sql = `
-        UPDATE formations 
-        SET title = ?, description = ?, price = ?, session_deb = ?, session_end = ?, formateur_id = ?, category = ?, tags = ?
-        WHERE title = ?`;
+  // Ensure tags is an array and convert it to a comma-separated string
+  const tagsString = Array.isArray(tags) ? tags.join(',') : tags || '';
 
-    db.query(sql, [title, description, price, session_deb, session_end, formateur_id, category, tagsString, name], (err, results) => {
-        if (err) {
-            console.error('Error updating formation by name:', err);
-            return res.status(500).json({ error: 'Database query failed' });
-        }
+  const sql = `
+      UPDATE formations 
+      SET title = ?, description = ?, price = ?, session_deb = ?, session_end = ?, formateur_id = ?, category = ?, tags = ?, image_path = ?
+      WHERE title = ?`;
 
-        if (results.affectedRows === 0) {
-            return res.status(404).json({ error: 'Formation not found!' });
-        }
+  db.query(sql, [title, description, price, formattedSessionDeb, formattedSessionEnd, formateur_id, category, tagsString, image_path, name], (err, results) => {
+    if (err) {
+      console.error('Error updating formation by name:', err);
+      return res.status(500).json({ error: 'Database query failed' });
+    }
 
-        res.status(200).json({ message: 'Formation updated successfully by name' });
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'Formation not found!' });
+    }
+
+    res.status(200).json({ 
+      message: 'Formation updated successfully by name',
+      image_path: image_path
     });
+  });
 };
 
-
 exports.deleteFormation = (req, res) => {
-    const { id } = req.params;
-    const sql = `DELETE FROM formations WHERE id = ?`;
-    db.query(sql, [id], (err, results) => {
-        if (err) {
-            console.error('Error deleting formation:', err);
-            return res.status(500).json({ error: 'Database query failed' });
-        }
+  const { id } = req.params;
 
-        if (results.affectedRows === 0) {
-            return res.status(404).json({ error: 'Formation not found' });
-        }
+  // First, get the formation to check if it has an image
+  const getSql = "SELECT image_path FROM formations WHERE id = ?";
+  db.query(getSql, [id], (err, results) => {
+    if (err) {
+      console.error('Error fetching formation:', err);
+      return res.status(500).json({ error: 'Database query failed' });
+    }
 
-        res.status(200).json({ message: 'Formation deleted successfully' });
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Formation not found!' });
+    }
+
+    const formation = results[0];
+
+    // Delete the formation
+    const deleteSql = "DELETE FROM formations WHERE id = ?";
+    db.query(deleteSql, [id], (err, results) => {
+      if (err) {
+        console.error('Error deleting formation:', err);
+        return res.status(500).json({ error: 'Database query failed' });
+      }
+
+      // If the formation had an image and it's not the default one, delete the image file
+      if (formation.image_path && formation.image_path !== '/uploads/formations/default-formation.png') {
+        const imagePath = path.join(__dirname, '..', formation.image_path);
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        }
+      }
+
+      res.status(200).json({ message: 'Formation deleted successfully' });
     });
+  });
 };
 
 exports.getFormationsOfFormateur = (req, res) => {
@@ -149,4 +221,32 @@ exports.getFormationsByCategory = (req, res) => {
         }
         return res.status(200).json(results);
     });
+};
+
+exports.getFormationsByTitle = (req, res) => {
+  const { title } = req.params;
+  const sql = 'SELECT * FROM formations WHERE title LIKE ?';
+  const searchPattern = `%${title}%`;
+  
+  db.query(sql, [searchPattern], (err, results) => {
+    if (err) {
+      console.error('Error searching formations:', err);
+      return res.status(500).json({ error: 'Database query failed' });
+    }
+    return res.status(200).json(results);
+  });
+};
+
+exports.getFormationsByCategoryAndTitle = (req, res) => {
+  const { category, title } = req.query;
+  const sql = 'SELECT * FROM formations WHERE category = ? AND title LIKE ?';
+  const searchPattern = `%${title}%`;
+  
+  db.query(sql, [category, searchPattern], (err, results) => {
+    if (err) {
+      console.error('Error searching formations:', err);
+      return res.status(500).json({ error: 'Database query failed' });
+    }
+    return res.status(200).json(results);
+  });
 };

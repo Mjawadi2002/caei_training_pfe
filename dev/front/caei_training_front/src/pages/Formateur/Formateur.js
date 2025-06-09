@@ -4,6 +4,8 @@ import { Table, Spinner, Alert, Container, Card, Button, Modal, Form } from "rea
 import { jwtDecode } from "jwt-decode";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Formateur() {
   const [formations, setFormations] = useState([]);
@@ -55,8 +57,24 @@ export default function Formateur() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFormations((prev) => prev.filter((formation) => formation.id !== formationId));
+      toast.success('Formation deleted successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } catch (err) {
       setError(err.response?.data?.message || "Failed to delete formation.");
+      toast.error(err.response?.data?.message || "Failed to delete formation.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -86,16 +104,33 @@ export default function Formateur() {
         await axios.put(`http://localhost:5000/api/v1/formations/${currentFormation.id}`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        toast.success('Formation updated successfully!', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       }
       fetchFormations();
       handleClose();
     } catch (err) {
       setError(err.response?.data?.message || "Operation failed.");
+      toast.error(err.response?.data?.message || "Operation failed.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
   return (
     <Container className="mt-5">
+      <ToastContainer />
       <Card className="shadow-lg p-4">
         <h2 className="text-center mb-4">My Proposed Courses</h2>
         {error && <Alert variant="danger">{error}</Alert>}

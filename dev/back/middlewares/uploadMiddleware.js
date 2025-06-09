@@ -4,11 +4,14 @@ const path = require('path');
 // Set up storage for uploaded files
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/profile_images/');
+    // Create uploads directory if it doesn't exist
+    const uploadDir = path.join(__dirname, '..', 'uploads', 'formations');
+    cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
+    // Create a unique filename
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    cb(null, 'formation-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
 
@@ -25,10 +28,12 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const upload = multer({
+const upload = multer({ 
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-  fileFilter: fileFilter
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  }
 });
 
 module.exports = upload;

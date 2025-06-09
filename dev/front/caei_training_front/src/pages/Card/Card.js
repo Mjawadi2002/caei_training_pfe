@@ -29,40 +29,6 @@ export default function Card({ image, title, text, description, icon }) {
                     </div>
                 </div>
             )}
-
-            <style jsx>{`
-                .hover-transform-up {
-                    transition: transform 0.3s ease;
-                }
-                .hover-transform-up:hover {
-                    transform: translateY(-5px);
-                }
-                .modal {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    background: rgba(0, 0, 0, 0.5);
-                }
-                .modal-content {
-                    background-color: white;
-                    padding: 20px;
-                    border-radius: 8px;
-                    max-width: 400px;
-                    text-align: center;
-                }
-                .close-btn {
-                    position: absolute;
-                    top: 10px;
-                    right: 10px;
-                    font-size: 1.5rem;
-                    cursor: pointer;
-                }
-            `}</style>
         </>
     );
 }

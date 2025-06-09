@@ -3,6 +3,8 @@ import axios from "axios";
 import { Table, Button, Container, Card, Spinner, Alert, Modal, Form } from "react-bootstrap";
 import { FaReply, FaTrash } from "react-icons/fa";
 import { BsCircleFill } from "react-icons/bs";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function ManageReclamations() {
   const [reclamations, setReclamations] = useState([]);
@@ -39,8 +41,24 @@ export default function ManageReclamations() {
         headers: { Authorization: `Bearer ${token}` }
       });
       setReclamations((prev) => prev.filter((rec) => rec.id !== id));
+      toast.success('Réclamation deleted successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } catch (err) {
       setError(err.response?.data?.message || "Failed to delete réclamation.");
+      toast.error(err.response?.data?.message || "Failed to delete réclamation.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -59,25 +77,40 @@ export default function ManageReclamations() {
     setResponseMessage(e.target.value);
   };
 
-  const handleSendResponse = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`http://localhost:5000/api/v1/email/respond/${currentReclamation.id}`, 
-        { message: responseMessage },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setReclamations((prev) => 
-        prev.map((rec) => rec.id === currentReclamation.id ? { ...rec, responded: true } : rec)
-      );
-      alert("Response sent successfully!");
+      await axios.post(`http://localhost:5000/api/v1/email/respond/${currentReclamation.id}`, {
+        response: responseMessage
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchReclamations();
       handleClose();
+      toast.success('Response sent successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } catch (err) {
       setError(err.response?.data?.message || "Failed to send response.");
+      toast.error(err.response?.data?.message || "Failed to send response.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
   return (
     <Container className="mt-5">
+      <ToastContainer />
       <Card className="shadow-lg p-4">
         <h2 className="text-center mb-4">Manage Réclamations</h2>
         {error && <Alert variant="danger">{error}</Alert>}
@@ -136,7 +169,7 @@ export default function ManageReclamations() {
         <Modal.Body>
           <p><strong>From:</strong> {currentReclamation?.nom} ({currentReclamation?.email})</p>
           <p><strong>Message:</strong> {currentReclamation?.message}</p>
-          <Form onSubmit={handleSendResponse}>
+          <Form onSubmit={handleSubmit}>
             <Form.Group controlId="responseMessage">
               <Form.Label>Response</Form.Label>
               <Form.Control as="textarea" rows={3} value={responseMessage} onChange={handleResponseChange} required />
