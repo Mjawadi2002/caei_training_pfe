@@ -69,7 +69,6 @@ export default function Agent() {
 
     return (
         <div className="container mt-4">
-            <h1 className="text-center text-dark display-4">Agent Dashboard</h1>
             {room ? (
                 <ChatBox
                     room={room}

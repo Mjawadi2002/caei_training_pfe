@@ -30,9 +30,11 @@ exports.uploadProfileImage = (req, res) => {
             });
             return res.status(404).json({ message: 'User not found' });
         }
+        // Return the relative path for the frontend
+        const relativePath = imagePath.replace(/\\/g, '/').split('uploads/')[1];
         res.status(200).json({ 
             message: 'Profile image updated successfully',
-            imagePath: imagePath 
+            imagePath: `/uploads/${relativePath}`
         });
     });
 };
@@ -53,9 +55,10 @@ exports.getProfileImage = (req, res) => {
 
         // Get the relative path of the image (stored in the database)
         const imagePath = results[0].profile_image;
-
-        // Build the URL that the frontend can use to access the image
-        const imageUrl = `/${imagePath.replace(/\\/g, '/')}`;
+        
+        // Convert the absolute path to a relative URL path
+        const relativePath = imagePath.replace(/\\/g, '/').split('uploads/')[1];
+        const imageUrl = `/uploads/${relativePath}`;
 
         // Send the image URL in the response
         res.json({ profile_image_url: imageUrl });

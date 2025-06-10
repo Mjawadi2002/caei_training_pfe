@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const { authenticateToken, authorizeRoles } = require('../middlewares/middleware');
-const upload = require('../middlewares/uploadMiddleware');
+const { uploadProfile } = require('../middlewares/uploadMiddleware');
 
 // User-related routes
 router.post('/login', userController.loginUser);
@@ -17,8 +17,8 @@ router.get('/:id', authenticateToken, userController.getUserById);
 router.post('/', authenticateToken, userController.createUser);
 router.delete('/:id', authenticateToken, authorizeRoles('admin'), userController.deleteUser);
 router.put('/:id', authenticateToken, userController.updateUser);
-router.post('/register', upload.single('profileImage'), userController.registerUser);
-router.post('/:id/profile-image', authenticateToken, upload.single('profileImage'), userController.uploadProfileImage);
+router.post('/register', uploadProfile.single('profileImage'), userController.registerUser);
+router.post('/:id/profile-image', authenticateToken, uploadProfile.single('profileImage'), userController.uploadProfileImage);
 router.get('/:id/profile-image', authenticateToken, userController.getProfileImage);
 
 // Password reset routes

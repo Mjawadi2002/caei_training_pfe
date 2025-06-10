@@ -16,17 +16,13 @@ export default function Footer() {
     setResponseMessage(null);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/v1/email/send-feedback", { message }, {
-        headers: { "Content-Type": "application/json" },
-      });
-      setResponseMessage({ type: "success", text: res.data.message });
-      setMessage("");
+      const response = await axios.post('http://localhost:5000/api/feedback', { message });
+      setResponseMessage({ type: 'success', text: 'Merci pour votre retour !' });
+      setMessage('');
     } catch (error) {
-      console.error("Error sending message:", error);
-      setResponseMessage({ type: "error", text: "Failed to send message. Please try again later." });
-    } finally {
-      setLoading(false);
+      setResponseMessage({ type: 'error', text: 'Erreur lors de l\'envoi du message. Veuillez réessayer.' });
     }
+    setLoading(false);
   };
 
   return (
@@ -35,7 +31,7 @@ export default function Footer() {
         <footer className="footer-container">
           <div className="footer-content">
             <div className="footer-section">
-              <h3 className="footer-title">Follow Us</h3>
+              <h3 className="footer-title">Suivez-nous</h3>
               <div className="social-icons">
                 <button className="social-link" aria-label="Facebook" onClick={() => window.open('https://www.facebook.com', '_blank')}>
                   <i className="bi bi-facebook"></i>
@@ -56,26 +52,26 @@ export default function Footer() {
             </div>
 
             <div className="footer-section">
-              <h3 className="footer-title">Quick Links</h3>
+              <h3 className="footer-title">Liens Rapides</h3>
               <ul className="footer-links">
-                <li><a href="/formations">All Courses</a></li>
-                <li><a href="/about">About Us</a></li>
-                <li><a href="/contact">Need Help</a></li>
+                <li><a href="/formations">Tous les Cours</a></li>
+                <li><a href="/about">À Propos</a></li>
+                <li><a href="/contact">Besoin d'Aide</a></li>
               </ul>
             </div>
 
             <div className="footer-section">
-              <h3 className="footer-title">Contact Us</h3>
+              <h3 className="footer-title">Contactez-nous</h3>
               <div className="contact-info">
-                <p><i className="bi bi-envelope-fill"></i> contact@caei.com</p>
-                <p><i className="bi bi-telephone-fill"></i> +123 456 789</p>
-                <p><i className="bi bi-geo-alt-fill"></i> 123 Education Street, Tech City</p>
-                <p><i className="bi bi-clock-fill"></i> Mon-Fri: 9AM-5PM</p>
+                <p><i className="bi bi-envelope-fill"></i> contact@caei-afri.com</p>
+                <p><i className="bi bi-telephone-fill"></i> +216 55 332 885</p>
+                <p><i className="bi bi-geo-alt-fill"></i> SIS 8 Rue Claude Bernard 1002 Belvedere-Tunis , Tunisie</p>
+                <p><i className="bi bi-clock-fill"></i> Lun-Ven: 9h-18h</p>
               </div>
             </div>
 
             <div className="footer-section">
-              <h3 className="footer-title">Feedback</h3>
+              <h3 className="footer-title">Retour d'Expérience</h3>
               {responseMessage && (
                 <div className={`alert-message ${responseMessage.type}`}>
                   {responseMessage.text}
@@ -85,25 +81,25 @@ export default function Footer() {
                 <textarea
                   className="form-control"
                   rows="3"
-                  placeholder="Your feedback helps us improve..."
+                  placeholder="Votre retour nous aide à nous améliorer..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required
                 ></textarea>
                 <button className="btn btn-success" type="submit" disabled={loading}>
-                  {loading ? <><i className="bi bi-arrow-repeat"></i> Sending...</> : <><i className="bi bi-send-fill"></i> Send</>}
+                  {loading ? <><i className="bi bi-arrow-repeat"></i> Envoi en cours...</> : <><i className="bi bi-send-fill"></i> Envoyer</>}
                 </button>
               </form>
             </div>
           </div>
 
           <div className="footer-bottom">
-            <p>© {new Date().getFullYear()} CAEI Training. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} CAEI Training. Tous droits réservés.</p>
           </div>
         </footer>
         : 
         <footer className="footer-simple">
-          <p>© {new Date().getFullYear()} CAEI Training. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} CAEI Training. Tous droits réservés.</p>
         </footer>
       } 
     </>

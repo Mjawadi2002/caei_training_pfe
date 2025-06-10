@@ -81,7 +81,7 @@ export default function ManageReclamations() {
     e.preventDefault();
     try {
       await axios.post(`http://localhost:5000/api/v1/email/respond/${currentReclamation.id}`, {
-        response: responseMessage
+        message: responseMessage
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });

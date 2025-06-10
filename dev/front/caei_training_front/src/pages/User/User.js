@@ -53,7 +53,11 @@ export default function User() {
                 headers: { Authorization: `Bearer ${token}` },
             })
                 .then((response) => {
-                    setUserImage(response.data.profile_image_url || "/default-profile.png");
+                    if (response.data.profile_image_url) {
+                        setUserImage(response.data.profile_image_url);
+                    } else {
+                        setUserImage("/default-profile.png");
+                    }
                 })
                 .catch((error) => {
                     console.error("Error fetching profile image:", error.response?.data || error.message);
@@ -64,7 +68,7 @@ export default function User() {
             console.error("Error decoding token:", error);
             setLoading(false);
         }
-    }, [userImage]);
+    }, []);
 
 
 
@@ -199,12 +203,14 @@ export default function User() {
             );
     
             if (response.data.imagePath) {
-                // Update the state to trigger re-render
+                // Update the state with the new image path
                 setUserImage(response.data.imagePath);
-                handleImageModalClose();
+                setSelectedFile(null);
+                setShowImageModal(false);
             }
         } catch (error) {
             console.error("Error uploading profile image:", error.response?.data || error.message);
+            alert("Failed to upload profile image. Please try again.");
         }
     };
 
@@ -227,7 +233,7 @@ export default function User() {
                                 <>
                                     <div className="profile-image-container">
                                         <img 
-                                            src={`http://localhost:5000${userImage}`}
+                                            src={userImage.startsWith('http') ? userImage : `http://localhost:5000${userImage}`}
                                             alt="Profile" 
                                             className="img-fluid rounded-circle mb-3" 
                                             width="150" 

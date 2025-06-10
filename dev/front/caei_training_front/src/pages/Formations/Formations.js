@@ -37,8 +37,8 @@ export default function Formations() {
       const uniqueCategories = [...new Set(response.data.map(formation => formation.category))];
       setCategories(uniqueCategories);
     } catch (err) {
-      setError(err.response?.data?.error || "Failed to load formations.");
-      toast.error(err.response?.data?.error || "Failed to load formations.", {
+      setError(err.response?.data?.error || "Échec du chargement des formations.");
+      toast.error(err.response?.data?.error || "Échec du chargement des formations.", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -86,7 +86,7 @@ export default function Formations() {
       );
 
       if (response.status === 201) {
-        toast.success('Enrollment created successfully!', {
+        toast.success('Inscription réussie !', {
           position: 'top-right',
           autoClose: 3000,
           hideProgressBar: false,
@@ -96,8 +96,8 @@ export default function Formations() {
         });
       }
     } catch (error) {
-      console.error('Error registering for formation:', error.response?.data || error.message);
-      toast.error('Failed to register for the formation.', {
+      console.error('Erreur lors de l\'inscription à la formation:', error.response?.data || error.message);
+      toast.error('Échec de l\'inscription à la formation.', {
         position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
@@ -115,13 +115,13 @@ export default function Formations() {
   return (
     <div className="container-fluid fade-in py-5">
       <ToastContainer />
-      <h2 className="text-center mb-4">Available Courses</h2>
+      <h2 className="text-center mb-4">Formations Disponibles</h2>
       {error && <Alert variant="danger">{error}</Alert>}
 
       <Row className="mb-4">
         <Col md={6}>
           <Form.Select value={selectedCategory} onChange={handleCategoryChange}>
-            <option value="all">All Categories</option>
+            <option value="all">Toutes les Catégories</option>
             {categories.map((category) => (
               <option key={category} value={category}>
                 {category}
@@ -132,7 +132,7 @@ export default function Formations() {
         <Col md={6}>
           <Form.Control
             type="text"
-            placeholder="Search by course title"
+            placeholder="Rechercher par titre de formation"
             value={searchTitle}
             onChange={handleSearchChange}
           />
@@ -161,19 +161,19 @@ export default function Formations() {
                   {expandedFormation === formation.id && (
                     <div className="formation-details">
                       <p className="card-text">
-                        <strong>Price:</strong> {formation.price} TND
+                        <strong>Prix:</strong> {formation.price} TND
                       </p>
                       <p className="card-text">
-                        <strong>Category:</strong> {formation.category}
+                        <strong>Catégorie:</strong> {formation.category}
                       </p>
                       <p className="card-text">
                         <strong>Tags:</strong> {formation.tags}
                       </p>
                       <p className="card-text">
-                        <strong>Session begins:</strong> {new Date(formation.session_deb).toLocaleDateString()}
+                        <strong>Début de session:</strong> {new Date(formation.session_deb).toLocaleDateString()}
                       </p>
                       <p className="card-text">
-                        <strong>Session ends:</strong> {new Date(formation.session_end).toLocaleDateString()}
+                        <strong>Fin de session:</strong> {new Date(formation.session_end).toLocaleDateString()}
                       </p>
                     </div>
                   )}
@@ -182,13 +182,13 @@ export default function Formations() {
                       className="btn btn-info me-2"
                       onClick={() => toggleDetails(formation.id)}
                     >
-                      {expandedFormation === formation.id ? 'Hide Details' : 'Show Details'}
+                      {expandedFormation === formation.id ? 'Masquer les Détails' : 'Afficher les Détails'}
                     </button>
                     <button
                       className="btn btn-success"
                       onClick={() => handleEnroll(formation.id)}
                     >
-                      Register
+                      S'inscrire
                     </button>
                   </div>
                 </div>
@@ -198,7 +198,7 @@ export default function Formations() {
         </div>
       ) : (
         <Alert variant="info" className="text-center">
-          No courses found matching your criteria.
+          Aucune formation ne correspond à vos critères.
         </Alert>
       )}
     </div>

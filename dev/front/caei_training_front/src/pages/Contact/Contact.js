@@ -21,14 +21,14 @@ export default function Contact() {
       });
   
       if (res.data.success) {
-        toast.success(res.data.message || "Message sent successfully!");
+        toast.success(res.data.message || "Message envoyé avec succès !");
         setFormData({ name: "", email: "", message: "" });
       } else {
-        toast.error(res.data.message || "Failed to send message.");
+        toast.error(res.data.message || "Échec de l'envoi du message.");
       }
     } catch (error) {
-      console.error("Error sending message:", error);
-      toast.error("Failed to send message.");
+      console.error("Erreur lors de l'envoi du message:", error);
+      toast.error("Échec de l'envoi du message.");
     } finally {
       setLoading(false);
     }
@@ -38,14 +38,14 @@ export default function Contact() {
     <div className="register-container fade-in">
       <div className="register-form-container">
         <form className="register-form" onSubmit={handleSubmit}>
-          <h2 className="form-title">Contact Us</h2>
+          <h2 className="form-title">Contactez-nous</h2>
 
           <div className="form-group">
             <input
               type="text"
               className="form-control input-icon-user"
               name="name"
-              placeholder="Your Name"
+              placeholder="Votre Nom"
               value={formData.name}
               onChange={handleChange}
               required
@@ -57,7 +57,7 @@ export default function Contact() {
               type="email"
               className="form-control input-icon-email"
               name="email"
-              placeholder="Your Email"
+              placeholder="Votre Email"
               value={formData.email}
               onChange={handleChange}
               required
@@ -68,7 +68,7 @@ export default function Contact() {
             <textarea
               className="form-control input-icon-message"
               name="message"
-              placeholder="Your Message"
+              placeholder="Votre Message"
               value={formData.message}
               onChange={handleChange}
               required
@@ -77,7 +77,7 @@ export default function Contact() {
 
           <div className="button-group">
             <button type="submit" className="btn btn-success btn-icon" disabled={loading}>
-              {loading ? "Sending..." : <>Send <FaPaperPlane /></>}
+              {loading ? "Envoi en cours..." : <>Envoyer <FaPaperPlane /></>}
             </button>
           </div>
         </form>

@@ -200,7 +200,7 @@ export default function ManageFormations() {
         formDataToSend.append('formationImage', selectedFile);
       }
 
-      const response = await axios.put(`http://localhost:5000/api/v1/formations/name/${currentFormation.title}`, formDataToSend, {
+      const response = await axios.put(`http://localhost:5000/api/v1/formations/${currentFormation.id}`, formDataToSend, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
